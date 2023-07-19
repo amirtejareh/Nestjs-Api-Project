@@ -3,6 +3,7 @@
     "module": "CommonJS",
     "target": "ES2017",
     "outDir": "dist",
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   }
