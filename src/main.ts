@@ -4,6 +4,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { SeederService } from "./seed/seed.service";
 import { config } from "dotenv";
+import { ThrottleMiddleware } from "./middleware/throttle.middleware";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,6 +21,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("api", app, document);
   await seederService.seed();
+  app.use(new ThrottleMiddleware().use);
+
   app.listen(3000);
 }
 
