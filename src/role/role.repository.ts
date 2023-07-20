@@ -10,4 +10,8 @@ export class RoleRepository {
   async findOneByTitle(title: string): Promise<Role | undefined> {
     return this.roleModel.findOne({ title }).exec();
   }
+
+  async findOneById(id: string): Promise<Role | undefined> {
+    return this.roleModel.findById(id);
+  }
 }

@@ -11,4 +11,8 @@ export class RoleService {
   async findOneByTitle(title: string): Promise<Role | undefined> {
     return this.roleRepository.findOneByTitle(title);
   }
+
+  async findOneById(id: string): Promise<Role | undefined> {
+    return this.roleRepository.findOneById(id);
+  }
 }

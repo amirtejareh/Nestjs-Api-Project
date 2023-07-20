@@ -24,7 +24,7 @@ export class SeederService {
     ];
     const roles = [
       {
-        name: "Super admin",
+        name: "SuperAdmin",
         permissions: permissions.map((permission) => permission.title),
       },
       { name: "User", permissions: ["profile"] },

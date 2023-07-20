@@ -22,4 +22,8 @@ export class UserRepository {
   async getUser(query: object): Promise<User> {
     return this.userModel.findOne(query);
   }
+
+  async findAll(): Promise<User[]> {
+    return this.userModel.find({});
+  }
 }

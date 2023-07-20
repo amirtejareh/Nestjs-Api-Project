@@ -8,6 +8,8 @@ import { RoleModule } from "../role/role.module";
 import { RoleService } from "../role/role.service";
 import { RoleRepository } from "../role/role.repository";
 import { RoleSchema } from "../role/entities/role.entity";
+import { JwtService } from "@nestjs/jwt";
+import { AuthService } from "../auth/auth.service";
 
 @Module({
   imports: [
@@ -18,6 +20,13 @@ import { RoleSchema } from "../role/entities/role.entity";
     ]),
   ],
   controllers: [UsersController],
-  providers: [RoleService, RoleRepository, UsersService, UserRepository],
+  providers: [
+    RoleService,
+    RoleRepository,
+    UsersService,
+    UserRepository,
+    JwtService,
+    AuthService,
+  ],
 })
 export class UsersModule {}
