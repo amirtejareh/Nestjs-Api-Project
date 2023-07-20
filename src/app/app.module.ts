@@ -9,7 +9,6 @@ import { SeedModule } from "../seed/seed.module";
 @Module({
   imports: [
     MongooseModule.forRoot("mongodb://127.0.0.1/karanbala"),
-
     UsersModule,
     SeedModule,
     AuthModule,

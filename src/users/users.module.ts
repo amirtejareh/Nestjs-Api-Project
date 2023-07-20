@@ -13,7 +13,6 @@ import { AuthService } from "../auth/auth.service";
 
 @Module({
   imports: [
-    RoleModule,
     MongooseModule.forFeature([
       { name: "user", schema: UserSchema },
       { name: "role", schema: RoleSchema },
