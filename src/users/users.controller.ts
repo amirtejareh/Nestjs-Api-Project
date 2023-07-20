@@ -23,6 +23,7 @@ export class UsersController {
       createUserDto.password,
       saltOrRounds
     );
+
     const createUser = {
       username: createUserDto.username,
       password: hashedPassword,
