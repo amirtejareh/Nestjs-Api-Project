@@ -12,25 +12,43 @@ export class AuthController {
     private usersService: UsersService
   ) {}
 
+  checkRequiredFields(requiredFields, inputData) {
+    for (const field of requiredFields) {
+      if (!inputData[field]) {
+        throw new MissingFieldsException(field);
+      }
+    }
+  }
+
   @Post("/signup")
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     const saltOrRounds = 10;
 
-    if (!createUserDto.password) {
-      throw new MissingFieldsException("password");
-    }
-    if (!createUserDto.username) {
-      throw new MissingFieldsException("username");
-    }
+    const requiredFields = [
+      "password",
+      "username",
+      "email",
+      "mobile",
+      "national_id_number",
+    ];
+
+    this.checkRequiredFields(requiredFields, createUserDto);
+
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
       saltOrRounds
     );
 
+    const { username, email, mobile, national_id_number } = createUserDto;
+
     const createUser = {
-      username: createUserDto.username,
+      username,
+      email,
+      mobile,
+      national_id_number,
       password: hashedPassword,
     };
+
     const result = await this.usersService.createUser(createUser);
     return result;
   }
