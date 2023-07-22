@@ -27,10 +27,23 @@ export class AuthController {
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     const { username, email, mobile, national_id_number } = createUserDto;
 
-    const existingUser = await this.usersService.getUser({ username });
-    if (existingUser) {
+    const existingUserByUsername = await this.usersService.getUser({
+      username,
+    });
+    const existingUserByMobile = await this.usersService.getUser({ mobile });
+    const existingUserEmail = await this.usersService.getUser({ email });
+    if (existingUserByUsername) {
       throw new ConflictException(
         "کاربری با این نام کاربری قبلاً ثبت نام کرده است"
+      );
+    }
+    if (existingUserEmail) {
+      throw new ConflictException("کاربری با این ایمیل قبلاً ثبت نام کرده است");
+    }
+
+    if (existingUserByMobile) {
+      throw new ConflictException(
+        "کاربری با این موبایل قبلاً ثبت نام کرده است"
       );
     }
 

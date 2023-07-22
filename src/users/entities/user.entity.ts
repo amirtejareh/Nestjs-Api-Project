@@ -11,19 +11,19 @@ export class User {
   })
   roles: Permission[];
 
-  @Prop()
+  @Prop({ unique: true, error: "نام کاربری قبلاً ثبت شده است" })
   username: string;
+
+  @Prop({ unique: true, error: "شماره تلفن همراه قبلاً ثبت شده است" })
+  mobile: string;
+
+  @Prop({ unique: true, error: "ایمیل قبلاً ثبت شده است" })
+  email: string;
 
   @Prop()
   password: string;
 
-  @Prop()
-  email: string;
-
-  @Prop()
-  mobile: string;
-
-  @Prop()
+  @Prop({ unique: true, error: "شماره ملی قبلاً ثبت شده است" })
   national_id_number: string;
 }
 
