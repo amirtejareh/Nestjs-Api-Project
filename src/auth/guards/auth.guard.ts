@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     const authToken = request.headers.authorization;
 
     if (!authToken || !authToken.startsWith("Bearer ")) {
-      throw UnauthorizedException;
+      throw new UnauthorizedException();
     }
 
     const token = authToken.split(" ")[1];
@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
       request.user = decoded;
       return true;
     } catch (err) {
-      throw UnauthorizedException;
+      throw new UnauthorizedException();
     }
   }
 }
