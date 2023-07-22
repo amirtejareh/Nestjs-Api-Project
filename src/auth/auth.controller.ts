@@ -4,6 +4,7 @@ import {
   Body,
   UnauthorizedException,
   ValidationPipe,
+  ConflictException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { MissingFieldsException } from "../common/exception/missing-fields-exception";
@@ -25,6 +26,13 @@ export class AuthController {
   @Post("/signup")
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     const { username, email, mobile, national_id_number } = createUserDto;
+
+    const existingUser = await this.usersService.getUser({ username });
+    if (existingUser) {
+      throw new ConflictException(
+        "کاربری با این نام کاربری قبلاً ثبت نام کرده است"
+      );
+    }
 
     if (!NationalCodeHelper.isValidIranianNationalId(national_id_number)) {
       throw new InvalidNationalIdException();
