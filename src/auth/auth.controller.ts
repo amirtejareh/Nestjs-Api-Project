@@ -1,10 +1,18 @@
-import { Controller, Post, Body, UnauthorizedException } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  UnauthorizedException,
+  ValidationPipe,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { MissingFieldsException } from "../../exception/missing-fields-exception";
+import { MissingFieldsException } from "../common/exception/missing-fields-exception";
 import { CreateUserDto } from "../users/dto/create-user.dto";
 import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 import * as bcrypt from "bcrypt";
+import { NationalCodeHelper } from "../common/utils/national-code.helper";
+import { InvalidNationalIdException } from "../common/exception/invalid-national-id-exception";
 @Controller("auth")
 export class AuthController {
   constructor(
@@ -12,34 +20,20 @@ export class AuthController {
     private usersService: UsersService
   ) {}
 
-  checkRequiredFields(requiredFields, inputData) {
-    for (const field of requiredFields) {
-      if (!inputData[field]) {
-        throw new MissingFieldsException(field);
-      }
-    }
-  }
+  private saltOrRounds = 10;
 
   @Post("/signup")
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    const saltOrRounds = 10;
+    const { username, email, mobile, national_id_number } = createUserDto;
 
-    const requiredFields = [
-      "password",
-      "username",
-      "email",
-      "mobile",
-      "national_id_number",
-    ];
-
-    this.checkRequiredFields(requiredFields, createUserDto);
+    if (!NationalCodeHelper.isValidIranianNationalId(national_id_number)) {
+      throw new InvalidNationalIdException();
+    }
 
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
-      saltOrRounds
+      this.saltOrRounds
     );
-
-    const { username, email, mobile, national_id_number } = createUserDto;
 
     const createUser = {
       username,
