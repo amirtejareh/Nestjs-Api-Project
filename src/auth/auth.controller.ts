@@ -14,6 +14,7 @@ import { UsersService } from "../users/users.service";
 import * as bcrypt from "bcrypt";
 import { NationalCodeHelper } from "../common/utils/national-code.helper";
 import { InvalidNationalIdException } from "../common/exception/invalid-national-id-exception";
+import { SigninUserDto } from "../users/dto/signin-user-dto";
 @Controller("auth")
 export class AuthController {
   constructor(
@@ -69,17 +70,17 @@ export class AuthController {
   }
 
   @Post("/signin")
-  async singinUser(@Body() createUserDto: CreateUserDto) {
-    if (!createUserDto.password) {
+  async singinUser(@Body() signinUserDto: SigninUserDto) {
+    if (!signinUserDto.password) {
       throw new MissingFieldsException("password");
     }
-    if (!createUserDto.username) {
+    if (!signinUserDto.username) {
       throw new MissingFieldsException("username");
     }
 
     const user = await this.authService.validateUser(
-      createUserDto.username,
-      createUserDto.password
+      signinUserDto.username,
+      signinUserDto.password
     );
 
     if (user == null) {
