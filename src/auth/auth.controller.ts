@@ -84,7 +84,7 @@ export class AuthController {
     );
 
     if (user == null) {
-      throw new UnauthorizedException("Invalid credentials.");
+      throw new UnauthorizedException("کاربری با این مشخصات یافت نشد.");
     }
 
     return await this.authService.login(user);
