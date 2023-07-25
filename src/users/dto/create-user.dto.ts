@@ -32,7 +32,13 @@ export class CreateUserDto {
   @IsNotEmpty({ message: "فیلد رمز عبور اجباری است" })
   @MaxLength(16, { message: "حداکثر طول رمز عبور ۱۶ کاراکتر است" })
   @IsStrongPassword(
-    { minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1 },
+    {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 0,
+    },
     {
       message:
         "رمز عبور شامل حداقل ۸ کاراکتر یک حرف کوچک، یک حرف بزرگ و یک عدداست",
