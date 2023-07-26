@@ -14,4 +14,8 @@ export class RoleRepository {
   async findOneById(id: string): Promise<Role | undefined> {
     return this.roleModel.findById(id);
   }
+
+  async findPermissionsOfRoles(query: object) {
+    return this.roleModel.find(query).populate("permissions");
+  }
 }

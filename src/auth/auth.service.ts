@@ -26,15 +26,15 @@ export class AuthService {
 
   async login(user: any) {
     const roleIds = user.roles;
-    const rolePromises = roleIds.map((roleId: string) =>
-      this.roleService.findOneById(roleId).then((role) => role.title)
-    );
-    const roles = await Promise.all(rolePromises);
+    const roles = await this.roleService.findPermissionsOfRoles({
+      _id: { $in: roleIds },
+    });
 
     const payload = { username: user.username, sub: user._id, roles };
 
     return {
       statusCode: 200,
+      payload,
       access_token: this.jwtService.sign(payload, {
         secret: process.env.JWT_KEY,
         expiresIn: process.env.EXPIRES_TIME,

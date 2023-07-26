@@ -17,53 +17,67 @@ export class SeederService {
 
   async seed() {
     const permissions = [
-      { title: "article" },
-      { title: "course" },
-      { title: "profile" },
-      { title: "episode" },
+      { resource: "post", action: "create" },
+      { resource: "post", action: "read" },
+      { resource: "post", action: "update" },
+      { resource: "post", action: "delete" },
+      { resource: "course", action: "read" },
+      { resource: "profile", action: "read" },
+      { resource: "profile", action: "update" },
     ];
+
     const roles = [
       {
-        name: "SuperAdmin",
-        permissions: permissions.map((permission) => permission.title),
+        title: "SuperAdmin",
+        permissions: permissions.map((permission) => permission),
       },
-      { name: "User", permissions: ["profile"] },
+      { title: "User", permissions: [{ resource: "profile", action: "read" }] },
     ];
 
     for (const permission of permissions) {
       const existingPermission = await this.permissionModel.findOne({
-        title: permission.title,
+        resource: permission.resource,
+        action: permission.action,
       });
 
       if (!existingPermission) {
         await this.permissionModel.create(permission);
-        console.log(`Permission ${permission.title} created`);
+        console.log(
+          `Permission ${permission.resource}:${permission.action} created`
+        );
       }
     }
 
     for (const role of roles) {
       const permissionObjects = await this.permissionModel
-        .find({ title: { $in: role.permissions } })
+        .find({
+          resource: { $in: role.permissions.map((p) => p.resource) },
+          action: { $in: role.permissions.map((p) => p.action) },
+        })
         .exec();
       const permissionIds = permissionObjects.map(
         (permission) => permission._id
       );
 
-      const existingRole = await this.roleModel.findOne({ title: role.name });
+      const existingRole = await this.roleModel.findOne({ title: role.title });
 
       if (existingRole) {
-        existingRole.permission = permissionIds;
+        existingRole.permissions = permissionIds;
         await existingRole.save();
         console.log(
-          `Role ${role.name} updated with permissions ${role.permissions}`
+          `Role ${role.title} updated with permissions ${role.permissions.map(
+            (p) => p.resource + ":" + p.action
+          )}`
         );
       } else {
         const createdRole = await this.roleModel.create({
-          title: role.name,
-          permission: permissionIds,
+          title: role.title,
+          permissions: permissionIds,
         });
         console.log(
-          `Role ${role.name} created with permissions ${role.permissions}`
+          `Role ${role.title} created with permissions ${role.permissions.map(
+            (p) => p.resource + ":" + p.action
+          )}`
         );
       }
     }

@@ -1,6 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
 import { Role } from "./entities/role.entity";
 import { RoleRepository } from "./role.repository";
 
@@ -14,5 +12,9 @@ export class RoleService {
 
   async findOneById(id: string): Promise<Role | undefined> {
     return this.roleRepository.findOneById(id);
+  }
+
+  async findPermissionsOfRoles(query: object) {
+    return this.roleRepository.findPermissionsOfRoles(query);
   }
 }
