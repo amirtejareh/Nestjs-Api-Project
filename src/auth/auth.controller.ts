@@ -25,7 +25,7 @@ export class AuthController {
   private saltOrRounds = 10;
 
   @Post("/signup")
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async createUser(@Body() createUserDto: CreateUserDto) {
     const { username, email, mobile, national_id_number } = createUserDto;
 
     const existingUserByUsername = await this.usersService.getUser({
@@ -66,7 +66,10 @@ export class AuthController {
     };
 
     const result = await this.usersService.createUser(createUser);
-    return result;
+    return {
+      statusCode: 200,
+      ...result,
+    };
   }
 
   @Post("/signin")
