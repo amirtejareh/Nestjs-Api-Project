@@ -12,18 +12,18 @@ export class FieldOfStudyService {
   }
 
   findAll() {
-    return `This action returns all fieldOfStudy`;
+    return this.filedOfStudyRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} fieldOfStudy`;
+  findOne(id: string) {
+    return this.filedOfStudyRepository.findOne(id);
   }
 
-  update(id: number, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
-    return `This action updates a #${id} fieldOfStudy`;
+  update(id: string, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
+    return this.filedOfStudyRepository.update(id, updateFieldOfStudyDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fieldOfStudy`;
+  remove(id: string) {
+    return this.filedOfStudyRepository.remove(id);
   }
 }

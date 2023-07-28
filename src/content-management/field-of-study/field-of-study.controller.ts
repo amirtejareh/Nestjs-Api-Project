@@ -35,7 +35,7 @@ export class FieldOfStudyController {
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.fieldOfStudyService.findOne(+id);
+    return this.fieldOfStudyService.findOne(id);
   }
 
   @Patch(":id")
@@ -43,11 +43,11 @@ export class FieldOfStudyController {
     @Param("id") id: string,
     @Body() updateFieldOfStudyDto: UpdateFieldOfStudyDto
   ) {
-    return this.fieldOfStudyService.update(+id, updateFieldOfStudyDto);
+    return this.fieldOfStudyService.update(id, updateFieldOfStudyDto);
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return this.fieldOfStudyService.remove(+id);
+    return this.fieldOfStudyService.remove(id);
   }
 }

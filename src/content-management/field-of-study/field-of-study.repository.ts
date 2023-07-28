@@ -20,18 +20,22 @@ export class FieldOfStudyRepository {
   }
 
   findAll() {
-    return `This action returns all fieldOfStudy`;
+    return this.fieldOfStudyModel.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} fieldOfStudy`;
+  findOne(id: string) {
+    return this.fieldOfStudyModel.findOne({ _id: id });
   }
 
-  update(id: number, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
-    return `This action updates a #${id} fieldOfStudy`;
+  update(id: string, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
+    return this.fieldOfStudyModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { ...updateFieldOfStudyDto } },
+      { new: true }
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fieldOfStudy`;
+  remove(id: string) {
+    return this.fieldOfStudyModel.findOneAndRemove({ _id: id });
   }
 }
