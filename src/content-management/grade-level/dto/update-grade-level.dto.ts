@@ -1,4 +1,21 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateGradeLevelDto } from './create-grade-level.dto';
+import { PartialType } from "@nestjs/swagger";
+import { CreateGradeLevelDto } from "./create-grade-level.dto";
 
-export class UpdateGradeLevelDto extends PartialType(CreateGradeLevelDto) {}
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, Length } from "class-validator";
+import { Book } from "../../book/entities/book.entity";
+import { TermOfStudy } from "../../term-of-study/entities/term-of-study.entity";
+export class UpdateGradeLevelDto extends PartialType(CreateGradeLevelDto) {
+  readonly _id?: string;
+  @ApiProperty({
+    description: "Title of th grade level",
+    example: "second",
+  })
+  @IsNotEmpty({ message: "فیلد عنوان پایه تحصیلی است" })
+  @Length(4, 20, { message: "عنوان کارپایه تحصیلی باید بین ۴ تا ۲۰ حرف باشد" })
+  readonly title: string;
+  readonly books?: Book[];
+  readonly terms?: TermOfStudy[];
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
+}

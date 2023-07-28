@@ -16,18 +16,22 @@ export class GradeLevelRepository {
   }
 
   findAll() {
-    return `This action returns all gradeLevel`;
+    return this.gradeLevelModel.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gradeLevel`;
+  findOne(id: string) {
+    return this.gradeLevelModel.findOne({ _id: id });
   }
 
-  update(id: number, updateGradeLevelDto: UpdateGradeLevelDto) {
-    return `This action updates a #${id} gradeLevel`;
+  update(id: string, updateGradeLevelDto: UpdateGradeLevelDto) {
+    return this.gradeLevelModel.findOneAndUpdate(
+      { _id: id },
+      { $set: { ...updateGradeLevelDto } },
+      { new: true }
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} gradeLevel`;
+  remove(id: string) {
+    return this.gradeLevelModel.findOneAndRemove({ _id: id });
   }
 }
