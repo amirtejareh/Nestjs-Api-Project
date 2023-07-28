@@ -22,9 +22,6 @@ export class RoleGuard implements CanActivate {
     const payload: JwtPayload = this.jwtService.verify(token, {
       secret: process.env.JWT_KEY,
     });
-    console.log(requiredRoles);
-    console.log(payload.roles);
-
     return this.matchRoles(requiredRoles, payload.roles);
   }
 
