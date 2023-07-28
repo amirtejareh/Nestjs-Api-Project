@@ -21,7 +21,7 @@ export class FieldOfStudyRepository {
     try {
       if (await this.findOneByTitle(createFieldOfStudyDto.title)) {
         throw new ConflictException(
-          "رشته تحصیلی با این عنوان در پایگاه داده موجود است"
+          "درج رشته تحصیلی تکراری امکان‌پذیر نمی‌باشد."
         );
       }
 

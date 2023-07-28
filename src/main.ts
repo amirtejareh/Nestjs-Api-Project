@@ -23,7 +23,7 @@ async function bootstrap() {
   await seederService.seed();
   app.use(new ThrottleMiddleware().use);
   app.enableCors({
-    origin: ["http://localhost:2000", "https://amirtejareh.github.io"],
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   });
