@@ -49,12 +49,30 @@ export class FieldOfStudyRepository {
     return this.fieldOfStudyModel.findOne({ _id: id });
   }
 
-  update(id: string, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
-    return this.fieldOfStudyModel.findOneAndUpdate(
-      { _id: id },
-      { $set: { ...updateFieldOfStudyDto } },
-      { new: true }
-    );
+  async update(
+    @Res() res,
+    id: string,
+    updateFieldOfStudyDto: UpdateFieldOfStudyDto
+  ) {
+    try {
+      const updateieldOfStudy = await this.fieldOfStudyModel.findOneAndUpdate(
+        { _id: id },
+        { $set: { ...updateFieldOfStudyDto } },
+        { new: true }
+      );
+
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        message: "رشته تحصیلی با موفقیت بروزرسانی شد",
+        data: updateieldOfStudy,
+      });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "مشکلی در بروزرسانی رشته تحصیلی به وجود آمده است",
+        error: error.message,
+      });
+    }
   }
 
   async remove(@Res() res, id: string) {

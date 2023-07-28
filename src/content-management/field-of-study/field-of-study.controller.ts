@@ -44,10 +44,11 @@ export class FieldOfStudyController {
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   update(
+    @Res() res,
     @Param("id") id: string,
     @Body() updateFieldOfStudyDto: UpdateFieldOfStudyDto
   ) {
-    return this.fieldOfStudyService.update(id, updateFieldOfStudyDto);
+    return this.fieldOfStudyService.update(res, id, updateFieldOfStudyDto);
   }
 
   @Delete(":id")

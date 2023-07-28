@@ -19,8 +19,8 @@ export class FieldOfStudyService {
     return this.filedOfStudyRepository.findOne(id);
   }
 
-  update(id: string, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
-    return this.filedOfStudyRepository.update(id, updateFieldOfStudyDto);
+  update(@Res() res, id: string, updateFieldOfStudyDto: UpdateFieldOfStudyDto) {
+    return this.filedOfStudyRepository.update(res, id, updateFieldOfStudyDto);
   }
 
   remove(@Res() res, id: string) {

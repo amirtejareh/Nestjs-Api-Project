@@ -24,7 +24,7 @@ async function bootstrap() {
   app.use(new ThrottleMiddleware().use);
   app.enableCors({
     origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   });
   app.listen(3000);
