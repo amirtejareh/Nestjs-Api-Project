@@ -5,6 +5,8 @@ import { UsersModule } from "../users/users.module";
 import { AuthModule } from "../auth/auth.module";
 import { SeedModule } from "../seed/seed.module";
 
+import { FieldOfStudyModule } from "../content-management/field-of-study/field-of-study.module";
+
 @Global()
 @Module({
   imports: [
@@ -12,6 +14,7 @@ import { SeedModule } from "../seed/seed.module";
     UsersModule,
     SeedModule,
     AuthModule,
+    FieldOfStudyModule,
   ],
   controllers: [AppController],
 })

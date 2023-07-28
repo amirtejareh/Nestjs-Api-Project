@@ -34,7 +34,6 @@ export class AuthService {
 
     return {
       statusCode: 200,
-      payload,
       access_token: this.jwtService.sign(payload, {
         secret: process.env.JWT_KEY,
         expiresIn: process.env.EXPIRES_TIME,
