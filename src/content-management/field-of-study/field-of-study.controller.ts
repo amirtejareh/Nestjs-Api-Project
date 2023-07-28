@@ -22,9 +22,9 @@ export class FieldOfStudyController {
 
   @Post()
   @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
   create(@Body() createFieldOfStudyDto: CreateFieldOfStudyDto) {
-    console.log("createFieldOfStudyDto", createFieldOfStudyDto);
-
     return this.fieldOfStudyService.create(createFieldOfStudyDto);
   }
 

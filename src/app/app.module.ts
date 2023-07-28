@@ -6,6 +6,7 @@ import { AuthModule } from "../auth/auth.module";
 import { SeedModule } from "../seed/seed.module";
 
 import { FieldOfStudyModule } from "../content-management/field-of-study/field-of-study.module";
+import { GradeLevelModule } from "../content-management/grade-level/grade-level.module";
 
 @Global()
 @Module({
@@ -15,6 +16,7 @@ import { FieldOfStudyModule } from "../content-management/field-of-study/field-o
     SeedModule,
     AuthModule,
     FieldOfStudyModule,
+    GradeLevelModule,
   ],
   controllers: [AppController],
 })

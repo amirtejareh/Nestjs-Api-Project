@@ -1,14 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
-import { GradeLevelRepository } from "./grade-level.repository";
+import { InjectModel } from "@nestjs/mongoose";
+import { GradeLevel } from "./entities/grade-level.entity";
+import { Model } from "mongoose";
 
 @Injectable()
-export class GradeLevelService {
-  constructor(private gradeLevelRepository: GradeLevelRepository) {}
-
+export class GradeLevelRepository {
+  constructor(
+    @InjectModel("gradeLevel")
+    private readonly gradeLevelModel: Model<GradeLevel>
+  ) {}
   create(createGradeLevelDto: CreateGradeLevelDto) {
-    return this.gradeLevelRepository.create(createGradeLevelDto);
+    return this.gradeLevelModel.create(createGradeLevelDto);
   }
 
   findAll() {
