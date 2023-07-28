@@ -57,7 +57,21 @@ export class FieldOfStudyRepository {
     );
   }
 
-  remove(id: string) {
-    return this.fieldOfStudyModel.findOneAndRemove({ _id: id });
+  remove(@Res() res, id: string) {
+    try {
+      const deleteFieldOfStudy = this.fieldOfStudyModel.findOneAndRemove({
+        _id: id,
+      });
+      return res.status(200).json({
+        statusCode: 200,
+        message: "یک رشته تحصیلی با موفقیت ایجاد شد",
+        data: deleteFieldOfStudy,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: e.message,
+      });
+    }
   }
 }

@@ -54,7 +54,7 @@ export class FieldOfStudyController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  remove(@Param("id") id: string) {
-    return this.fieldOfStudyService.remove(id);
+  remove(@Res() res, @Param("id") id: string) {
+    return this.fieldOfStudyService.remove(res, id);
   }
 }

@@ -23,7 +23,7 @@ export class FieldOfStudyService {
     return this.filedOfStudyRepository.update(id, updateFieldOfStudyDto);
   }
 
-  remove(id: string) {
-    return this.filedOfStudyRepository.remove(id);
+  remove(@Res() res, id: string) {
+    return this.filedOfStudyRepository.remove(res, id);
   }
 }
