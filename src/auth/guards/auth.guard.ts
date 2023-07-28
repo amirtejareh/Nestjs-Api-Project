@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     const authToken = request.headers.authorization;
 
     if (!authToken || !authToken.startsWith("Bearer ")) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("عدم دسترسی مجاز");
     }
 
     const token = authToken.split(" ")[1];

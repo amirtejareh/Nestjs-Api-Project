@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, Res } from "@nestjs/common";
 import { CreateFieldOfStudyDto } from "./dto/create-field-of-study.dto";
 import { UpdateFieldOfStudyDto } from "./dto/update-field-of-study.dto";
 import { InjectModel } from "@nestjs/mongoose";
@@ -13,10 +13,32 @@ export class FieldOfStudyRepository {
     private readonly fieldOfStudyModel: Model<FieldOfStudy>
   ) {}
 
-  create(createFieldOfStudyDto: CreateFieldOfStudyDto) {
-    return this.fieldOfStudyModel.create({
-      ...createFieldOfStudyDto,
-    });
+  async findOneByTitle(title: string) {
+    return this.fieldOfStudyModel.findOne({ title }).exec();
+  }
+
+  async create(@Res() res, createFieldOfStudyDto: CreateFieldOfStudyDto) {
+    try {
+      if (await this.findOneByTitle(createFieldOfStudyDto.title)) {
+        throw new ConflictException(
+          "رشته تحصیلی با این عنوان در پایگاه داده موجود است"
+        );
+      }
+
+      const createdFieldOfStudy = await this.fieldOfStudyModel.create(
+        createFieldOfStudyDto
+      );
+      return res.status(200).json({
+        statusCode: 200,
+        message: "یک رشته تحصیلی با موفقیت ایجاد شد",
+        data: createdFieldOfStudy,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: e.message,
+      });
+    }
   }
 
   findAll() {

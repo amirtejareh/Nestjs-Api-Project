@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Res } from "@nestjs/common";
 import { CreateFieldOfStudyDto } from "./dto/create-field-of-study.dto";
 import { UpdateFieldOfStudyDto } from "./dto/update-field-of-study.dto";
 import { FieldOfStudyRepository } from "./field-of-study.repository";
@@ -7,8 +7,8 @@ import { FieldOfStudyRepository } from "./field-of-study.repository";
 export class FieldOfStudyService {
   constructor(private filedOfStudyRepository: FieldOfStudyRepository) {}
 
-  create(createFieldOfStudyDto: CreateFieldOfStudyDto) {
-    return this.filedOfStudyRepository.create(createFieldOfStudyDto);
+  create(@Res() res, createFieldOfStudyDto: CreateFieldOfStudyDto) {
+    return this.filedOfStudyRepository.create(res, createFieldOfStudyDto);
   }
 
   findAll() {

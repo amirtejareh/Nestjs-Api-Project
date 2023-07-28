@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Res,
 } from "@nestjs/common";
 import { FieldOfStudyService } from "./field-of-study.service";
 import { CreateFieldOfStudyDto } from "./dto/create-field-of-study.dto";
@@ -24,8 +25,8 @@ export class FieldOfStudyController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Body() createFieldOfStudyDto: CreateFieldOfStudyDto) {
-    return this.fieldOfStudyService.create(createFieldOfStudyDto);
+  create(@Res() res, @Body() createFieldOfStudyDto: CreateFieldOfStudyDto) {
+    return this.fieldOfStudyService.create(res, createFieldOfStudyDto);
   }
 
   @Get()
@@ -39,6 +40,9 @@ export class FieldOfStudyController {
   }
 
   @Patch(":id")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
   update(
     @Param("id") id: string,
     @Body() updateFieldOfStudyDto: UpdateFieldOfStudyDto
@@ -47,6 +51,9 @@ export class FieldOfStudyController {
   }
 
   @Delete(":id")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
   remove(@Param("id") id: string) {
     return this.fieldOfStudyService.remove(id);
   }
