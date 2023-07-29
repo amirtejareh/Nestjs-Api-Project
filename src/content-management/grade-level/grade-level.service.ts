@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Res } from "@nestjs/common";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
 import { GradeLevelRepository } from "./grade-level.repository";
@@ -7,8 +7,8 @@ import { GradeLevelRepository } from "./grade-level.repository";
 export class GradeLevelService {
   constructor(private gradeLevelRepository: GradeLevelRepository) {}
 
-  create(createGradeLevelDto: CreateGradeLevelDto) {
-    return this.gradeLevelRepository.create(createGradeLevelDto);
+  create(@Res() res, createGradeLevelDto: CreateGradeLevelDto) {
+    return this.gradeLevelRepository.create(res, createGradeLevelDto);
   }
 
   findAll() {
@@ -19,11 +19,11 @@ export class GradeLevelService {
     return this.gradeLevelRepository.findOne(id);
   }
 
-  update(id: string, updateGradeLevelDto: UpdateGradeLevelDto) {
-    return this.gradeLevelRepository.update(id, updateGradeLevelDto);
+  update(@Res() res, id: string, updateGradeLevelDto: UpdateGradeLevelDto) {
+    return this.gradeLevelRepository.update(res, id, updateGradeLevelDto);
   }
 
-  remove(id: string) {
-    return this.gradeLevelRepository.remove(id);
+  remove(@Res() res, id: string) {
+    return this.gradeLevelRepository.remove(res, id);
   }
 }

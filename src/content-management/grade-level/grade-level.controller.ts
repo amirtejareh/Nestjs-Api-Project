@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Res,
 } from "@nestjs/common";
 import { GradeLevelService } from "./grade-level.service";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
@@ -24,8 +25,8 @@ export class GradeLevelController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Body() createGradeLevelDto: CreateGradeLevelDto) {
-    return this.gradeLevelService.create(createGradeLevelDto);
+  create(@Res() res, @Body() createGradeLevelDto: CreateGradeLevelDto) {
+    return this.gradeLevelService.create(res, createGradeLevelDto);
   }
 
   @Get()
@@ -39,15 +40,22 @@ export class GradeLevelController {
   }
 
   @Patch(":id")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
   update(
+    @Res() res,
     @Param("id") id: string,
     @Body() updateGradeLevelDto: UpdateGradeLevelDto
   ) {
-    return this.gradeLevelService.update(id, updateGradeLevelDto);
+    return this.gradeLevelService.update(res, id, updateGradeLevelDto);
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.gradeLevelService.remove(id);
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
+  remove(@Res() res, @Param("id") id: string) {
+    return this.gradeLevelService.remove(res, id);
   }
 }
