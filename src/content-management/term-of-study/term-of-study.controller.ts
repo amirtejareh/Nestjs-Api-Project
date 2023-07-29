@@ -26,8 +26,6 @@ export class TermOfStudyController {
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   create(@Res() res, @Body() createTermOfStudyDto: CreateTermOfStudyDto) {
-    console.log("ues");
-
     return this.termOfStudyService.create(res, createTermOfStudyDto);
   }
 
