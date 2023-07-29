@@ -8,6 +8,7 @@ import { SeedModule } from "../seed/seed.module";
 import { FieldOfStudyModule } from "../content-management/field-of-study/field-of-study.module";
 import { GradeLevelModule } from "../content-management/grade-level/grade-level.module";
 import { TermOfStudyModule } from "../content-management/term-of-study/term-of-study.module";
+import { BookModule } from "../content-management/book/book.module";
 
 @Global()
 @Module({
@@ -20,6 +21,7 @@ import { TermOfStudyModule } from "../content-management/term-of-study/term-of-s
     FieldOfStudyModule,
     GradeLevelModule,
     TermOfStudyModule,
+    BookModule,
   ],
   controllers: [AppController],
 })

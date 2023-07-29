@@ -55,7 +55,7 @@ export class FieldOfStudyRepository {
     updateFieldOfStudyDto: UpdateFieldOfStudyDto
   ) {
     try {
-      const updateieldOfStudy = await this.fieldOfStudyModel.findOneAndUpdate(
+      const updateFieldOfStudy = await this.fieldOfStudyModel.findOneAndUpdate(
         { _id: id },
         { $set: { ...updateFieldOfStudyDto } },
         { new: true }
@@ -64,7 +64,7 @@ export class FieldOfStudyRepository {
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: "رشته تحصیلی با موفقیت بروزرسانی شد",
-        data: updateieldOfStudy,
+        data: updateFieldOfStudy,
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

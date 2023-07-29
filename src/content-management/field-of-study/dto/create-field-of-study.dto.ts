@@ -8,7 +8,7 @@ export class CreateFieldOfStudyDto {
     example: "Math",
   })
   @IsNotEmpty({ message: "فیلد عنوان رشته تحصیلی اجباری است" })
-  @Length(4, 20, { message: "عنوان رشته تحصیلی باید بین ۳ تا ۲۰ حرف باشد" })
+  @Length(3, 20, { message: "عنوان رشته تحصیلی باید بین ۳ تا ۲۰ حرف باشد" })
   readonly title: string;
   readonly gradeLevels?: GradeLevel[];
   readonly createdAt?: Date;
