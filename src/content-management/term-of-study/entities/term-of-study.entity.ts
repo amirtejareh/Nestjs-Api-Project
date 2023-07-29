@@ -8,15 +8,6 @@ export type TermOfStudyDocument = TermOfStudy & Document;
 export class TermOfStudy {
   @Prop({ required: true })
   title: string;
-
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: TermOfStudy.name }],
-  })
-  books: Book[];
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: TermOfStudy.name }],
-  })
-  terms: TermOfStudy[];
 }
 
 export const TermOfStudySchema = SchemaFactory.createForClass(TermOfStudy);

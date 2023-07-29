@@ -22,6 +22,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = authToken.split(" ")[1];
+
     try {
       const decoded = this.jwtService.verify(token, {
         secret: process.env.JWT_KEY,
@@ -29,7 +30,7 @@ export class AuthGuard implements CanActivate {
       request.user = decoded;
       return true;
     } catch (err) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("توکن اعتبار ندارد");
     }
   }
 }

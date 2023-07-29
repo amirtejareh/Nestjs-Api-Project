@@ -1,26 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTermOfStudyDto } from './dto/create-term-of-study.dto';
-import { UpdateTermOfStudyDto } from './dto/update-term-of-study.dto';
+import { Injectable, Res } from "@nestjs/common";
+import { CreateTermOfStudyDto } from "./dto/create-term-of-study.dto";
+import { UpdateTermOfStudyDto } from "./dto/update-term-of-study.dto";
+import { TermOfStudyRepository } from "./term-of-study.repository";
 
 @Injectable()
 export class TermOfStudyService {
-  create(createTermOfStudyDto: CreateTermOfStudyDto) {
-    return 'This action adds a new termOfStudy';
+  constructor(private termOfStudyRepository: TermOfStudyRepository) {}
+
+  create(@Res() res, createTermOfStudyDto: CreateTermOfStudyDto) {
+    return this.termOfStudyRepository.create(res, createTermOfStudyDto);
   }
 
   findAll() {
-    return `This action returns all termOfStudy`;
+    return this.termOfStudyRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} termOfStudy`;
+  findOne(id: string) {
+    return this.termOfStudyRepository.findOne(id);
   }
 
-  update(id: number, updateTermOfStudyDto: UpdateTermOfStudyDto) {
-    return `This action updates a #${id} termOfStudy`;
+  update(@Res() res, id: string, updateTermOfStudyDto: UpdateTermOfStudyDto) {
+    return this.termOfStudyRepository.update(res, id, updateTermOfStudyDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} termOfStudy`;
+  remove(@Res() res, id: string) {
+    return this.termOfStudyRepository.remove(res, id);
   }
 }
