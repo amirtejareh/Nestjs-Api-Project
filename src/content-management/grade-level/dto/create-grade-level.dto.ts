@@ -9,7 +9,7 @@ export class CreateGradeLevelDto {
     example: "second",
   })
   @IsNotEmpty({ message: "فیلد عنوان پایه تحصیلی است" })
-  @Length(4, 20, { message: "عنوان کارپایه تحصیلی باید بین ۴ تا ۲۰ حرف باشد" })
+  @Length(3, 20, { message: "عنوان پایه تحصیلی باید بین ۳ تا ۲۰ حرف باشد" })
   readonly title: string;
   readonly books?: Book[];
   readonly terms?: TermOfStudy[];
