@@ -1,0 +1,8 @@
+{
+  "disks": [
+    {
+      "name": "disk1",
+      "mountTo": "uploads/image_grade_level"
+    }
+  ]
+}

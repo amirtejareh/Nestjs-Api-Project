@@ -31,8 +31,6 @@ export class GradeLevelService {
 
     @Body() updateGradeLevelDto: UpdateGradeLevelDto
   ) {
-    console.log("service", updateGradeLevelDto);
-
     return this.gradeLevelRepository.update(res, file, id, updateGradeLevelDto);
   }
 
