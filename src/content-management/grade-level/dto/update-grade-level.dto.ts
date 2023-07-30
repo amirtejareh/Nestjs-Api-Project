@@ -20,7 +20,7 @@ export class UpdateGradeLevelDto extends PartialType(CreateGradeLevelDto) {
   readonly description: string;
 
   @ApiProperty({ type: "string", format: "binary" })
-  public image: any;
+  public image?: any;
 
   readonly books?: Book[];
   readonly terms?: TermOfStudy[];

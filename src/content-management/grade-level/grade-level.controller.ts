@@ -51,18 +51,6 @@ export class GradeLevelController {
     return this.gradeLevelService.findAll();
   }
 
-  @Get("image/:filename")
-  async getImage(@Param("filename") filename: string, @Res() res) {
-    const imagePath = join(
-      __dirname,
-      "../../",
-      "uploads",
-      "image_grade_level",
-      filename
-    );
-    res.sendFile(imagePath);
-  }
-
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.gradeLevelService.findOne(id);
