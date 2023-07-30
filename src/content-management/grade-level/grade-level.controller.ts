@@ -59,15 +59,18 @@ export class GradeLevelController {
   @Patch(":id")
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
+  @UseInterceptors(FileInterceptor("image"))
   @Roles("SuperAdmin")
   update(
     @Res() res,
+
+    @UploadedFile() file: Express.Multer.File,
     @Param("id") id: string,
+
     @Body() updateGradeLevelDto: UpdateGradeLevelDto
   ) {
-    return this.gradeLevelService.update(res, id, updateGradeLevelDto);
+    return this.gradeLevelService.update(res, file, id, updateGradeLevelDto);
   }
-
   @Delete(":id")
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)

@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { SeederService } from "./seed/seed.service";
 import { config } from "dotenv";
 import { ThrottleMiddleware } from "./middleware/throttle.middleware";
+import express from "express";
+import { join } from "path";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +24,7 @@ async function bootstrap() {
   SwaggerModule.setup("api", app, document);
   await seederService.seed();
   app.use(new ThrottleMiddleware().use);
+  app.use("/uploads", express.static(join(__dirname, "..", "uploads")));
   app.enableCors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],

@@ -1,10 +1,16 @@
 import {
+  Body,
   ConflictException,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
   Res,
   UploadedFile,
 } from "@nestjs/common";
+import * as fs from "fs";
+
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
 import { InjectModel } from "@nestjs/mongoose";
@@ -69,26 +75,61 @@ export class GradeLevelRepository {
 
   async update(
     @Res() res,
-    id: string,
+    @UploadedFile() file,
+    @Param("id") id: string,
     updateGradeLevelDto: UpdateGradeLevelDto
   ) {
     try {
-      const updateGradeLevelModel = await this.gradeLevelModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { ...updateGradeLevelDto } },
-        { new: true }
-      );
+      const gradeLevel = await this.gradeLevelModel.findById(id);
 
-      return res.status(HttpStatus.OK).json({
-        statusCode: HttpStatus.OK,
-        message: "پایه تحصیلی با موفقیت بروزرسانی شد",
-        data: updateGradeLevelModel,
+      if (!gradeLevel) {
+        throw new NotFoundException("پایه تحصیلی مورد نظر یافت نشد.");
+      }
+
+      // بررسی اینکه آیا فایل جدیدی آپلود شده است یا خیر
+      if (file) {
+        // ذخیره فایل جدید در دیتابیس
+        const fileName = await this.imageService.saveImage(
+          "image_grade_level",
+          file
+        );
+        updateGradeLevelDto.image = fileName;
+
+        // با استفاده از fs.writeFile()، فایل را در مسیر جدید ذخیره می‌کنیم
+        fs.writeFile(`./${fileName}`, file.buffer, (err) => {
+          if (err) {
+            throw new InternalServerErrorException(
+              "خطایی در ذخیره فایل جدید رخ داده است."
+            );
+          }
+        });
+
+        if (gradeLevel.image) {
+        }
+        // حذف فایل قدیمی
+        fs.unlink(`./${gradeLevel.image}`, (err) => {
+          if (err) {
+            throw new InternalServerErrorException(
+              "خطایی در حذف فایل قدیمی رخ داده است."
+            );
+          }
+        });
+      }
+
+      const updatedGradeLevelModel =
+        await this.gradeLevelModel.findByIdAndUpdate(id, updateGradeLevelDto, {
+          new: true,
+        });
+
+      return res.status(200).json({
+        statusCode: 200,
+        message: "پایه تحصیلی با موفقیت بروزرسانی شد.",
+        data: updatedGradeLevelModel,
       });
-    } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در بروزرسانی پایه تحصیلی به وجود آمده است",
-        error: error.message,
+    } catch (e) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: e.message,
       });
     }
   }

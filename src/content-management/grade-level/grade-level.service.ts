@@ -1,4 +1,4 @@
-import { Injectable, Res, UploadedFile } from "@nestjs/common";
+import { Body, Injectable, Param, Res, UploadedFile } from "@nestjs/common";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
 import { GradeLevelRepository } from "./grade-level.repository";
@@ -23,8 +23,17 @@ export class GradeLevelService {
     return this.gradeLevelRepository.findOne(id);
   }
 
-  update(@Res() res, id: string, updateGradeLevelDto: UpdateGradeLevelDto) {
-    return this.gradeLevelRepository.update(res, id, updateGradeLevelDto);
+  update(
+    @Res() res,
+
+    @UploadedFile() file: Express.Multer.File,
+    @Param("id") id: string,
+
+    @Body() updateGradeLevelDto: UpdateGradeLevelDto
+  ) {
+    console.log("service", updateGradeLevelDto);
+
+    return this.gradeLevelRepository.update(res, file, id, updateGradeLevelDto);
   }
 
   remove(@Res() res, id: string) {
