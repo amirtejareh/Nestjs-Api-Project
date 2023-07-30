@@ -21,6 +21,7 @@ import { Roles } from "../../common/decorators/roles.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Express } from "express";
 import { ImageService } from "../../common/services/imageService";
+import { join } from "path";
 
 @Controller("grade-level")
 export class GradeLevelController {
@@ -46,8 +47,20 @@ export class GradeLevelController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.gradeLevelService.findAll();
+  }
+
+  @Get("image/:filename")
+  async getImage(@Param("filename") filename: string, @Res() res) {
+    const imagePath = join(
+      __dirname,
+      "../../",
+      "uploads",
+      "image_grade_level",
+      filename
+    );
+    res.sendFile(imagePath);
   }
 
   @Get(":id")
