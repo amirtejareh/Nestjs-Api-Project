@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, Length } from "class-validator";
+import { IsNotEmpty, IsString, Length } from "class-validator";
 import { Book } from "../../book/entities/book.entity";
 import { TermOfStudy } from "../../term-of-study/entities/term-of-study.entity";
 export class CreateGradeLevelDto {
@@ -11,6 +11,19 @@ export class CreateGradeLevelDto {
   @IsNotEmpty({ message: "فیلد عنوان پایه تحصیلی است" })
   @Length(3, 20, { message: "عنوان پایه تحصیلی باید بین ۳ تا ۲۰ حرف باشد" })
   readonly title: string;
+
+  @ApiProperty({
+    description: "Description of th grade level",
+    example: "description",
+  })
+  @Length(3, 5000, {
+    message: "توضیحات پایه تحصیلی باید بین ۳ تا ۵۰۰۰ حرف باشد",
+  })
+  readonly description: string;
+
+  @ApiProperty({ type: "string", format: "binary" })
+  public image: any;
+
   readonly books?: Book[];
   readonly terms?: TermOfStudy[];
   readonly createdAt?: Date;

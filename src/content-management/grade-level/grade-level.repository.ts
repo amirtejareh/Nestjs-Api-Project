@@ -1,26 +1,46 @@
-import { ConflictException, HttpStatus, Injectable, Res } from "@nestjs/common";
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Res,
+  UploadedFile,
+} from "@nestjs/common";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { GradeLevel } from "./entities/grade-level.entity";
 import { Model } from "mongoose";
+import { ImageService } from "../../common/services/imageService";
 
 @Injectable()
 export class GradeLevelRepository {
   constructor(
     @InjectModel("gradeLevel")
-    private readonly gradeLevelModel: Model<GradeLevel>
+    private readonly gradeLevelModel: Model<GradeLevel>,
+    private readonly imageService: ImageService
   ) {}
 
   async findOneByTitle(title: string) {
     return this.gradeLevelModel.findOne({ title }).exec();
   }
-  async create(@Res() res, createGradeLevelDto: CreateGradeLevelDto) {
+  async create(
+    @Res() res,
+    @UploadedFile() file,
+    createGradeLevelDto: CreateGradeLevelDto
+  ) {
     try {
       if (await this.findOneByTitle(createGradeLevelDto.title)) {
         throw new ConflictException(
           "درج پایه تحصیلی تکراری امکان‌پذیر نمی‌باشد."
         );
+      }
+
+      if (file) {
+        const fileName = await this.imageService.saveImage(
+          "image_grade_level",
+          file
+        );
+        createGradeLevelDto.image = fileName;
       }
 
       const createdGradeLevelModel = await this.gradeLevelModel.create(

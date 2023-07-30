@@ -14,6 +14,14 @@ export class UpdateGradeLevelDto extends PartialType(CreateGradeLevelDto) {
   @IsNotEmpty({ message: "فیلد عنوان پایه تحصیلی است" })
   @Length(3, 20, { message: "عنوان کارپایه تحصیلی باید بین ۳ تا ۲۰ حرف باشد" })
   readonly title: string;
+  @Length(3, 5000, {
+    message: "توضیحات پایه تحصیلی باید بین ۳ تا ۵۰۰۰ حرف باشد",
+  })
+  readonly description: string;
+
+  @ApiProperty({ type: "string", format: "binary" })
+  public image: any;
+
   readonly books?: Book[];
   readonly terms?: TermOfStudy[];
   readonly createdAt?: Date;

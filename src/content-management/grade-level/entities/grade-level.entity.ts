@@ -10,6 +10,12 @@ export class GradeLevel {
   @Prop({ required: true })
   title: string;
 
+  @Prop({ required: false })
+  description: string;
+
+  @Prop({ required: false })
+  image: string;
+
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
   })

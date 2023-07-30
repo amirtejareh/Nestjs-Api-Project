@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Res,
+  UseInterceptors,
+  UploadedFile,
 } from "@nestjs/common";
 import { GradeLevelService } from "./grade-level.service";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
@@ -16,6 +18,9 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { Express } from "express";
+import { ImageService } from "../../common/services/imageService";
 
 @Controller("grade-level")
 export class GradeLevelController {
@@ -25,8 +30,19 @@ export class GradeLevelController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Res() res, @Body() createGradeLevelDto: CreateGradeLevelDto) {
-    return this.gradeLevelService.create(res, createGradeLevelDto);
+  @UseInterceptors(FileInterceptor("image"))
+  async create(
+    @Res() res,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createGradeLevelDto: CreateGradeLevelDto
+  ) {
+    const result = this.gradeLevelService.create(
+      res,
+      file,
+      createGradeLevelDto
+    );
+
+    return result;
   }
 
   @Get()

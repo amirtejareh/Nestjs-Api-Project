@@ -9,6 +9,7 @@ import { FieldOfStudyModule } from "../content-management/field-of-study/field-o
 import { GradeLevelModule } from "../content-management/grade-level/grade-level.module";
 import { TermOfStudyModule } from "../content-management/term-of-study/term-of-study.module";
 import { BookModule } from "../content-management/book/book.module";
+import { ImageService } from "../common/services/imageService";
 
 @Global()
 @Module({
@@ -23,6 +24,8 @@ import { BookModule } from "../content-management/book/book.module";
     TermOfStudyModule,
     BookModule,
   ],
+  providers: [ImageService],
+
   controllers: [AppController],
 })
 export class AppModule {}

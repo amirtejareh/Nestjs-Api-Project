@@ -1,4 +1,4 @@
-import { Injectable, Res } from "@nestjs/common";
+import { Injectable, Res, UploadedFile } from "@nestjs/common";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
 import { GradeLevelRepository } from "./grade-level.repository";
@@ -7,8 +7,12 @@ import { GradeLevelRepository } from "./grade-level.repository";
 export class GradeLevelService {
   constructor(private gradeLevelRepository: GradeLevelRepository) {}
 
-  create(@Res() res, createGradeLevelDto: CreateGradeLevelDto) {
-    return this.gradeLevelRepository.create(res, createGradeLevelDto);
+  create(
+    @Res() res,
+    @UploadedFile() file,
+    createGradeLevelDto: CreateGradeLevelDto
+  ) {
+    return this.gradeLevelRepository.create(res, file, createGradeLevelDto);
   }
 
   findAll() {
