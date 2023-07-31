@@ -105,15 +105,15 @@ export class GradeLevelRepository {
         });
 
         if (gradeLevel.image) {
+          fs.unlink(`./${gradeLevel.image}`, (err) => {
+            if (err) {
+              throw new InternalServerErrorException(
+                "خطایی در حذف فایل قدیمی رخ داده است."
+              );
+            }
+          });
         }
         // حذف فایل قدیمی
-        fs.unlink(`./${gradeLevel.image}`, (err) => {
-          if (err) {
-            throw new InternalServerErrorException(
-              "خطایی در حذف فایل قدیمی رخ داده است."
-            );
-          }
-        });
       }
 
       const updatedGradeLevelModel =
