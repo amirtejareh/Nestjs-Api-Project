@@ -23,7 +23,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("api", app, document);
   await seederService.seed();
-  app.use(new ThrottleMiddleware().use);
+  // app.use(new ThrottleMiddleware().use);
   app.use("/uploads", express.static(join(__dirname, "..", "uploads")));
   app.enableCors({
     origin: "*",
