@@ -82,26 +82,26 @@ export class BookRepository {
         const fileName = await this.imageService.saveImage("image_book", file);
         updateBookDto.image = fileName;
 
-        fs.writeFile(`./${fileName}`, file.buffer, (err) => {
-          if (err) {
-            throw new InternalServerErrorException(
-              "خطایی در ذخیره فایل جدید رخ داده است."
-            );
-          }
-        });
+        try {
+          fs.writeFileSync(`${fileName}`, file.buffer);
+        } catch (err) {
+          throw new InternalServerErrorException(
+            "خطایی در حذف ذخیره فایل رخ داده است."
+          );
+        }
 
         if (book.image) {
-          fs.unlink(`./${book.image}`, (err) => {
-            if (err) {
-              throw new InternalServerErrorException(
-                "خطایی در حذف فایل قدیمی رخ داده است."
-              );
-            }
-          });
+          try {
+            fs.unlinkSync(`${book.image}`);
+          } catch (err) {
+            throw new InternalServerErrorException(
+              "خطایی در حذف فایل قدیمی رخ داده است."
+            );
+          }
         }
       }
 
-      const updatedGradeLevelModel = await this.bookModel.findByIdAndUpdate(
+      const updateBooklModel = await this.bookModel.findByIdAndUpdate(
         id,
         updateBookDto,
         {
@@ -112,7 +112,7 @@ export class BookRepository {
       return res.status(200).json({
         statusCode: 200,
         message: "کتاب با موفقیت بروزرسانی شد.",
-        data: updatedGradeLevelModel,
+        data: updateBooklModel,
       });
     } catch (e) {
       return res.status(500).json({

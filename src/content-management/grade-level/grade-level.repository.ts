@@ -86,34 +86,32 @@ export class GradeLevelRepository {
         throw new NotFoundException("پایه تحصیلی مورد نظر یافت نشد.");
       }
 
-      // بررسی اینکه آیا فایل جدیدی آپلود شده است یا خیر
       if (file) {
-        // ذخیره فایل جدید در دیتابیس
         const fileName = await this.imageService.saveImage(
           "image_grade_level",
           file
         );
         updateGradeLevelDto.image = fileName;
 
-        // با استفاده از fs.writeFile()، فایل را در مسیر جدید ذخیره می‌کنیم
-        fs.writeFile(`./${fileName}`, file.buffer, (err) => {
-          if (err) {
-            throw new InternalServerErrorException(
-              "خطایی در ذخیره فایل جدید رخ داده است."
-            );
-          }
-        });
+        try {
+          fs.writeFileSync(`./${fileName}`, file.buffer);
+        } catch (err) {
+          throw new InternalServerErrorException(
+            "خطایی در حذف ذخیره فایل رخ داده است."
+          );
+        }
 
         if (gradeLevel.image) {
-          fs.unlink(`./${gradeLevel.image}`, (err) => {
-            if (err) {
-              throw new InternalServerErrorException(
-                "خطایی در حذف فایل قدیمی رخ داده است."
-              );
-            }
-          });
+          try {
+            fs.unlinkSync(`${gradeLevel.image}`);
+          } catch (err) {
+            console.log(err);
+
+            throw new InternalServerErrorException(
+              "خطایی در حذف فایل قدیمی رخ داده است."
+            );
+          }
         }
-        // حذف فایل قدیمی
       }
 
       const updatedGradeLevelModel =
