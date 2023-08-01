@@ -8,11 +8,6 @@ export type FieldOfStudyDocument = FieldOfStudy & Document;
 export class FieldOfStudy {
   @Prop({ required: true })
   title: string;
-
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
-  })
-  gradeLevels: GradeLevel[];
 }
 
 export const FieldOfStudySchema = SchemaFactory.createForClass(FieldOfStudy);

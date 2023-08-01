@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 import { BookService } from "./book.service";
 import { CreateBookDto } from "./dto/create-book.dto";
@@ -16,6 +18,7 @@ import { ApiBearerAuth } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller("book")
 export class BookController {
@@ -25,8 +28,13 @@ export class BookController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Res() res, @Body() createBookDto: CreateBookDto) {
-    return this.bookService.create(res, createBookDto);
+  @UseInterceptors(FileInterceptor("image"))
+  create(
+    @Res() res,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createBookDto: CreateBookDto
+  ) {
+    return this.bookService.create(res, file, createBookDto);
   }
 
   @Get()
@@ -42,13 +50,16 @@ export class BookController {
   @Patch(":id")
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
+  @UseInterceptors(FileInterceptor("image"))
   @Roles("SuperAdmin")
   update(
     @Res() res,
+    @UploadedFile() file: Express.Multer.File,
     @Param("id") id: string,
+
     @Body() updateBookDto: UpdateBookDto
   ) {
-    return this.bookService.update(res, id, updateBookDto);
+    return this.bookService.update(res, file, id, updateBookDto);
   }
 
   @Delete(":id")

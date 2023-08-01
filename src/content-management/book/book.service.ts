@@ -1,4 +1,4 @@
-import { Injectable, Res } from "@nestjs/common";
+import { Injectable, Res, UploadedFile } from "@nestjs/common";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
 import { BookRepository } from "./book.repository";
@@ -7,8 +7,12 @@ import { BookRepository } from "./book.repository";
 export class BookService {
   constructor(private bookRepository: BookRepository) {}
 
-  create(@Res() res, createBookDto: CreateBookDto) {
-    return this.bookRepository.create(res, createBookDto);
+  create(
+    @Res() res,
+    @UploadedFile() file: Express.Multer.File,
+    createBookDto: CreateBookDto
+  ) {
+    return this.bookRepository.create(res, file, createBookDto);
   }
 
   findAll() {
@@ -19,8 +23,13 @@ export class BookService {
     return this.bookRepository.findOne(id);
   }
 
-  update(@Res() res, id: string, updateBookDto: UpdateBookDto) {
-    return this.bookRepository.update(res, id, updateBookDto);
+  update(
+    @Res() res,
+    @UploadedFile() file: Express.Multer.File,
+    id: string,
+    updateBookDto: UpdateBookDto
+  ) {
+    return this.bookRepository.update(res, file, id, updateBookDto);
   }
 
   remove(@Res() res, id: string) {

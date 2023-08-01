@@ -3,6 +3,10 @@
     {
       "name": "disk1",
       "mountTo": "uploads/image_grade_level"
+    },
+    {
+      "name": "disk2",
+      "mountTo": "uploads/image_book"
     }
   ]
 }

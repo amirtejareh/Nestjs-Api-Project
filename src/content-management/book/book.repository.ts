@@ -1,32 +1,53 @@
-import { ConflictException, HttpStatus, Injectable, Res } from "@nestjs/common";
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
+  Res,
+  UploadedFile,
+} from "@nestjs/common";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { Book } from "./entities/book.entity";
+import * as fs from "fs";
+import { ImageService } from "../../common/services/imageService";
 
 @Injectable()
 export class BookRepository {
   constructor(
     @InjectModel("book")
-    private readonly bookModel: Model<Book>
+    private readonly bookModel: Model<Book>,
+    private readonly imageService: ImageService
   ) {}
 
   async findOneByTitle(title: string) {
     return this.bookModel.findOne({ title }).exec();
   }
 
-  async create(@Res() res, createBookDto: CreateBookDto) {
+  async create(
+    @Res() res,
+    @UploadedFile() file: Express.Multer.File,
+    createBookDto: CreateBookDto
+  ) {
     try {
       if (await this.findOneByTitle(createBookDto.title)) {
         throw new ConflictException("درج کتاب تکراری امکان‌پذیر نمی‌باشد.");
       }
 
-      const createBook = await this.bookModel.create(createBookDto);
+      if (file) {
+        const fileName = await this.imageService.saveImage("image_book", file);
+        createBookDto.image = fileName;
+      }
+
+      const createBookModel = await this.bookModel.create(createBookDto);
       return res.status(200).json({
         statusCode: 200,
         message: "یک کتاب با موفقیت ایجاد شد",
-        data: createBook,
+        data: createBookModel,
       });
     } catch (e) {
       return res.status(500).json({
@@ -41,27 +62,62 @@ export class BookRepository {
   }
 
   findOne(id: string) {
-    return this.bookModel.findOne({});
+    return this.bookModel.findOne({ _id: id });
   }
 
-  async update(@Res() res, id: string, updateBookDto: UpdateBookDto) {
+  async update(
+    @Res() res,
+    @UploadedFile() file,
+    @Param("id") id: string,
+    updateBookDto: UpdateBookDto
+  ) {
     try {
-      const updateBook = await this.bookModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { ...updateBookDto } },
-        { new: true }
+      const book = await this.bookModel.findById(id);
+
+      if (!book) {
+        throw new NotFoundException("کتاب مورد نظر یافت نشد.");
+      }
+
+      if (file) {
+        const fileName = await this.imageService.saveImage("image_book", file);
+        updateBookDto.image = fileName;
+
+        fs.writeFile(`./${fileName}`, file.buffer, (err) => {
+          if (err) {
+            throw new InternalServerErrorException(
+              "خطایی در ذخیره فایل جدید رخ داده است."
+            );
+          }
+        });
+
+        if (book.image) {
+          fs.unlink(`./${book.image}`, (err) => {
+            if (err) {
+              throw new InternalServerErrorException(
+                "خطایی در حذف فایل قدیمی رخ داده است."
+              );
+            }
+          });
+        }
+      }
+
+      const updatedGradeLevelModel = await this.bookModel.findByIdAndUpdate(
+        id,
+        updateBookDto,
+        {
+          new: true,
+        }
       );
 
-      return res.status(HttpStatus.OK).json({
-        statusCode: HttpStatus.OK,
-        message: " کتاب مورد نظر با موفقیت بروزرسانی شد",
-        data: updateBook,
+      return res.status(200).json({
+        statusCode: 200,
+        message: "کتاب با موفقیت بروزرسانی شد.",
+        data: updatedGradeLevelModel,
       });
-    } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در بروزرسانی کتاب مورد نظر به وجود آمده است",
-        error: error.message,
+    } catch (e) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: e.message,
       });
     }
   }

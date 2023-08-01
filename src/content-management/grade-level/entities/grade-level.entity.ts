@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
-import { Book } from "../../book/entities/book.entity";
-import { TermOfStudy } from "../../term-of-study/entities/term-of-study.entity";
+import { FieldOfStudy } from "../../field-of-study/entities/field-of-study.entity";
 
 export type GradeLevelDocument = GradeLevel & Document;
 
@@ -17,13 +16,9 @@ export class GradeLevel {
   image: string;
 
   @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
   })
-  books: Book[];
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: TermOfStudy.name }],
-  })
-  terms: TermOfStudy[];
+  fieldOfStudies: FieldOfStudy[];
 }
 
 export const GradeLevelSchema = SchemaFactory.createForClass(GradeLevel);
