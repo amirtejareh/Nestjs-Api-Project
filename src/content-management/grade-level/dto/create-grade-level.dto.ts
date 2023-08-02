@@ -23,9 +23,6 @@ export class CreateGradeLevelDto {
 
   @ApiProperty({ type: "string", format: "binary" })
   public image: any;
-
-  readonly books?: Book[];
-  readonly terms?: TermOfStudy[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

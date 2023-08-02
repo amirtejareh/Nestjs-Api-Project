@@ -6,13 +6,16 @@ import {
   PermissionDocument,
 } from "../permission/entities/permission.entity";
 import { Model } from "mongoose";
+import { TermOfStudy } from "../content-management/term-of-study/entities/term-of-study.entity";
 
 @Injectable()
 export class SeederService {
   constructor(
     @InjectModel(Role.name) private roleModel: Model<RoleDocument>,
     @InjectModel(Permission.name)
-    private permissionModel: Model<PermissionDocument>
+    private permissionModel: Model<PermissionDocument>,
+    @InjectModel(TermOfStudy.name)
+    private termOfStudyModel: Model<TermOfStudy>
   ) {}
 
   async seed() {
@@ -33,6 +36,16 @@ export class SeederService {
       },
       { title: "User", permissions: [{ resource: "profile", action: "read" }] },
     ];
+
+    const existingTermOfStudy = await this.termOfStudyModel.find({});
+
+    if (existingTermOfStudy.length === 0) {
+      Array.of(1, 2).map(async (number: number) => {
+        await this.termOfStudyModel.create({
+          title: `ترم ${number}`,
+        });
+      });
+    }
 
     for (const permission of permissions) {
       const existingPermission = await this.permissionModel.findOne({
@@ -70,7 +83,7 @@ export class SeederService {
           )}`
         );
       } else {
-        const createdRole = await this.roleModel.create({
+        await this.roleModel.create({
           title: role.title,
           permissions: permissionIds,
         });

@@ -6,38 +6,38 @@ import {
   Patch,
   Param,
   Delete,
-  Res,
   UseGuards,
+  Res,
 } from "@nestjs/common";
-import { TermOfStudyService } from "./term-of-study.service";
-import { CreateTermOfStudyDto } from "./dto/create-term-of-study.dto";
-import { UpdateTermOfStudyDto } from "./dto/update-term-of-study.dto";
+import { ChapterService } from "./chapter.service";
+import { CreateChapterDto } from "./dto/create-chapter.dto";
+import { UpdateChapterDto } from "./dto/update-chapter.dto";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 
-@ApiTags("Term of study")
-@Controller("term-of-study")
-export class TermOfStudyController {
-  constructor(private readonly termOfStudyService: TermOfStudyService) {}
+@ApiTags("Chapter")
+@Controller("chapter")
+export class ChapterController {
+  constructor(private readonly chapterService: ChapterService) {}
 
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Res() res, @Body() createTermOfStudyDto: CreateTermOfStudyDto) {
-    return this.termOfStudyService.create(res, createTermOfStudyDto);
+  create(@Res() res, @Body() createChapterDto: CreateChapterDto) {
+    return this.chapterService.create(res, createChapterDto);
   }
 
   @Get()
   findAll() {
-    return this.termOfStudyService.findAll();
+    return this.chapterService.findAll();
   }
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.termOfStudyService.findOne(id);
+    return this.chapterService.findOne(id);
   }
 
   @Patch(":id")
@@ -47,9 +47,9 @@ export class TermOfStudyController {
   update(
     @Res() res,
     @Param("id") id: string,
-    @Body() updateTermOfStudyDto: UpdateTermOfStudyDto
+    @Body() updateChapterDto: UpdateChapterDto
   ) {
-    return this.termOfStudyService.update(res, id, updateTermOfStudyDto);
+    return this.chapterService.update(res, id, updateChapterDto);
   }
 
   @Delete(":id")
@@ -57,6 +57,6 @@ export class TermOfStudyController {
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   remove(@Res() res, @Param("id") id: string) {
-    return this.termOfStudyService.remove(res, id);
+    return this.chapterService.remove(res, id);
   }
 }

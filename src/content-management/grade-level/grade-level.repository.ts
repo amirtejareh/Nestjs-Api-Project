@@ -21,7 +21,7 @@ import { ImageService } from "../../common/services/imageService";
 @Injectable()
 export class GradeLevelRepository {
   constructor(
-    @InjectModel("gradeLevel")
+    @InjectModel(GradeLevel.name)
     private readonly gradeLevelModel: Model<GradeLevel>,
     private readonly imageService: ImageService
   ) {}

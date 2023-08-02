@@ -15,6 +15,8 @@ import * as bcrypt from "bcrypt";
 import { NationalCodeHelper } from "../common/utils/national-code.helper";
 import { InvalidNationalIdException } from "../common/exception/invalid-national-id-exception";
 import { SigninUserDto } from "../users/dto/signin-user-dto";
+import { ApiTags } from "@nestjs/swagger";
+@ApiTags("Auth")
 @Controller("auth")
 export class AuthController {
   constructor(

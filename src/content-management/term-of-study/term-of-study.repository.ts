@@ -24,13 +24,13 @@ export class TermOfStudyRepository {
         );
       }
 
-      const createdGradeLevelModel = await this.termOfStudylModel.create(
+      const createTermOfStudyModel = await this.termOfStudylModel.create(
         createTermOfStudyDto
       );
       return res.status(200).json({
         statusCode: 200,
         message: "یک ترم تحصیلی با موفقیت ایجاد شد",
-        data: createdGradeLevelModel,
+        data: createTermOfStudyModel,
       });
     } catch (e) {
       return res.status(500).json({

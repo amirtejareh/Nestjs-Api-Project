@@ -10,6 +10,7 @@ import { GradeLevelModule } from "../content-management/grade-level/grade-level.
 import { TermOfStudyModule } from "../content-management/term-of-study/term-of-study.module";
 import { BookModule } from "../content-management/book/book.module";
 import { ImageService } from "../common/services/imageService";
+import { ChapterModule } from "../content-management/chapter/chapter.module";
 
 @Global()
 @Module({
@@ -22,6 +23,7 @@ import { ImageService } from "../common/services/imageService";
     GradeLevelModule,
     TermOfStudyModule,
     BookModule,
+    ChapterModule,
   ],
   providers: [ImageService],
 

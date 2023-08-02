@@ -11,7 +11,7 @@ import {
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { Book } from "./entities/book.entity";
 import * as fs from "fs";
 import { ImageService } from "../../common/services/imageService";
@@ -19,7 +19,7 @@ import { ImageService } from "../../common/services/imageService";
 @Injectable()
 export class BookRepository {
   constructor(
-    @InjectModel("book")
+    @InjectModel(Book.name)
     private readonly bookModel: Model<Book>,
     private readonly imageService: ImageService
   ) {}
@@ -59,6 +59,16 @@ export class BookRepository {
 
   findAll() {
     return this.bookModel.find({});
+  }
+
+  async findBooksBasedOnGradeLevels(gradeLevels: string[]) {
+    const books = await this.bookModel.find({
+      gradeLevels: {
+        $in: gradeLevels.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
+
+    return books;
   }
 
   findOne(id: string) {

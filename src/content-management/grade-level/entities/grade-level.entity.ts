@@ -16,7 +16,7 @@ export class GradeLevel {
   image: string;
 
   @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: FieldOfStudy.name }],
   })
   fieldOfStudies: FieldOfStudy[];
 }

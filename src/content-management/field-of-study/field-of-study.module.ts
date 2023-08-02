@@ -3,10 +3,7 @@ import { FieldOfStudyService } from "./field-of-study.service";
 import { FieldOfStudyController } from "./field-of-study.controller";
 import { FieldOfStudyRepository } from "./field-of-study.repository";
 import { MongooseModule } from "@nestjs/mongoose";
-import {
-  FieldOfStudy,
-  FieldOfStudySchema,
-} from "./entities/field-of-study.entity";
+import { FieldOfStudySchema } from "./entities/field-of-study.entity";
 import { JwtService } from "@nestjs/jwt";
 
 @Module({

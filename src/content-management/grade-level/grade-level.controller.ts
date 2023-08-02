@@ -14,15 +14,13 @@ import {
 import { GradeLevelService } from "./grade-level.service";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Express } from "express";
-import { ImageService } from "../../common/services/imageService";
-import { join } from "path";
-
+@ApiTags("Grade Level")
 @Controller("grade-level")
 export class GradeLevelController {
   constructor(private readonly gradeLevelService: GradeLevelService) {}

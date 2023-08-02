@@ -10,16 +10,18 @@ import {
   Res,
   UploadedFile,
   UseInterceptors,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { BookService } from "./book.service";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
 
+@ApiTags("Book")
 @Controller("book")
 export class BookController {
   constructor(private readonly bookService: BookService) {}
@@ -45,6 +47,13 @@ export class BookController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.bookService.findOne(id);
+  }
+
+  @Get("withGradeLevels/:gradeLevelId")
+  async findBooksBasedOnGradeLevels(
+    @Param("gradeLevelId", ParseArrayPipe) gradeLevels: string[]
+  ) {
+    return this.bookService.findBooksBasedOnGradeLevels(gradeLevels);
   }
 
   @Patch(":id")
