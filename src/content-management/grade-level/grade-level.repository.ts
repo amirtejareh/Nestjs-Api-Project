@@ -105,8 +105,6 @@ export class GradeLevelRepository {
           try {
             fs.unlinkSync(`${gradeLevel.image}`);
           } catch (err) {
-            console.log(err);
-
             throw new InternalServerErrorException(
               "خطایی در حذف فایل قدیمی رخ داده است."
             );

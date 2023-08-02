@@ -53,6 +53,10 @@ export class BookController {
   async findBooksBasedOnGradeLevels(
     @Param("gradeLevelId", ParseArrayPipe) gradeLevels: string[]
   ) {
+    if (gradeLevels[0] == "null") {
+      return [];
+    }
+
     return this.bookService.findBooksBasedOnGradeLevels(gradeLevels);
   }
 

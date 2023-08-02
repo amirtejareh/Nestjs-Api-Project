@@ -23,8 +23,6 @@ export class ChapterRepository {
     return this.chapterModel.findOne({ title }).exec();
   }
   async create(@Res() res, @Body() createChapterDto: CreateChapterDto) {
-    console.log(" repository createChapterDto", createChapterDto);
-
     try {
       if (await this.findOneByTitle(createChapterDto.title)) {
         throw new ConflictException("درج فصل تکراری امکان‌پذیر نمی‌باشد.");
