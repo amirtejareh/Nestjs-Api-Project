@@ -15,6 +15,10 @@ export class ChapterService {
     return this.chapterRepository.findAll();
   }
 
+  async findChaptersBasedOnBooks(books: string[]) {
+    return this.chapterRepository.findChaptersBasedOnBooks(books);
+  }
+
   findOne(@Param("id") id: string) {
     return this.chapterRepository.findOne(id);
   }
