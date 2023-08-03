@@ -10,7 +10,7 @@ import { CreateChapterDto } from "./dto/create-chapter.dto";
 import { UpdateChapterDto } from "./dto/update-chapter.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { Chapter } from "./entities/chapter.entity";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 @Injectable()
 export class ChapterRepository {
@@ -46,6 +46,16 @@ export class ChapterRepository {
 
   findAll() {
     return this.chapterModel.find({});
+  }
+
+  async findChaptersBasedOnBooks(books: string[]) {
+    const chapters = await this.chapterModel.find({
+      gradeLevels: {
+        $in: books.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
+
+    return books;
   }
 
   findOne(@Param("id") id: string) {
