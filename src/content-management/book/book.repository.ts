@@ -140,7 +140,7 @@ export class BookRepository {
           });
         }
 
-        if (findOneBook.image) {
+        if (existsSync(findOneBook.image)) {
           try {
             fs.unlinkSync(`${findOneBook.image}`);
           } catch (err) {
