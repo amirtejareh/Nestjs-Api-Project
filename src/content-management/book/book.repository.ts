@@ -143,6 +143,19 @@ export class BookRepository {
           message: "کتاب مورد نظر پیدا نشد",
         });
       }
+
+      const findOneBook = await this.bookModel.findOne({ _id: id });
+
+      if (findOneBook.image) {
+        try {
+          fs.unlinkSync(`${findOneBook.image}`);
+        } catch (err) {
+          throw new InternalServerErrorException(
+            "خطایی در حذف فایل قدیمی رخ داده است."
+          );
+        }
+      }
+
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: "کتاب مورد نظر با موفقیت حذف شد",

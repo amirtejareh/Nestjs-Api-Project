@@ -141,6 +141,19 @@ export class GradeLevelRepository {
           message: "پایه تحصیلی مورد نظر پیدا نشد",
         });
       }
+
+      const findOneGradeLevel = await this.gradeLevelModel.findOne({ _id: id });
+
+      if (findOneGradeLevel.image) {
+        try {
+          fs.unlinkSync(`${findOneGradeLevel.image}`);
+        } catch (err) {
+          throw new InternalServerErrorException(
+            "خطایی در حذف فایل قدیمی رخ داده است."
+          );
+        }
+      }
+
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: "پایه تحصیلی با موفقیت حذف شد",
