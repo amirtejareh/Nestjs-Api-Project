@@ -3,6 +3,7 @@ import { IsNotEmpty, Length } from "class-validator";
 import { GradeLevel } from "../../grade-level/entities/grade-level.entity";
 import { Book } from "../../book/entities/book.entity";
 import { TermOfStudy } from "../../term-of-study/entities/term-of-study.entity";
+import { Chapter } from "../../chapter/entities/chapter.entity";
 
 export class CreateSubjectDto {
   readonly _id?: string;
@@ -14,6 +15,7 @@ export class CreateSubjectDto {
   @Length(3, 20, { message: "عنوان موضوع باید بین ۳ تا ۲۰ حرف باشد" })
   readonly title: string;
   readonly gradeLevels: GradeLevel[];
+  readonly chapters: Chapter[];
   readonly books: Book[];
   readonly terms: TermOfStudy[];
   readonly createdAt?: Date;
