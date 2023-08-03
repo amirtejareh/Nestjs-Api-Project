@@ -1,26 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSectionDto } from './dto/create-section.dto';
-import { UpdateSectionDto } from './dto/update-section.dto';
+import { Body, Injectable, Param, Res } from "@nestjs/common";
+import { CreateSectionDto } from "./dto/create-section.dto";
+import { UpdateSectionDto } from "./dto/update-section.dto";
+import { SectionRepository } from "./section.repository";
 
 @Injectable()
 export class SectionService {
-  create(createSectionDto: CreateSectionDto) {
-    return 'This action adds a new section';
+  constructor(private readonly sectionRepository: SectionRepository) {}
+
+  create(@Res() res, @Body() createSectionDto: CreateSectionDto) {
+    return this.sectionRepository.create(res, createSectionDto);
   }
 
   findAll() {
-    return `This action returns all section`;
+    return this.sectionRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} section`;
+  findOne(@Param("id") id: string) {
+    return this.sectionRepository.findOne(id);
   }
 
-  update(id: number, updateSectionDto: UpdateSectionDto) {
-    return `This action updates a #${id} section`;
+  update(
+    @Res() res,
+    @Param("id") id: string,
+    @Body() updateSectionDto: UpdateSectionDto
+  ) {
+    return this.sectionRepository.update(res, id, updateSectionDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} section`;
+  remove(@Res() res, @Param("id") id: string) {
+    return this.sectionRepository.remove(res, id);
   }
 }
