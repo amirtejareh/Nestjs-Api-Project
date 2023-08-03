@@ -1,15 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SectionService } from './section.service';
-import { CreateSectionDto } from './dto/create-section.dto';
-import { UpdateSectionDto } from './dto/update-section.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Res,
+} from "@nestjs/common";
+import { SectionService } from "./section.service";
+import { CreateSectionDto } from "./dto/create-section.dto";
+import { ApiBearerAuth } from "@nestjs/swagger";
+import { AuthGuard } from "../../auth/guards/auth.guard";
+import { Roles } from "../../common/decorators/roles.decorator";
+import { RoleGuard } from "../../auth/guards/role.guard";
+import { UpdateSectionDto } from "./dto/update-section.dto";
 
-@Controller('section')
+@Controller("section")
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
 
   @Post()
-  create(@Body() createSectionDto: CreateSectionDto) {
-    return this.sectionService.create(createSectionDto);
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
+  create(@Res() res, @Body() createSectionDto: CreateSectionDto) {
+    return this.sectionService.create(res, createSectionDto);
   }
 
   @Get()
@@ -17,18 +34,28 @@ export class SectionController {
     return this.sectionService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sectionService.findOne(+id);
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    return this.sectionService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSectionDto: UpdateSectionDto) {
-    return this.sectionService.update(+id, updateSectionDto);
+  @Patch(":id")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
+  update(
+    @Res() res,
+    @Param("id") id: string,
+    @Body() updateSectionDto: UpdateSectionDto
+  ) {
+    return this.sectionService.update(res, id, updateSectionDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sectionService.remove(+id);
+  @Delete(":id")
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
+  remove(@Res() res, @Param("id") id: string) {
+    return this.sectionService.remove(res, id);
   }
 }
