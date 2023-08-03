@@ -7,6 +7,7 @@ import { config } from "dotenv";
 import { ThrottleMiddleware } from "./middleware/throttle.middleware";
 import express from "express";
 import { join } from "path";
+import * as csurf from "csurf";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,7 @@ async function bootstrap() {
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   });
+  app.use(csurf());
   app.listen(3000);
 }
 
