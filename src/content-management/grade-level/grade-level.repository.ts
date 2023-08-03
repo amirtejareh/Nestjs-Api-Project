@@ -140,7 +140,7 @@ export class GradeLevelRepository {
 
         if (existsSync(findOneGradeLevel.image)) {
           try {
-            fs.unlinkSync(`./${findOneGradeLevel.image}`);
+            fs.unlinkSync(`${findOneGradeLevel.image}`);
           } catch (err) {
             throw new InternalServerErrorException(
               "خطایی در حذف فایل قدیمی رخ داده است."
