@@ -11,6 +11,7 @@ import { TermOfStudyModule } from "../content-management/term-of-study/term-of-s
 import { BookModule } from "../content-management/book/book.module";
 import { ImageService } from "../common/services/imageService";
 import { ChapterModule } from "../content-management/chapter/chapter.module";
+import { SectionModule } from "../content-management/section/section.module";
 
 @Global()
 @Module({
@@ -24,6 +25,7 @@ import { ChapterModule } from "../content-management/chapter/chapter.module";
     TermOfStudyModule,
     BookModule,
     ChapterModule,
+    SectionModule,
   ],
   providers: [ImageService],
 
