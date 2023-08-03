@@ -9,8 +9,8 @@ export class CreateSectionDto {
     description: "Title of the section",
     example: "section 1",
   })
-  @IsNotEmpty({ message: "فیلد عنوان فصل اجباری است" })
-  @Length(3, 20, { message: "عنوان فصل باید بین ۳ تا ۲۰ حرف باشد" })
+  @IsNotEmpty({ message: "فیلد عنوان بخش اجباری است" })
+  @Length(3, 20, { message: "عنوان بخش باید بین ۳ تا ۲۰ حرف باشد" })
   readonly title: string;
   readonly gradeLevels: GradeLevel[];
   readonly books: Book[];
