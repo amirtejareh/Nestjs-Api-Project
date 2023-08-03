@@ -50,12 +50,12 @@ export class ChapterRepository {
 
   async findChaptersBasedOnBooks(books: string[]) {
     const chapters = await this.chapterModel.find({
-      gradeLevels: {
+      books: {
         $in: books.map((id: string) => new Types.ObjectId(id)),
       },
     });
 
-    return books;
+    return chapters;
   }
 
   findOne(@Param("id") id: string) {
