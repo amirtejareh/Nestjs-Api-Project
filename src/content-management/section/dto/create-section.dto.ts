@@ -6,8 +6,8 @@ import { Chapter } from "../../chapter/entities/chapter.entity";
 export class CreateSectionDto {
   readonly _id?: string;
   @ApiProperty({
-    description: "Title of the chapter",
-    example: "Chapter 1",
+    description: "Title of the section",
+    example: "section 1",
   })
   @IsNotEmpty({ message: "فیلد عنوان فصل اجباری است" })
   @Length(3, 20, { message: "عنوان فصل باید بین ۳ تا ۲۰ حرف باشد" })
