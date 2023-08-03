@@ -10,6 +10,7 @@ import {
   UploadedFile,
 } from "@nestjs/common";
 import * as fs from "fs";
+import { existsSync } from "fs";
 
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
@@ -93,15 +94,7 @@ export class GradeLevelRepository {
         );
         updateGradeLevelDto.image = fileName;
 
-        try {
-          fs.writeFileSync(`./${fileName}`, file.buffer);
-        } catch (err) {
-          throw new InternalServerErrorException(
-            "خطایی در حذف ذخیره فایل رخ داده است."
-          );
-        }
-
-        if (gradeLevel.image) {
+        if (existsSync(gradeLevel.image)) {
           try {
             fs.unlinkSync(`${gradeLevel.image}`);
           } catch (err) {
@@ -132,32 +125,38 @@ export class GradeLevelRepository {
 
   async remove(@Res() res, id: string) {
     try {
-      const deleteGradeLevelModel = await this.gradeLevelModel.deleteOne({
-        _id: id,
-      });
-      if (!deleteGradeLevelModel) {
-        return res.status(HttpStatus.NOT_FOUND).json({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: "پایه تحصیلی مورد نظر پیدا نشد",
+      const findOneGradeLevel = await this.findOne(id);
+
+      if (findOneGradeLevel) {
+        const deleteGradeLevelModel = await this.gradeLevelModel.deleteOne({
+          _id: id,
+        });
+        if (!deleteGradeLevelModel) {
+          return res.status(HttpStatus.NOT_FOUND).json({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "پایه تحصیلی مورد نظر پیدا نشد",
+          });
+        }
+
+        if (existsSync(findOneGradeLevel.image)) {
+          try {
+            fs.unlinkSync(`./${findOneGradeLevel.image}`);
+          } catch (err) {
+            throw new InternalServerErrorException(
+              "خطایی در حذف فایل قدیمی رخ داده است."
+            );
+          }
+        }
+
+        return res.status(HttpStatus.OK).json({
+          statusCode: HttpStatus.OK,
+          message: "پایه تحصیلی با موفقیت حذف شد",
+          data: null,
         });
       }
-
-      const findOneGradeLevel = await this.gradeLevelModel.findOne({ _id: id });
-
-      if (findOneGradeLevel.image) {
-        try {
-          fs.unlinkSync(`${findOneGradeLevel.image}`);
-        } catch (err) {
-          throw new InternalServerErrorException(
-            "خطایی در حذف فایل قدیمی رخ داده است."
-          );
-        }
-      }
-
-      return res.status(HttpStatus.OK).json({
-        statusCode: HttpStatus.OK,
-        message: "پایه تحصیلی با موفقیت حذف شد",
-        data: deleteGradeLevelModel,
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: "پایه تحصیلی مورد نظر پیدا نشد",
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

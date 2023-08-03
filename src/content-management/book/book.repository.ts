@@ -15,6 +15,7 @@ import { Model, Types } from "mongoose";
 import { Book } from "./entities/book.entity";
 import * as fs from "fs";
 import { ImageService } from "../../common/services/imageService";
+import { existsSync } from "fs";
 
 @Injectable()
 export class BookRepository {
@@ -92,15 +93,7 @@ export class BookRepository {
         const fileName = await this.imageService.saveImage("image_book", file);
         updateBookDto.image = fileName;
 
-        try {
-          fs.writeFileSync(`${fileName}`, file.buffer);
-        } catch (err) {
-          throw new InternalServerErrorException(
-            "خطایی در حذف ذخیره فایل رخ داده است."
-          );
-        }
-
-        if (book.image) {
+        if (existsSync(book.image)) {
           try {
             fs.unlinkSync(`${book.image}`);
           } catch (err) {
@@ -134,32 +127,38 @@ export class BookRepository {
 
   async remove(@Res() res, id: string) {
     try {
-      const deleteBook = await this.bookModel.deleteOne({
-        _id: id,
-      });
-      if (!deleteBook) {
-        return res.status(HttpStatus.NOT_FOUND).json({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: "کتاب مورد نظر پیدا نشد",
+      const findOneBook = await this.findOne(id);
+
+      if (findOneBook) {
+        const deleteBook = await this.bookModel.deleteOne({
+          _id: id,
+        });
+        if (!deleteBook) {
+          return res.status(HttpStatus.NOT_FOUND).json({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "کتاب مورد نظر پیدا نشد",
+          });
+        }
+
+        if (findOneBook.image) {
+          try {
+            fs.unlinkSync(`${findOneBook.image}`);
+          } catch (err) {
+            throw new InternalServerErrorException(
+              "خطایی در حذف فایل قدیمی رخ داده است."
+            );
+          }
+        }
+
+        return res.status(HttpStatus.OK).json({
+          statusCode: HttpStatus.OK,
+          message: "کتاب مورد نظر با موفقیت حذف شد",
+          data: deleteBook,
         });
       }
-
-      const findOneBook = await this.bookModel.findOne({ _id: id });
-
-      if (findOneBook.image) {
-        try {
-          fs.unlinkSync(`${findOneBook.image}`);
-        } catch (err) {
-          throw new InternalServerErrorException(
-            "خطایی در حذف فایل قدیمی رخ داده است."
-          );
-        }
-      }
-
-      return res.status(HttpStatus.OK).json({
-        statusCode: HttpStatus.OK,
-        message: "کتاب مورد نظر با موفقیت حذف شد",
-        data: deleteBook,
+      return res.status(HttpStatus.NOT_FOUND).json({
+        statusCode: HttpStatus.NOT_FOUND,
+        message: "کتاب مورد نظر پیدا نشد",
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
