@@ -11,12 +11,13 @@ import {
 } from "@nestjs/common";
 import { SectionService } from "./section.service";
 import { CreateSectionDto } from "./dto/create-section.dto";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { UpdateSectionDto } from "./dto/update-section.dto";
 
+@ApiTags("Section")
 @Controller("section")
 export class SectionController {
   constructor(private readonly sectionService: SectionService) {}
