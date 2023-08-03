@@ -26,4 +26,4 @@ export class Section {
   })
   chapters: Chapter[];
 }
-export const SectionSchema = SchemaFactory.createForClass(Chapter);
+export const SectionSchema = SchemaFactory.createForClass(Section);
