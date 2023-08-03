@@ -12,6 +12,7 @@ import { BookModule } from "../content-management/book/book.module";
 import { ImageService } from "../common/services/imageService";
 import { ChapterModule } from "../content-management/chapter/chapter.module";
 import { SectionModule } from "../content-management/section/section.module";
+import { SubjectModule } from "../content-management/subject/subject.module";
 
 @Global()
 @Module({
@@ -26,6 +27,7 @@ import { SectionModule } from "../content-management/section/section.module";
     BookModule,
     ChapterModule,
     SectionModule,
+    SubjectModule,
   ],
   providers: [ImageService],
 
