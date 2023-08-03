@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Res,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { ChapterService } from "./chapter.service";
 import { CreateChapterDto } from "./dto/create-chapter.dto";
@@ -33,6 +34,17 @@ export class ChapterController {
   @Get()
   findAll() {
     return this.chapterService.findAll();
+  }
+
+  @Get("withBooks/:booklId")
+  async findChaptersBasedOnBooks(
+    @Param("booklId", ParseArrayPipe) books: string[]
+  ) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.chapterService.findChaptersBasedOnBooks(books);
   }
 
   @Get(":id")
