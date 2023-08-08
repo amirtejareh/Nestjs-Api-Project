@@ -6,10 +6,10 @@ import { Section } from "../../../content-management/section/entities/section.en
 import { Subject } from "../../../content-management/subject/entities/subject.entity";
 import { Chapter } from "../../../content-management/chapter/entities/chapter.entity";
 
-export type QuestionDocument = Question & Document;
+export type ObjectiveTestDocument = ObjectiveTest & Document;
 
 @Schema({ timestamps: true })
-export class Question {
+export class ObjectiveTest {
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
   })
@@ -46,7 +46,7 @@ export class Question {
   type: string;
 
   @Prop({ required: true })
-  question: string;
+  objectiveTest: string;
 
   @Prop({ required: true })
   correctAnswer: number;
@@ -54,7 +54,7 @@ export class Question {
   @Prop({ required: true })
   examNumber: number;
   @Prop({ required: true })
-  questionNumber: number;
+  objectiveTestNumber: number;
 }
 
-export const QuestionSchema = SchemaFactory.createForClass(Question);
+export const ObjectiveTestSchema = SchemaFactory.createForClass(ObjectiveTest);
