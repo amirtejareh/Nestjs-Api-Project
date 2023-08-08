@@ -13,6 +13,7 @@ import { ImageService } from "../common/services/imageService";
 import { ChapterModule } from "../content-management/chapter/chapter.module";
 import { SectionModule } from "../content-management/section/section.module";
 import { SubjectModule } from "../content-management/subject/subject.module";
+import { ObjectiveTestModule } from "../exam-management/objective-test/objective-test.module";
 
 @Global()
 @Module({
@@ -28,6 +29,7 @@ import { SubjectModule } from "../content-management/subject/subject.module";
     ChapterModule,
     SectionModule,
     SubjectModule,
+    ObjectiveTestModule,
   ],
   providers: [ImageService],
 

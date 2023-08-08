@@ -31,8 +31,8 @@ export class ObjectiveTest {
   })
   subjects: Subject[];
 
-  @Prop({ required: true, enum: ["hard", "easy", "average"] })
-  difficulty: string;
+  @Prop({ required: true, enum: ["easy", "average", "hard"] })
+  questionDifficulty: string;
   @Prop({
     required: true,
     enum: [
@@ -43,10 +43,10 @@ export class ObjectiveTest {
       "challenging",
     ],
   })
-  type: string;
+  questionType: string;
 
   @Prop({ required: true })
-  objectiveTest: string;
+  question: string[];
 
   @Prop({ required: true })
   correctAnswer: number;
@@ -54,7 +54,13 @@ export class ObjectiveTest {
   @Prop({ required: true })
   examNumber: number;
   @Prop({ required: true })
-  objectiveTestNumber: number;
+  questionNumber: number;
+
+  @Prop({
+    required: true,
+    enum: ["main", "remedial"],
+  })
+  examType: string;
 }
 
 export const ObjectiveTestSchema = SchemaFactory.createForClass(ObjectiveTest);

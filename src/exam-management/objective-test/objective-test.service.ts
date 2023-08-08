@@ -1,26 +1,35 @@
-import { Injectable } from "@nestjs/common";
+import { Body, Injectable, Param, Res } from "@nestjs/common";
 import { CreateObjectiveTestDto } from "./dto/create-objective-test.dto";
 import { UpdateObjectiveTestDto } from "./dto/update-objective-test.dto";
+import { ObjectiveTestRepository } from "./objective-test.repository";
 
 @Injectable()
 export class ObjectiveTestService {
-  create(createObjectiveTestDto: CreateObjectiveTestDto) {
-    return "This action adds a new objectiveTest";
+  constructor(
+    private readonly objectiveTestRepository: ObjectiveTestRepository
+  ) {}
+
+  create(@Res() res, @Body() createObjectiveTestDto: CreateObjectiveTestDto) {
+    return this.objectiveTestRepository.create(res, createObjectiveTestDto);
   }
 
   findAll() {
-    return `This action returns all objectiveTest`;
+    return this.objectiveTestRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} objectiveTest`;
+  findOne(@Param("id") id: string) {
+    return this.objectiveTestRepository.findOne(id);
   }
 
-  update(id: number, updateObjectiveTestDto: UpdateObjectiveTestDto) {
-    return `This action updates a #${id} objectiveTest`;
+  update(
+    @Res() res,
+    @Param("id") id: string,
+    @Body() updateObjectiveTestDto: UpdateObjectiveTestDto
+  ) {
+    return this.objectiveTestRepository.update(res, id, updateObjectiveTestDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} objectiveTest`;
+  remove(@Res() res, @Param("id") id: string) {
+    return this.objectiveTestRepository.remove(res, id);
   }
 }
