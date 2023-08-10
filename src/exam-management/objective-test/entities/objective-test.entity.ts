@@ -53,8 +53,6 @@ export class ObjectiveTest {
 
   @Prop({ required: true })
   examNumber: number;
-  @Prop({ required: true })
-  questionNumber: number;
 
   @Prop({
     required: true,
