@@ -10,7 +10,7 @@ import { CreateSectionDto } from "./dto/create-section.dto";
 import { UpdateSectionDto } from "./dto/update-section.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { Section } from "./entities/section.entity";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 @Injectable()
 export class SectionRepository {
@@ -50,6 +50,16 @@ export class SectionRepository {
 
   findOne(@Param("id") id: string) {
     return this.sectionModel.findOne({ _id: id });
+  }
+
+  async findSectionsBasedOnChapters(chapters: string[]) {
+    const sections = await this.sectionModel.find({
+      chapters: {
+        $in: chapters.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
+
+    return sections;
   }
 
   async update(

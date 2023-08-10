@@ -36,9 +36,9 @@ export class ChapterController {
     return this.chapterService.findAll();
   }
 
-  @Get("withBooks/:booklId")
+  @Get("withBooks/:bookId")
   async findChaptersBasedOnBooks(
-    @Param("booklId", ParseArrayPipe) books: string[]
+    @Param("bookId", ParseArrayPipe) books: string[]
   ) {
     if (books[0] == "null") {
       return [];

@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Res,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { SectionService } from "./section.service";
 import { CreateSectionDto } from "./dto/create-section.dto";
@@ -38,6 +39,17 @@ export class SectionController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.sectionService.findOne(id);
+  }
+
+  @Get("withChapters/:chapterId")
+  async findSectionsBasedOnChapters(
+    @Param("chapterId", ParseArrayPipe) chapters: string[]
+  ) {
+    if (chapters[0] == "null") {
+      return [];
+    }
+
+    return this.sectionService.findSectionsBasedOnChapters(chapters);
   }
 
   @Patch(":id")

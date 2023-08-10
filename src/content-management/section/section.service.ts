@@ -1,10 +1,11 @@
-import { Body, Injectable, Param, Res } from "@nestjs/common";
+import { Body, Injectable, Param, ParseArrayPipe, Res } from "@nestjs/common";
 import { CreateSectionDto } from "./dto/create-section.dto";
 import { UpdateSectionDto } from "./dto/update-section.dto";
 import { SectionRepository } from "./section.repository";
 
 @Injectable()
 export class SectionService {
+  sectionService: any;
   constructor(private readonly sectionRepository: SectionRepository) {}
 
   create(@Res() res, @Body() createSectionDto: CreateSectionDto) {
@@ -17,6 +18,10 @@ export class SectionService {
 
   findOne(@Param("id") id: string) {
     return this.sectionRepository.findOne(id);
+  }
+
+  async findSectionsBasedOnChapters(chapters: string[]) {
+    return this.sectionRepository.findSectionsBasedOnChapters(chapters);
   }
 
   update(
