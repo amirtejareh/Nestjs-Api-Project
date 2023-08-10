@@ -56,9 +56,13 @@ export class ObjectiveTest {
 
   @Prop({
     required: true,
-    enum: ["main", "remedial"],
   })
-  examType: string;
+  start: Date;
+
+  @Prop({
+    required: true,
+  })
+  end: Date;
 }
 
 export const ObjectiveTestSchema = SchemaFactory.createForClass(ObjectiveTest);
