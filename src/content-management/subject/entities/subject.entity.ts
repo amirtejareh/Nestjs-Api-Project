@@ -4,6 +4,7 @@ import { GradeLevel } from "../../grade-level/entities/grade-level.entity";
 import { Book } from "../../book/entities/book.entity";
 import { TermOfStudy } from "../../term-of-study/entities/term-of-study.entity";
 import { Chapter } from "../../chapter/entities/chapter.entity";
+import { Section } from "../../section/entities/section.entity";
 
 export type SubjectDocument = Subject & Document;
 
@@ -26,6 +27,11 @@ export class Subject {
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
   })
   chapters: Chapter[];
+
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Section.name }],
+  })
+  sections: Section[];
 
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: TermOfStudy.name }],

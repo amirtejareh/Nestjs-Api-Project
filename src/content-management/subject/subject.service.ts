@@ -19,6 +19,10 @@ export class SubjectService {
     return this.subjectRepository.findOne(id);
   }
 
+  async findSubjectsBasedOnSections(sections: string[]) {
+    return this.subjectRepository.findSubjectsBasedOnSections(sections);
+  }
+
   update(
     @Res() res,
     @Param("id") id: string,

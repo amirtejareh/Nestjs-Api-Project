@@ -8,7 +8,7 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Subject } from "./entities/subject.entity";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { CreateSubjectDto } from "./dto/create-subject.dto";
 import { UpdateSubjectDto } from "./dto/update-subject.dto";
 
@@ -50,6 +50,16 @@ export class SubjectRepository {
 
   findOne(@Param("id") id: string) {
     return this.subjectModel.findOne({ _id: id });
+  }
+
+  async findSubjectsBasedOnSections(sections: string[]) {
+    const subjects = await this.subjectModel.find({
+      sections: {
+        $in: sections.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
+
+    return subjects;
   }
 
   async update(

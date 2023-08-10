@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Res,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { SubjectService } from "./subject.service";
 import { CreateSubjectDto } from "./dto/create-subject.dto";
@@ -37,6 +38,17 @@ export class SubjectController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.subjectService.findOne(id);
+  }
+
+  @Get("withSections/:sectionId")
+  async findSubjectsBasedOnSections(
+    @Param("sectionId", ParseArrayPipe) sections: string[]
+  ) {
+    if (sections[0] == "null") {
+      return [];
+    }
+
+    return this.subjectService.findSubjectsBasedOnSections(sections);
   }
 
   @Patch(":id")
