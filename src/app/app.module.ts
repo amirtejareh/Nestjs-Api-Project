@@ -14,6 +14,7 @@ import { ChapterModule } from "../content-management/chapter/chapter.module";
 import { SectionModule } from "../content-management/section/section.module";
 import { SubjectModule } from "../content-management/subject/subject.module";
 import { ObjectiveTestModule } from "../exam-management/objective-test/objective-test.module";
+import { QuestionModule } from "../exam-management/question/question.module";
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { ObjectiveTestModule } from "../exam-management/objective-test/objective
     SectionModule,
     SubjectModule,
     ObjectiveTestModule,
+    QuestionModule,
   ],
   providers: [ImageService],
 
