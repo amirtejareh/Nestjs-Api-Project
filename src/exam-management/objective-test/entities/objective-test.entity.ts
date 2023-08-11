@@ -10,6 +10,12 @@ export class ObjectiveTest {
 
   @Prop({
     required: true,
+    enum: ["main", "remedial"],
+  })
+  type: string;
+
+  @Prop({
+    required: true,
   })
   start: Date;
 
