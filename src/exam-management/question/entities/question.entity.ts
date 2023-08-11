@@ -44,7 +44,7 @@ export class Question {
       "challenging",
     ],
   })
-  questionType: string;
+  type: string;
 
   @Prop({ required: true })
   question: string;
@@ -53,7 +53,10 @@ export class Question {
   correctAnswer: number;
 
   @Prop({ required: true })
-  number: number;
+  number: string;
+
+  @Prop({ required: true })
+  options: string[];
 
   @Prop({ required: false })
   objectiveTests: ObjectiveTest[];

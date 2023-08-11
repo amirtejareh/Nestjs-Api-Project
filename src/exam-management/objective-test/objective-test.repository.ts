@@ -37,7 +37,7 @@ export class ObjectiveTestRepository {
   }
 
   findAll() {
-    return this.objectiveTestModel.find({});
+    return this.objectiveTestModel.find({}).sort({ start: "desc" });
   }
 
   findOne(@Param("id") id: string) {
@@ -72,24 +72,32 @@ export class ObjectiveTestRepository {
 
   async remove(@Res() res, @Param("id") id: string) {
     try {
+      const findOneObjectiveTest = await this.findOne(id);
+      if (!findOneObjectiveTest) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "آزمون تستی مورد نظر پیدا نشد",
+        });
+      }
+
       const deleteSectionModel = await this.objectiveTestModel.deleteOne({
         _id: id,
       });
       if (!deleteSectionModel) {
         return res.status(HttpStatus.NOT_FOUND).json({
           statusCode: HttpStatus.NOT_FOUND,
-          message: "بخش مورد نظر پیدا نشد",
+          message: "آزمون تستی مورد نظر پیدا نشد",
         });
       }
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        message: "بخش مورد نظر با موفقیت حذف شد",
+        message: "آزمون تستی مورد نظر با موفقیت حذف شد",
         data: deleteSectionModel,
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در حذف بخش مورد نظر به وجود آمده است",
+        message: "مشکلی در حذف آزمون تستی مورد نظر به وجود آمده است",
         error: error.message,
       });
     }

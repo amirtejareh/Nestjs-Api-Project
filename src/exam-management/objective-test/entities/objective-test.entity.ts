@@ -6,13 +6,18 @@ export type ObjectiveTestDocument = ObjectiveTest & Document;
 @Schema({ timestamps: true })
 export class ObjectiveTest {
   @Prop({ required: true })
-  number: number;
+  number: string;
 
   @Prop({
     required: true,
     enum: ["main", "remedial"],
   })
   type: string;
+
+  @Prop({
+    required: true,
+  })
+  duration: string;
 
   @Prop({
     required: true,
