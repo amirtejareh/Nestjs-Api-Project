@@ -7,6 +7,7 @@ import { config } from "dotenv";
 import { ThrottleMiddleware } from "./middleware/throttle.middleware";
 import express from "express";
 import { join } from "path";
+import bodyParser from "body-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +27,8 @@ async function bootstrap() {
   await seederService.seed();
   // app.use(new ThrottleMiddleware().use);
   app.use("/uploads", express.static(join(__dirname, "..", "uploads")));
+  app.use(bodyParser.json({ limit: "10mb" }));
+
   app.enableCors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
