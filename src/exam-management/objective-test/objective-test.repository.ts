@@ -37,7 +37,11 @@ export class ObjectiveTestRepository {
   }
 
   findAll() {
-    return this.objectiveTestModel.find({}).sort({ start: "desc" });
+    const today = new Date().toISOString();
+
+    return this.objectiveTestModel
+      .find({ start: { $gte: today } })
+      .sort({ start: "asc" });
   }
 
   findOne(@Param("id") id: string) {

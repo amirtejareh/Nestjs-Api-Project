@@ -14,9 +14,7 @@ export class ObjectiveTest {
   })
   type: string;
 
-  @Prop({
-    required: true,
-  })
+  @Prop()
   duration: string;
 
   @Prop({
