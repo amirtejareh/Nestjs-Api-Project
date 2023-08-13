@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
+import { GradeLevel } from "../../../content-management/grade-level/entities/grade-level.entity";
 
 export type ObjectiveTestDocument = ObjectiveTest & Document;
 
@@ -16,6 +17,11 @@ export class ObjectiveTest {
 
   @Prop()
   duration: string;
+
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
+  })
+  gradeLevel: GradeLevel;
 
   @Prop({
     required: true,
