@@ -2,10 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { LearningMaterialService } from './learning-material.service';
 import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
 import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Learning Material")
 @Controller('learning-material')
 export class LearningMaterialController {
-  constructor(private readonly learningMaterialService: LearningMaterialService) {}
+  constructor(private readonly learningMaterialService: LearningMaterialService) { }
 
   @Post()
   create(@Body() createLearningMaterialDto: CreateLearningMaterialDto) {

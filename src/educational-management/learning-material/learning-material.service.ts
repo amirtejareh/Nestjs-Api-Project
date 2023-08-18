@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
 import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
+import { LearningMaterialRepository } from './learning-material.repository';
 
 @Injectable()
 export class LearningMaterialService {
+  constructor(private readonly learningMaterialRepository: LearningMaterialRepository) { }
+
   create(createLearningMaterialDto: CreateLearningMaterialDto) {
     return 'This action adds a new learningMaterial';
   }

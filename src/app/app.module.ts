@@ -15,6 +15,7 @@ import { SectionModule } from "../content-management/section/section.module";
 import { SubjectModule } from "../content-management/subject/subject.module";
 import { ObjectiveTestModule } from "../exam-management/objective-test/objective-test.module";
 import { QuestionModule } from "../exam-management/question/question.module";
+import { LearningMaterialModule } from "../educational-management/learning-material/learning-material.module";
 
 @Global()
 @Module({
@@ -32,9 +33,10 @@ import { QuestionModule } from "../exam-management/question/question.module";
     SubjectModule,
     ObjectiveTestModule,
     QuestionModule,
+    LearningMaterialModule
   ],
   providers: [ImageService],
 
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }
