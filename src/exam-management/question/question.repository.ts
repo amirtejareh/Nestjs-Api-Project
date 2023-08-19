@@ -38,11 +38,13 @@ export class QuestionRepository {
   }
 
   async findBooksBasedOnObjectiveTests(objectiveTests: string) {
-    const books = await this.questionModel.find({
-      objectiveTests: {
-        $in: objectiveTests,
-      },
-    });
+    const books = await this.questionModel
+      .find({
+        objectiveTests: {
+          $in: objectiveTests,
+        },
+      })
+      .populate("books");
     return books;
   }
 

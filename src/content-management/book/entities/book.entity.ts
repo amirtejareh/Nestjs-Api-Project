@@ -22,3 +22,8 @@ export class Book {
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
+BookSchema.virtual("questions", {
+  ref: "Question",
+  localField: "_id",
+  foreignField: "books",
+});
