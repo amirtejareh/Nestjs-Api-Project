@@ -30,7 +30,7 @@ export class CreateObjectiveTestDto {
       "challenging",
     ],
   })
-  questionType: string;
+  type: string;
 
   @ApiProperty({ type: [String] })
   question: string[];
