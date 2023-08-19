@@ -45,9 +45,7 @@ export class QuestionRepository {
         }),
       },
     });
-    console.log(books, "books");
-
-    return books;
+    return books.map((element) => element.books);
   }
 
   findOne(@Param("id") id: string) {
