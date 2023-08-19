@@ -37,15 +37,13 @@ export class QuestionRepository {
     return this.questionModel.find({});
   }
 
-  async findBooksBasedOnObjectiveTests(objectiveTests: string[]) {
+  async findBooksBasedOnObjectiveTests(objectiveTests: string) {
     const books = await this.questionModel.find({
       objectiveTests: {
-        $in: objectiveTests.map((id: string) => {
-          return id;
-        }),
+        $in: objectiveTests,
       },
     });
-    return books.map((element) => element.books);
+    return books;
   }
 
   findOne(@Param("id") id: string) {

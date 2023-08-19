@@ -19,7 +19,7 @@ export class QuestionService {
     return this.questionRepository.findOne(id);
   }
 
-  async findBooksBasedOnObjectiveTests(objectiveTestId: string[]) {
+  async findBooksBasedOnObjectiveTests(objectiveTestId: string) {
     return this.questionRepository.findBooksBasedOnObjectiveTests(
       objectiveTestId
     );

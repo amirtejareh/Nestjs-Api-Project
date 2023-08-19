@@ -42,7 +42,7 @@ export class QuestionController {
 
   @Get("withMainObjectiveTestId/:objectiveTestId")
   async findBooksBasedOnObjectiveTests(
-    @Param("objectiveTestId", ParseArrayPipe) objectiveTests: string[]
+    @Param("objectiveTestId", ParseArrayPipe) objectiveTests: string
   ) {
     if (objectiveTests[0] == "null") {
       return [];
