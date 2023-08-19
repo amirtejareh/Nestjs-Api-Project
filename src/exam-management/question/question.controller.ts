@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Res,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { QuestionService } from "./question.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
@@ -37,6 +38,17 @@ export class QuestionController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.questionService.findOne(id);
+  }
+
+  @Get("withMainObjectiveTestId/:objectiveTestId")
+  async findBooksBasedOnObjectiveTests(
+    @Param("objectiveTestId", ParseArrayPipe) objectiveTests: string[]
+  ) {
+    if (objectiveTests[0] == "null") {
+      return [];
+    }
+
+    return this.questionService.findBooksBasedOnObjectiveTests(objectiveTests);
   }
 
   @Patch(":id")

@@ -1,6 +1,6 @@
 import { Body, HttpStatus, Injectable, Param, Res } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { Question } from "./entities/question.entity";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
@@ -35,6 +35,19 @@ export class QuestionRepository {
 
   findAll() {
     return this.questionModel.find({});
+  }
+
+  async findBooksBasedOnObjectiveTests(objectiveTests: string[]) {
+    const books = await this.questionModel.find({
+      objectiveTests: {
+        $in: objectiveTests.map((id: string) => {
+          return id;
+        }),
+      },
+    });
+    console.log(books, "books");
+
+    return books;
   }
 
   findOne(@Param("id") id: string) {
