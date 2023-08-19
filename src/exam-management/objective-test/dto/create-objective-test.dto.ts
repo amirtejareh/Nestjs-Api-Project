@@ -46,7 +46,6 @@ export class CreateObjectiveTestDto {
 
   @ApiProperty({ enum: ["main", "remedial"] })
   examType: string;
-
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

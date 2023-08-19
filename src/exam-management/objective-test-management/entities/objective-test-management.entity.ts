@@ -8,15 +8,11 @@ export type ObjectiveTestManagementDocument = ObjectiveTestManagement &
 
 @Schema({ timestamps: true })
 export class ObjectiveTestManagement {
-  @Prop({
-    type: { type: mongooseSchema.Types.ObjectId, ref: Book.name },
-  })
+  @Prop({ required: true })
   book: string;
 
-  @Prop({
-    type: { type: mongooseSchema.Types.ObjectId, ref: ObjectiveTest.name },
-  })
-  objectiveTest: ObjectiveTest;
+  @Prop({ required: true })
+  objectiveTest: string;
 
   @Prop({
     required: true,
