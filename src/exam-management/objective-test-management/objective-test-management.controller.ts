@@ -16,8 +16,8 @@ import { AuthGuard } from "../../auth/guards/auth.guard";
 import { CreateObjectiveTestManagementDto } from "./dto/create-objective-test-management.dto";
 import { ObjectiveTestManagementService } from "./objective-test-management.service";
 import { UpdateObjectiveTestManagementDto } from "./dto/update-objective-test-management.dto";
-@ApiTags("Objective Test")
-@Controller("objectiveTest")
+@ApiTags("Objective Test Management")
+@Controller("objectiveTestManagement")
 export class ObjectiveTestManagementController {
   constructor(
     private readonly objectiveTestService: ObjectiveTestManagementService

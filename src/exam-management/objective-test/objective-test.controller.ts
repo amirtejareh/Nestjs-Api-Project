@@ -34,6 +34,11 @@ export class ObjectiveTestController {
     return this.objectiveTestService.findAll();
   }
 
+  @Get("mainTest")
+  findMainObjectiveTest() {
+    return this.objectiveTestService.findMainObjectiveTest();
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.objectiveTestService.findOne(id);
