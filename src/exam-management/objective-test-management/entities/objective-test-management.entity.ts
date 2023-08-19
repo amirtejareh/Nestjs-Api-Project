@@ -3,7 +3,7 @@ import { Document, Schema as mongooseSchema } from "mongoose";
 import { Book } from "../../../content-management/book/entities/book.entity";
 import { ObjectiveTest } from "../../../exam-management/objective-test/entities/objective-test.entity";
 
-export type ObjectiveNestManagementDocument = ObjectiveTestManagement &
+export type ObjectiveTestManagementDocument = ObjectiveTestManagement &
   Document;
 
 @Schema({ timestamps: true })
