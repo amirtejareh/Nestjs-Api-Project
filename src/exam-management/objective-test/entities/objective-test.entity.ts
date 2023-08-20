@@ -15,6 +15,12 @@ export class ObjectiveTest {
   })
   type: string;
 
+  @Prop({
+    required: true,
+    default: false,
+  })
+  isPublished: boolean;
+
   @Prop()
   duration: string;
 
