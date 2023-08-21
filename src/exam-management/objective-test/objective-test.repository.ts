@@ -40,7 +40,7 @@ export class ObjectiveTestRepository {
     const today = new Date().toISOString();
 
     return this.objectiveTestModel
-      .find({ start: { $gte: today } })
+      .find({ end: { $gte: today }, isPublished: true })
       .sort({ start: "asc" });
   }
 
