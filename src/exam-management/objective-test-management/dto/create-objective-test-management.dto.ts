@@ -4,10 +4,10 @@ import { Book } from "../../../content-management/book/entities/book.entity";
 
 export class CreateObjectiveTestManagementDto {
   @ApiProperty()
-  book: Book[];
+  book: Book;
 
   @ApiProperty()
-  objectiveTest: ObjectiveTest[];
+  objectiveTest: ObjectiveTest;
 
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
