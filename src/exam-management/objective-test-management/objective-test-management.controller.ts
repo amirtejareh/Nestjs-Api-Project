@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Res,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -42,6 +43,14 @@ export class ObjectiveTestManagementController {
     return this.objectiveTestService.findAll();
   }
 
+  @Get("withObjectiveTests/:objectiveTestId")
+  async getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.objectiveTestService.getObjectiveTestsBasedNumber(
+      objectiveTests
+    );
+  }
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.objectiveTestService.findOne(id);

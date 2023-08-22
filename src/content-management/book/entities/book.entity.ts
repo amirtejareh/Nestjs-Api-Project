@@ -4,7 +4,7 @@ import { GradeLevel } from "../../grade-level/entities/grade-level.entity";
 
 export type BookDocument = Book & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class Book {
   @Prop({ required: true })
   title: string;
@@ -22,8 +22,9 @@ export class Book {
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
-BookSchema.virtual("questions", {
-  ref: "Question",
+
+BookSchema.virtual("chapters", {
+  ref: "Chapter",
   localField: "_id",
   foreignField: "books",
 });

@@ -1,6 +1,13 @@
-import { Body, HttpStatus, Injectable, Param, Res } from "@nestjs/common";
+import {
+  Body,
+  HttpStatus,
+  Injectable,
+  Param,
+  ParseArrayPipe,
+  Res,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { ObjectiveTestManagement } from "./entities/objective-test-management.entity";
 import { CreateObjectiveTestManagementDto } from "./dto/create-objective-test-management.dto";
 import { UpdateObjectiveTestManagementDto } from "./dto/update-objective-test-management.dto";
@@ -39,12 +46,22 @@ export class ObjectiveTestManagementRepository {
     const today = new Date().toISOString();
 
     return this.objectiveTestModel
-      .find({ start: { $gte: today } })
+      .find({ end: { $gte: today } })
       .sort({ start: "asc" });
   }
 
   findOne(@Param("id") id: string) {
     return this.objectiveTestModel.findOne({ _id: id });
+  }
+
+  getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.objectiveTestModel
+      .find({
+        objectiveTest: new Types.ObjectId(objectiveTests),
+      })
+      .populate("books");
   }
 
   async update(

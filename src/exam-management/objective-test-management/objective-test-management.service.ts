@@ -1,4 +1,4 @@
-import { Body, Injectable, Param, Res } from "@nestjs/common";
+import { Body, Injectable, Param, ParseArrayPipe, Res } from "@nestjs/common";
 import { ObjectiveTestManagementRepository } from "./objective-test-management.repository";
 import { CreateObjectiveTestManagementDto } from "./dto/create-objective-test-management.dto";
 import { UpdateObjectiveTestManagementDto } from "./dto/update-objective-test-management.dto";
@@ -25,6 +25,14 @@ export class ObjectiveTestManagementService {
 
   findOne(@Param("id") id: string) {
     return this.objectiveTestRepository.findOne(id);
+  }
+
+  getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.objectiveTestRepository.getObjectiveTestsBasedNumber(
+      objectiveTests
+    );
   }
 
   update(

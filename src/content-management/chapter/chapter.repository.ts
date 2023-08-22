@@ -45,7 +45,7 @@ export class ChapterRepository {
   }
 
   findAll() {
-    return this.chapterModel.find({});
+    return this.chapterModel.find({}).populate("books");
   }
 
   async findChaptersBasedOnBooks(books: string[]) {
