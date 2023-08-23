@@ -1,8 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, Res, UploadedFile, UploadedFiles } from '@nestjs/common';
 import { LearningMaterialService } from './learning-material.service';
 import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
 import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { AuthGuard } from '../../auth/guards/auth.guard';
+import { RoleGuard } from '../../auth/guards/role.guard';
+import { AnyFilesInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @ApiTags("Learning Material")
 @Controller('learning-material')
@@ -10,8 +14,16 @@ export class LearningMaterialController {
   constructor(private readonly learningMaterialService: LearningMaterialService) { }
 
   @Post()
-  create(@Body() createLearningMaterialDto: CreateLearningMaterialDto) {
-    return this.learningMaterialService.create(createLearningMaterialDto);
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, RoleGuard)
+  @Roles("SuperAdmin")
+  @UseInterceptors(AnyFilesInterceptor())
+  create(
+    @Res() res,
+    @UploadedFiles() pdfFiles: Array<Express.Multer.File>,
+    @Body() createLearningMaterialDto: CreateLearningMaterialDto
+  ) {
+    return this.learningMaterialService.create(res, pdfFiles, createLearningMaterialDto);
   }
 
   @Get()
@@ -21,16 +33,23 @@ export class LearningMaterialController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.learningMaterialService.findOne(+id);
+    return this.learningMaterialService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLearningMaterialDto: UpdateLearningMaterialDto) {
-    return this.learningMaterialService.update(+id, updateLearningMaterialDto);
+  @ApiBearerAuth()
+  @UseInterceptors(AnyFilesInterceptor())
+  update(
+    @Res() res,
+    @UploadedFiles() pdfFiles: Array<Express.Multer.File>,
+    @Param('id') id: string,
+    @Body() updateLearningMaterialDto: UpdateLearningMaterialDto,) {
+    return this.learningMaterialService.update(res, pdfFiles, id, updateLearningMaterialDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.learningMaterialService.remove(+id);
+  remove(@Res() res,
+    @Param('id') id: string) {
+    return this.learningMaterialService.remove(res, id);
   }
 }
