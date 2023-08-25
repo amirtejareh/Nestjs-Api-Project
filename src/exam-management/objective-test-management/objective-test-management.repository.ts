@@ -26,8 +26,6 @@ export class ObjectiveTestManagementRepository {
     @Res() res,
     @Body() createObjectiveTestManagementDto: CreateObjectiveTestManagementDto
   ) {
-    console.log(createObjectiveTestManagementDto);
-
     try {
       const createObjectiveTestManagementModel =
         await this.objectiveTestModel.create(createObjectiveTestManagementDto);
