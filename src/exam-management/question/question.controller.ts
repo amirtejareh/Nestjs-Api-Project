@@ -33,8 +33,29 @@ export class QuestionController {
   }
 
   @Get()
-  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
-    return this.questionService.findAll(page, limit);
+  findAll(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10,
+    @Query("objectiveTestId") objectiveTests: string
+  ) {
+    return this.questionService.findAll(page, limit, objectiveTests);
+  }
+
+  @Get("withBooks/:BookId")
+  async findQuestionsBasedOnBooks(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("BookId", ParseArrayPipe) books: string[]
+  ) {
+    console.log(page);
+    console.log(limit);
+    console.log(books);
+
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.questionService.findQuestionsBasedOnBooks(page, limit, books);
   }
 
   @Get(":id")

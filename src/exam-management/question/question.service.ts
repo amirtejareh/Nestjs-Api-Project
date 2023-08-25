@@ -11,8 +11,24 @@ export class QuestionService {
     return this.questionRepository.create(res, createQuestionDto);
   }
 
-  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
-    return this.questionRepository.findAll(page, limit);
+  findAll(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10,
+    @Query("objectiveTestId") objectiveTests: string
+  ) {
+    return this.questionRepository.findAll(page, limit, objectiveTests);
+  }
+
+  async findQuestionsBasedOnBooks(
+    page: number = 1,
+    limit: number = 10,
+    books: string[]
+  ) {
+    return this.questionRepository.findQuestionsBasedOnBooks(
+      page,
+      limit,
+      books
+    );
   }
 
   findOne(@Param("id") id: string) {

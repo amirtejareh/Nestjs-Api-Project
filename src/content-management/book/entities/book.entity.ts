@@ -6,6 +6,7 @@ export type BookDocument = Book & Document;
 
 @Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class Book {
+  [x: string]: any;
   @Prop({ required: true })
   title: string;
 
