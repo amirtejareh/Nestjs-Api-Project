@@ -45,7 +45,7 @@ export class QuestionController {
   async findQuestionsBasedOnBooks(
     @Query("page") page: number,
     @Query("limit") limit: number,
-    @Query("BookId", ParseArrayPipe) books: string[]
+    @Query("BookId") books: string
   ) {
     console.log(page);
     console.log(limit);

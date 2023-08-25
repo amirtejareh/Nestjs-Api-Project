@@ -22,7 +22,7 @@ export class QuestionService {
   async findQuestionsBasedOnBooks(
     page: number = 1,
     limit: number = 10,
-    books: string[]
+    books: string
   ) {
     return this.questionRepository.findQuestionsBasedOnBooks(
       page,

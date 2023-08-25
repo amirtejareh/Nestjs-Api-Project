@@ -66,28 +66,36 @@ export class QuestionRepository {
   async findQuestionsBasedOnBooks(
     page: number = 1,
     limit: number = 10,
-    books: string[]
+    books: string
   ) {
     const skip = (page - 1) * limit;
 
-    const questions = await this.questionModel
+    const questionIds = await this.questionModel
       .find({
-        books: {
-          $in: books.map((id: string) => new Types.ObjectId(id)),
-        },
+        books: books,
       })
       .skip(skip)
-      .limit(limit);
-    const totalQuestions = await this.questionModel
+      .limit(limit)
+      .select("_id");
+
+    const totalQuestions = await this.questionModel.countDocuments({
+      books: {
+        $in: [books],
+      },
+    });
+
+    const questions = await this.questionModel
       .find({
-        books: {
-          $in: books.map((id: string) => new Types.ObjectId(id)),
+        _id: {
+          $in: questionIds,
         },
       })
-      .count();
-    if (questions.length == 0) {
+      .populate("books");
+
+    if (questions.length === 0) {
       return [];
     }
+
     return {
       questions,
       currentPage: page,
