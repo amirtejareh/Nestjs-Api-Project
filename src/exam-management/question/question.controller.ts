@@ -9,6 +9,8 @@ import {
   UseGuards,
   Res,
   ParseArrayPipe,
+  Req,
+  Query,
 } from "@nestjs/common";
 import { QuestionService } from "./question.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
@@ -31,8 +33,8 @@ export class QuestionController {
   }
 
   @Get()
-  findAll() {
-    return this.questionService.findAll();
+  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
+    return this.questionService.findAll(page, limit);
   }
 
   @Get(":id")

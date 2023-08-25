@@ -14,7 +14,7 @@ export class ObjectiveTestManagement {
   books: Book;
 
   @Prop({
-    type: { type: mongooseSchema.Types.ObjectId, ref: ObjectiveTest.name },
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: ObjectiveTest.name }],
   })
   objectiveTest: ObjectiveTest;
 

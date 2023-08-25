@@ -1,4 +1,4 @@
-import { Body, Injectable, Param, Res } from "@nestjs/common";
+import { Body, Injectable, Param, Query, Req, Res } from "@nestjs/common";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 import { QuestionRepository } from "./question.repository";
@@ -11,8 +11,8 @@ export class QuestionService {
     return this.questionRepository.create(res, createQuestionDto);
   }
 
-  findAll() {
-    return this.questionRepository.findAll();
+  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
+    return this.questionRepository.findAll(page, limit);
   }
 
   findOne(@Param("id") id: string) {
