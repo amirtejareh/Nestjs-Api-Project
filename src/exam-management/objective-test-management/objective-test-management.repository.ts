@@ -1,15 +1,22 @@
-import { Body, HttpStatus, Injectable, Param, Res } from "@nestjs/common";
-import { CreateObjectiveTestDto } from "./dto/create-objective-test.dto";
-import { UpdateObjectiveTestDto } from "./dto/update-objective-test.dto";
+import {
+  Body,
+  HttpStatus,
+  Injectable,
+  Param,
+  ParseArrayPipe,
+  Res,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { ObjectiveTest } from "./entities/objective-test.entity";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
+import { ObjectiveTestManagement } from "./entities/objective-test-management.entity";
+import { CreateObjectiveTestManagementDto } from "./dto/create-objective-test-management.dto";
+import { UpdateObjectiveTestManagementDto } from "./dto/update-objective-test-management.dto";
 
 @Injectable()
-export class ObjectiveTestRepository {
+export class ObjectiveTestManagementRepository {
   constructor(
-    @InjectModel(ObjectiveTest.name)
-    private readonly objectiveTestModel: Model<ObjectiveTest>
+    @InjectModel(ObjectiveTestManagement.name)
+    private readonly objectiveTestModel: Model<ObjectiveTestManagement>
   ) {}
 
   async findOneByTitle(title: string) {
@@ -17,16 +24,15 @@ export class ObjectiveTestRepository {
   }
   async create(
     @Res() res,
-    @Body() createObjectiveTestDto: CreateObjectiveTestDto
+    @Body() createObjectiveTestManagementDto: CreateObjectiveTestManagementDto
   ) {
     try {
-      const createObjectiveTestModel = await this.objectiveTestModel.create(
-        createObjectiveTestDto
-      );
+      const createObjectiveTestManagementModel =
+        await this.objectiveTestModel.create(createObjectiveTestManagementDto);
       return res.status(200).json({
         statusCode: 200,
         message: "یک آزمون تستی با موفقیت ایجاد شد",
-        data: createObjectiveTestModel,
+        data: createObjectiveTestManagementModel,
       });
     } catch (e) {
       return res.status(500).json({
@@ -40,15 +46,7 @@ export class ObjectiveTestRepository {
     const today = new Date().toISOString();
 
     return this.objectiveTestModel
-      .find({ end: { $gte: today }, isPublished: true })
-      .sort({ start: "asc" });
-  }
-
-  findMainObjectiveTest() {
-    const today = new Date().toISOString();
-
-    return this.objectiveTestModel
-      .find({ type: "main", start: { $gte: today } })
+      .find({ end: { $gte: today } })
       .sort({ start: "asc" });
   }
 
@@ -56,10 +54,20 @@ export class ObjectiveTestRepository {
     return this.objectiveTestModel.findOne({ _id: id });
   }
 
+  getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.objectiveTestModel
+      .find({
+        objectiveTest: new Types.ObjectId(objectiveTests),
+      })
+      .populate("books");
+  }
+
   async update(
     @Res() res,
     @Param("id") id: string,
-    @Body() updateSectionDto: UpdateObjectiveTestDto
+    @Body() updateSectionDto: UpdateObjectiveTestManagementDto
   ) {
     try {
       const updateSectionModel = await this.objectiveTestModel.findOneAndUpdate(
@@ -84,8 +92,8 @@ export class ObjectiveTestRepository {
 
   async remove(@Res() res, @Param("id") id: string) {
     try {
-      const findOneObjectiveTest = await this.findOne(id);
-      if (!findOneObjectiveTest) {
+      const findOneObjectiveTestManagement = await this.findOne(id);
+      if (!findOneObjectiveTestManagement) {
         return res.status(HttpStatus.NOT_FOUND).json({
           statusCode: HttpStatus.NOT_FOUND,
           message: "آزمون تستی مورد نظر پیدا نشد",

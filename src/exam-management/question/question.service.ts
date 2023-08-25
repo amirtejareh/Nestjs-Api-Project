@@ -19,6 +19,12 @@ export class QuestionService {
     return this.questionRepository.findOne(id);
   }
 
+  async findBooksBasedOnObjectiveTests(objectiveTestId: string) {
+    return this.questionRepository.findBooksBasedOnObjectiveTests(
+      objectiveTestId
+    );
+  }
+
   update(
     @Res() res,
     @Param("id") id: string,

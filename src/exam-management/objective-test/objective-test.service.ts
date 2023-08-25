@@ -21,6 +21,10 @@ export class ObjectiveTestService {
     return this.objectiveTestRepository.findOne(id);
   }
 
+  findMainObjectiveTest() {
+    return this.objectiveTestRepository.findMainObjectiveTest();
+  }
+
   update(
     @Res() res,
     @Param("id") id: string,
