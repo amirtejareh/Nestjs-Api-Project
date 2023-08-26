@@ -47,10 +47,6 @@ export class QuestionController {
     @Query("limit") limit: number,
     @Query("BookId") books: string
   ) {
-    console.log(page);
-    console.log(limit);
-    console.log(books);
-
     if (books[0] == "null") {
       return [];
     }
