@@ -16,6 +16,7 @@ import { SubjectModule } from "../content-management/subject/subject.module";
 import { ObjectiveTestModule } from "../exam-management/objective-test/objective-test.module";
 import { QuestionModule } from "../exam-management/question/question.module";
 import { ObjectiveTestManagementModule } from "../exam-management/objective-test-management/objective-test-management.module";
+import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
 
 @Global()
 @Module({
@@ -28,6 +29,7 @@ import { ObjectiveTestManagementModule } from "../exam-management/objective-test
     GradeLevelModule,
     TermOfStudyModule,
     BookModule,
+    BookReferenceModule,
     ChapterModule,
     SectionModule,
     SubjectModule,
