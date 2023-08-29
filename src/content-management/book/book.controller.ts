@@ -60,6 +60,17 @@ export class BookController {
     return this.bookService.findBooksBasedOnGradeLevels(gradeLevels);
   }
 
+  @Get("withBookReferences/:bookReferenceId")
+  async findBooksBasedOnBookReferences(
+    @Param("bookReferenceId", ParseArrayPipe) bookReferences: string[]
+  ) {
+    if (bookReferences[0] == "null") {
+      return [];
+    }
+
+    return this.bookService.findBooksBasedOnBookReferences(bookReferences);
+  }
+
   @Patch(":id")
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)

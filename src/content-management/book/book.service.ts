@@ -23,6 +23,10 @@ export class BookService {
     return this.bookRepository.findBooksBasedOnGradeLevels(gradeLevels);
   }
 
+  async findBooksBasedOnBookReferences(bookReferences: string[]) {
+    return this.bookRepository.findBooksBasedOnBookReferences(bookReferences);
+  }
+
   findOne(id: string) {
     return this.bookRepository.findOne(id);
   }
