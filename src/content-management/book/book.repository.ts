@@ -72,6 +72,16 @@ export class BookRepository {
     return books;
   }
 
+  async findBooksBasedOnBookReferences(bookReferences: string[]) {
+    const books = await this.bookModel.find({
+      bookReferences: {
+        $in: bookReferences.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
+
+    return books;
+  }
+
   findOne(id: string) {
     return this.bookModel.findOne({ _id: id });
   }

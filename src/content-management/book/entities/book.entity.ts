@@ -20,7 +20,7 @@ export class Book {
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: BookReference.name }],
   })
-  bookReference: BookReference[];
+  bookReferences: BookReference[];
 
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
