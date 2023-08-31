@@ -19,6 +19,7 @@ import { LearningMaterialModule } from "../educational-management/learning-mater
 import { ObjectiveTestManagementModule } from "../exam-management/objective-test-management/objective-test-management.module";
 import { EssayQuestionModule } from "../educational-management/essay-questions/essay-questions.module";
 import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
+import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and-test.module";
 
 @Global()
 @Module({
@@ -40,6 +41,7 @@ import { BookReferenceModule } from "../content-management/book-reference/book-r
     LearningMaterialModule,
     ObjectiveTestManagementModule,
     EssayQuestionModule,
+    TipAndTestModule
   ],
   providers: [ImageService],
 
