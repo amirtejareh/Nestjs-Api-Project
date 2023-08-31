@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
 import { Book } from "../../../content-management/book/entities/book.entity";
 import { ObjectiveTest } from "../../objective-test/entities/objective-test.entity";
+import { BookReference } from "../../../content-management/book-reference/entities/book-reference.entity";
 
 export type ObjectiveTestManagementDocument = ObjectiveTestManagement &
   Document;
@@ -9,9 +10,9 @@ export type ObjectiveTestManagementDocument = ObjectiveTestManagement &
 @Schema({ timestamps: true })
 export class ObjectiveTestManagement {
   @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: BookReference.name }],
   })
-  books: Book;
+  bookReferences: BookReference;
 
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: ObjectiveTest.name }],

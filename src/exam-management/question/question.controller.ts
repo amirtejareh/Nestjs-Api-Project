@@ -54,6 +54,23 @@ export class QuestionController {
     return this.questionService.findQuestionsBasedOnBooks(page, limit, books);
   }
 
+  @Get("withBookReferencess/:BookReferenceId")
+  async findQuestionsBasedOnBookReferences(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("BookId") bookReferences: string
+  ) {
+    if (bookReferences[0] == "null") {
+      return [];
+    }
+
+    return this.questionService.findQuestionsBasedOnBookReferences(
+      page,
+      limit,
+      bookReferences
+    );
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.questionService.findOne(id);
@@ -68,6 +85,32 @@ export class QuestionController {
     }
 
     return this.questionService.findBooksBasedOnObjectiveTests(objectiveTests);
+  }
+
+  @Get("questionsWithObjectiveTestId/:objectiveTestId")
+  async findQuestionsBasedOnObjectiveTests(
+    @Param("objectiveTestId", ParseArrayPipe) objectiveTests: string
+  ) {
+    if (objectiveTests[0] == "null") {
+      return [];
+    }
+
+    return this.questionService.findQuestionsBasedOnObjectiveTests(
+      objectiveTests
+    );
+  }
+
+  @Get("bookReferencesWithMainObjectiveTestId/:objectiveTestId")
+  async findBookReferencesBasedOnObjectiveTests(
+    @Param("objectiveTestId", ParseArrayPipe) objectiveTests: string
+  ) {
+    if (objectiveTests[0] == "null") {
+      return [];
+    }
+
+    return this.questionService.findBookReferencesBasedOnObjectiveTests(
+      objectiveTests
+    );
   }
 
   @Patch(":id")

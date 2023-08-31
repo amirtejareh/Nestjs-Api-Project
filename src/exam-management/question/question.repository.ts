@@ -104,6 +104,47 @@ export class QuestionRepository {
     };
   }
 
+  async findQuestionsBasedOnBookReferences(
+    page: number = 1,
+    limit: number = 10,
+    bookReferences: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    const questionIds = await this.questionModel
+      .find({
+        bookReferences: bookReferences,
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalQuestions = await this.questionModel.countDocuments({
+      bookReferences: {
+        $in: [bookReferences],
+      },
+    });
+
+    const questions = await this.questionModel
+      .find({
+        _id: {
+          $in: questionIds,
+        },
+      })
+      .populate("books");
+
+    if (questions.length === 0) {
+      return [];
+    }
+
+    return {
+      questions,
+      currentPage: page,
+      totalPages: Math.ceil(totalQuestions / limit),
+      totalItems: totalQuestions,
+    };
+  }
+
   async findBooksBasedOnObjectiveTests(objectiveTests: string) {
     const questions = await this.questionModel
       .find({
@@ -127,6 +168,43 @@ export class QuestionRepository {
     });
 
     return uniqueBooks;
+  }
+
+  async findBookReferencesBasedOnObjectiveTests(objectiveTests: string) {
+    const questions = await this.questionModel
+      .find({
+        objectiveTests: {
+          $in: objectiveTests,
+        },
+      })
+      .populate("bookReferences");
+
+    const uniqueBookReferences = [];
+
+    questions.forEach((question) => {
+      const bookReferences = question.bookReferences[0];
+      const existingBook = uniqueBookReferences.find(
+        (b) => b.title === bookReferences.title
+      );
+      if (!existingBook) {
+        uniqueBookReferences.push({
+          title: bookReferences.title,
+          _id: bookReferences._id,
+        });
+      }
+    });
+
+    return uniqueBookReferences;
+  }
+
+  async findQuestionsBasedOnObjectiveTests(objectiveTests: string) {
+    const questions = await this.questionModel.find({
+      objectiveTests: {
+        $in: objectiveTests,
+      },
+    });
+
+    return questions;
   }
 
   findOne(@Param("id") id: string) {

@@ -31,12 +31,36 @@ export class QuestionService {
     );
   }
 
+  async findQuestionsBasedOnBookReferences(
+    page: number = 1,
+    limit: number = 10,
+    bookReferences: string
+  ) {
+    return this.questionRepository.findQuestionsBasedOnBookReferences(
+      page,
+      limit,
+      bookReferences
+    );
+  }
+
   findOne(@Param("id") id: string) {
     return this.questionRepository.findOne(id);
   }
 
   async findBooksBasedOnObjectiveTests(objectiveTestId: string) {
     return this.questionRepository.findBooksBasedOnObjectiveTests(
+      objectiveTestId
+    );
+  }
+
+  async findBookReferencesBasedOnObjectiveTests(objectiveTestId: string) {
+    return this.questionRepository.findBookReferencesBasedOnObjectiveTests(
+      objectiveTestId
+    );
+  }
+
+  async findQuestionsBasedOnObjectiveTests(objectiveTestId: string) {
+    return this.questionRepository.findQuestionsBasedOnObjectiveTests(
       objectiveTestId
     );
   }

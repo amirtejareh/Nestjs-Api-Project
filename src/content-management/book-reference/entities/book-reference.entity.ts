@@ -6,6 +6,7 @@ export type BookReferenceDocument = BookReference & Document;
 
 @Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class BookReference {
+  [x: string]: any;
   @Prop({ required: true })
   title: string;
 
@@ -16,3 +17,8 @@ export class BookReference {
 }
 
 export const BookReferenceSchema = SchemaFactory.createForClass(BookReference);
+BookReferenceSchema.virtual("questions", {
+  ref: "Question",
+  localField: "_id",
+  foreignField: "bookReferences",
+});

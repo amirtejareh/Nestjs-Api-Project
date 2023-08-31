@@ -6,6 +6,7 @@ import { Section } from "../../../content-management/section/entities/section.en
 import { Subject } from "../../../content-management/subject/entities/subject.entity";
 import { Chapter } from "../../../content-management/chapter/entities/chapter.entity";
 import { ObjectiveTest } from "../../objective-test/entities/objective-test.entity";
+import { BookReference } from "../../../content-management/book-reference/entities/book-reference.entity";
 
 export type QuestionDocument = Question & Document;
 
@@ -19,6 +20,11 @@ export class Question {
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
   })
   books: Book[];
+
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: BookReference.name }],
+  })
+  bookReferences: BookReference[];
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
   })

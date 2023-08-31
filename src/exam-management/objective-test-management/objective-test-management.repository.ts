@@ -61,7 +61,7 @@ export class ObjectiveTestManagementRepository {
       .find({
         objectiveTest: new Types.ObjectId(objectiveTests),
       })
-      .populate("books");
+      .populate("bookReferences");
   }
 
   async update(
