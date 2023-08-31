@@ -18,6 +18,7 @@ import { QuestionModule } from "../exam-management/question/question.module";
 import { LearningMaterialModule } from "../educational-management/learning-material/learning-material.module";
 import { ObjectiveTestManagementModule } from "../exam-management/objective-test-management/objective-test-management.module";
 import { EssayQuestionModule } from "../educational-management/essay-questions/essay-questions.module";
+import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { EssayQuestionModule } from "../educational-management/essay-questions/e
     GradeLevelModule,
     TermOfStudyModule,
     BookModule,
+    BookReferenceModule,
     ChapterModule,
     SectionModule,
     SubjectModule,

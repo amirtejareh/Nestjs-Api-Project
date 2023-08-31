@@ -9,6 +9,8 @@ import {
   UseGuards,
   Res,
   ParseArrayPipe,
+  Req,
+  Query,
 } from "@nestjs/common";
 import { QuestionService } from "./question.service";
 import { CreateQuestionDto } from "./dto/create-question.dto";
@@ -31,8 +33,25 @@ export class QuestionController {
   }
 
   @Get()
-  findAll() {
-    return this.questionService.findAll();
+  findAll(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10,
+    @Query("objectiveTestId") objectiveTests: string
+  ) {
+    return this.questionService.findAll(page, limit, objectiveTests);
+  }
+
+  @Get("withBooks/:BookId")
+  async findQuestionsBasedOnBooks(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("BookId") books: string
+  ) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.questionService.findQuestionsBasedOnBooks(page, limit, books);
   }
 
   @Get(":id")

@@ -1,7 +1,7 @@
-import { Body, HttpStatus, Injectable, Param, Res } from "@nestjs/common";
+import { Body, HttpStatus, Injectable, Param, Req, Res } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
-import { Question } from "./entities/question.entity";
+import { Question, QuestionDocument } from "./entities/question.entity";
 import { CreateQuestionDto } from "./dto/create-question.dto";
 import { UpdateQuestionDto } from "./dto/update-question.dto";
 
@@ -33,19 +33,100 @@ export class QuestionRepository {
     }
   }
 
-  findAll() {
-    return this.questionModel.find({});
+  async findAll(page: number = 1, limit: number = 10, objectiveTests: string) {
+    const skip = (page - 1) * limit;
+
+    const questions = await this.questionModel
+      .find({
+        objectiveTests: {
+          $in: objectiveTests,
+        },
+      })
+      .skip(skip)
+      .limit(limit);
+    const totalQuestions = await this.questionModel
+      .find({
+        objectiveTests: {
+          $in: objectiveTests,
+        },
+      })
+      .count();
+
+    if (questions.length == 0) {
+      return [];
+    }
+    return {
+      questions,
+      currentPage: page,
+      totalPages: Math.ceil(totalQuestions / limit),
+      totalItems: totalQuestions,
+    };
+  }
+
+  async findQuestionsBasedOnBooks(
+    page: number = 1,
+    limit: number = 10,
+    books: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    const questionIds = await this.questionModel
+      .find({
+        books: books,
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalQuestions = await this.questionModel.countDocuments({
+      books: {
+        $in: [books],
+      },
+    });
+
+    const questions = await this.questionModel
+      .find({
+        _id: {
+          $in: questionIds,
+        },
+      })
+      .populate("books");
+
+    if (questions.length === 0) {
+      return [];
+    }
+
+    return {
+      questions,
+      currentPage: page,
+      totalPages: Math.ceil(totalQuestions / limit),
+      totalItems: totalQuestions,
+    };
   }
 
   async findBooksBasedOnObjectiveTests(objectiveTests: string) {
-    const books = await this.questionModel
+    const questions = await this.questionModel
       .find({
         objectiveTests: {
           $in: objectiveTests,
         },
       })
       .populate("books");
-    return books;
+
+    const uniqueBooks = [];
+
+    questions.forEach((question) => {
+      const book = question.books[0];
+      const existingBook = uniqueBooks.find((b) => b.title === book.title);
+      if (!existingBook) {
+        uniqueBooks.push({
+          title: book.title,
+          _id: book._id,
+        });
+      }
+    });
+
+    return uniqueBooks;
   }
 
   findOne(@Param("id") id: string) {
