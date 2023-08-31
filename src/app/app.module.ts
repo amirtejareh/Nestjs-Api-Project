@@ -20,6 +20,7 @@ import { ObjectiveTestManagementModule } from "../exam-management/objective-test
 import { EssayQuestionModule } from "../educational-management/essay-questions/essay-questions.module";
 import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
 import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and-test.module";
+import { KaranbalaModule } from "../educational-management/karanbala/karanbala.module";
 
 @Global()
 @Module({
@@ -41,7 +42,8 @@ import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and
     LearningMaterialModule,
     ObjectiveTestManagementModule,
     EssayQuestionModule,
-    TipAndTestModule
+    TipAndTestModule,
+    KaranbalaModule
   ],
   providers: [ImageService],
 
