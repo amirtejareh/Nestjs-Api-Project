@@ -21,6 +21,7 @@ import { EssayQuestionModule } from "../educational-management/essay-questions/e
 import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
 import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and-test.module";
 import { KaranbalaModule } from "../educational-management/karanbala/karanbala.module";
+import { BookExercisesModule } from "../educational-management/book-exercises/book-exercises.module";
 
 @Global()
 @Module({
@@ -43,7 +44,8 @@ import { KaranbalaModule } from "../educational-management/karanbala/karanbala.m
     ObjectiveTestManagementModule,
     EssayQuestionModule,
     TipAndTestModule,
-    KaranbalaModule
+    KaranbalaModule,
+    BookExercisesModule
   ],
   providers: [ImageService],
 
