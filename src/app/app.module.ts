@@ -15,7 +15,9 @@ import { SectionModule } from "../content-management/section/section.module";
 import { SubjectModule } from "../content-management/subject/subject.module";
 import { ObjectiveTestModule } from "../exam-management/objective-test/objective-test.module";
 import { QuestionModule } from "../exam-management/question/question.module";
+import { LearningMaterialModule } from "../educational-management/learning-material/learning-material.module";
 import { ObjectiveTestManagementModule } from "../exam-management/objective-test-management/objective-test-management.module";
+import { EssayQuestionModule } from "../educational-management/essay-questions/essay-questions.module";
 import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
 
 @Global()
@@ -35,10 +37,12 @@ import { BookReferenceModule } from "../content-management/book-reference/book-r
     SubjectModule,
     ObjectiveTestModule,
     QuestionModule,
+    LearningMaterialModule,
     ObjectiveTestManagementModule,
+    EssayQuestionModule,
   ],
   providers: [ImageService],
 
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }

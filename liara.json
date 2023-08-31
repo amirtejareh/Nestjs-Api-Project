@@ -7,6 +7,10 @@
     {
       "name": "disk2",
       "mountTo": "uploads/image_book"
+    },
+    {
+      "name": "disk3",
+      "mountTo": "uploads/learning_material"
     }
   ]
 }
