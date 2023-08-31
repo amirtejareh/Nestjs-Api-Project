@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { CreateLearningMaterialDto } from './create-learning-material.dto';
+import { CreateEssayQuestionsDto } from './create-essay-questions.dto';
 import { GradeLevel } from '../../../content-management/grade-level/entities/grade-level.entity';
 import { Book } from '../../../content-management/book/entities/book.entity';
 import { Chapter } from '../../../content-management/chapter/entities/chapter.entity';
@@ -7,7 +7,7 @@ import { Section } from '../../../content-management/section/entities/section.en
 import { Subject } from '../../../content-management/subject/entities/subject.entity';
 import { IVideo } from '../../../interface/IEntity';
 
-export class UpdateLearningMaterialDto extends PartialType(CreateLearningMaterialDto) {
+export class UpdateEssayQuestionDto extends PartialType(CreateEssayQuestionsDto) {
     readonly _id?: string;
     readonly gradeLevel?: GradeLevel;
     readonly book?: Book;

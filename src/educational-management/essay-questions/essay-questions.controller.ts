@@ -1,17 +1,17 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, Res, UploadedFile, UploadedFiles, ParseArrayPipe } from '@nestjs/common';
-import { LearningMaterialService } from './learning-material.service';
-import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
-import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
+import { EssayQuestionService } from './essay-questions.service';
+import { CreateEssayQuestionsDto } from './dto/create-essay-questions.dto';
+import { UpdateEssayQuestionDto } from './dto/update-essay-questions.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RoleGuard } from '../../auth/guards/role.guard';
 import { AnyFilesInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
-@ApiTags("Learning Material")
-@Controller('learning-material')
-export class LearningMaterialController {
-  constructor(private readonly learningMaterialService: LearningMaterialService) { }
+@ApiTags("Essay Question")
+@Controller('essay-question')
+export class EssayQuestionController {
+  constructor(private readonly essayQuestionService: EssayQuestionService) { }
 
   @Post()
   @ApiBearerAuth()
@@ -21,32 +21,30 @@ export class LearningMaterialController {
   create(
     @Res() res,
     @UploadedFiles() pdfFiles: Array<Express.Multer.File>,
-    @Body() createLearningMaterialDto: CreateLearningMaterialDto
+    @Body() createEssayQuestionsDto: CreateEssayQuestionsDto
   ) {
-    console.log('createLearningMaterialDto => ', createLearningMaterialDto);
-
-    return this.learningMaterialService.create(res, pdfFiles, createLearningMaterialDto);
+    return this.essayQuestionService.create(res, pdfFiles, createEssayQuestionsDto);
   }
 
   @Get()
   findAll() {
-    return this.learningMaterialService.findAll();
+    return this.essayQuestionService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.learningMaterialService.findOne(id);
+    return this.essayQuestionService.findOne(id);
   }
 
   @Get("withSubjects/:subjectsId")
-  async findLearningMaterialBasedOnSubject(
+  async findEssayQuestionBasedOnSubject(
     @Param("subjectsId", ParseArrayPipe) subjects: string[]
   ) {
     if (subjects[0] == "null") {
       return [];
     }
 
-    return this.learningMaterialService.findBasedOnSubjects(subjects);
+    return this.essayQuestionService.findBasedOnSubjects(subjects);
   }
 
   @Patch(':id')
@@ -56,13 +54,13 @@ export class LearningMaterialController {
     @Res() res,
     @UploadedFiles() pdfFiles: Array<Express.Multer.File>,
     @Param('id') id: string,
-    @Body() updateLearningMaterialDto: UpdateLearningMaterialDto,) {
-    return this.learningMaterialService.update(res, pdfFiles, id, updateLearningMaterialDto);
+    @Body() updateEssayQuestionDto: UpdateEssayQuestionDto,) {
+    return this.essayQuestionService.update(res, pdfFiles, id, updateEssayQuestionDto);
   }
 
   @Delete(':id')
   remove(@Res() res,
     @Param('id') id: string) {
-    return this.learningMaterialService.remove(res, id);
+    return this.essayQuestionService.remove(res, id);
   }
 }

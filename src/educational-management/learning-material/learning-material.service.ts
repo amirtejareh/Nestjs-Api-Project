@@ -24,6 +24,10 @@ export class LearningMaterialService {
     return this.learningMaterialRepository.findOne(id);
   }
 
+  async findBasedOnSubjects(subjects: string[]) {
+    return this.learningMaterialRepository.findBasedOnSubjects(subjects);
+  }
+
   update(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],

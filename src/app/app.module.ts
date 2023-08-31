@@ -17,6 +17,7 @@ import { ObjectiveTestModule } from "../exam-management/objective-test/objective
 import { QuestionModule } from "../exam-management/question/question.module";
 import { LearningMaterialModule } from "../educational-management/learning-material/learning-material.module";
 import { ObjectiveTestManagementModule } from "../exam-management/objective-test-management/objective-test-management.module";
+import { EssayQuestionModule } from "../educational-management/essay-questions/essay-questions.module";
 
 @Global()
 @Module({
@@ -36,6 +37,7 @@ import { ObjectiveTestManagementModule } from "../exam-management/objective-test
     QuestionModule,
     LearningMaterialModule,
     ObjectiveTestManagementModule,
+    EssayQuestionModule,
   ],
   providers: [ImageService],
 

@@ -7,10 +7,10 @@ import { Section } from "../../../content-management/section/entities/section.en
 import { Subject } from "../../../content-management/subject/entities/subject.entity";
 import { IVideo } from "../../../interface/IEntity";
 
-export type LearningMaterialDocument = LearningMaterial & Document;
+export type EssayQuestionDocument = EssayQuestion & Document;
 
 @Schema({ timestamps: true })
-export class LearningMaterial {
+export class EssayQuestion {
     @Prop({
         type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
     })
@@ -47,4 +47,4 @@ export class LearningMaterial {
     pdfFiles: string[];
 }
 
-export const LearningMaterialSchema = SchemaFactory.createForClass(LearningMaterial);
+export const EssayQuestionSchema = SchemaFactory.createForClass(EssayQuestion);

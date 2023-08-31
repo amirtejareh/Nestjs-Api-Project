@@ -5,9 +5,8 @@ import { GradeLevel } from "../../../content-management/grade-level/entities/gra
 import { Section } from "../../../content-management/section/entities/section.entity";
 import { Subject } from "../../../content-management/subject/entities/subject.entity";
 import { TermOfStudy } from "../../../content-management/term-of-study/entities/term-of-study.entity";
-import { IVideo } from "../../../interface/IEntity";
 
-export class CreateLearningMaterialDto {
+export class CreateEssayQuestionsDto {
     readonly _id?: string;
     @ApiProperty({
         description: "Grade level id",
@@ -38,12 +37,6 @@ export class CreateLearningMaterialDto {
         example: "64d5513027862ad356480ff0",
     })
     readonly subject: Subject;
-
-    @ApiProperty({
-        description: "List of video object",
-        example: `{"title": "", "link": '#'}`,
-    })
-    readonly videos: IVideo[];
 
     @ApiProperty({ type: "string", format: "binary" })
     public pdfFiles: string[];
