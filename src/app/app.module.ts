@@ -22,6 +22,7 @@ import { BookReferenceModule } from "../content-management/book-reference/book-r
 import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and-test.module";
 import { KaranbalaModule } from "../educational-management/karanbala/karanbala.module";
 import { BookExercisesModule } from "../educational-management/book-exercises/book-exercises.module";
+import { OnlineGradeReportModule } from "../exam-management/online-grade-report/online-grade-report.module";
 
 @Global()
 @Module({
@@ -40,15 +41,16 @@ import { BookExercisesModule } from "../educational-management/book-exercises/bo
     SubjectModule,
     ObjectiveTestModule,
     QuestionModule,
+    OnlineGradeReportModule,
     LearningMaterialModule,
     ObjectiveTestManagementModule,
     EssayQuestionModule,
     TipAndTestModule,
     KaranbalaModule,
-    BookExercisesModule
+    BookExercisesModule,
   ],
   providers: [ImageService],
 
   controllers: [AppController],
 })
-export class AppModule { }
+export class AppModule {}
