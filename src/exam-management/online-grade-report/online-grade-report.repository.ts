@@ -53,20 +53,105 @@ export class OnlineGradeReportRepository {
     const questions =
       await this.questionService.findQuestionsBasedOnObjectiveTests(examId);
 
+    let easyCount = 0;
+    let averageCount = 0;
+    let hardCount = 0;
     let correctCount = 0;
+    let correctEasyCount = 0;
+    let correctAverageCount = 0;
+    let correctHardCount = 0;
     let incorrectCount = 0;
+    let incorrectEasyCount = 0;
+    let incorrectAverageCount = 0;
+    let incorrectHardCount = 0;
     let unansweredCount = 0;
+    let unansweredEasyCount = 0;
+    let unansweredAverageCount = 0;
+    let unansweredHardCount = 0;
+    let conceptionalCount = 0;
+    let correctConceptionalCount = 0;
+    let incorrectConceptionalCount = 0;
+    let unansweredConceptionalCount = 0;
+    let computationalCount = 0;
+    let correctComputationalCount = 0;
+    let incorrectComputationalCount = 0;
+    let unansweredComputationalCount = 0;
+    let trickCount = 0;
+    let correctTrickCount = 0;
+    let incorrectTrickCount = 0;
+    let unansweredTrickCount = 0;
+    let memorizationalCount = 0;
+    let correctMemorizationalCount = 0;
+    let incorrectMemorizationalCount = 0;
+    let unansweredMemorizationalCount = 0;
+    let challengingCount = 0;
+    let correctChallengingCount = 0;
+    let incorrectChallengingCount = 0;
+    let unansweredChallengingCount = 0;
+
     let userAnswers = [];
+    questions.map((question) => {
+      if (question.questionDifficulty == "hard") {
+        hardCount++;
+      }
+      if (question.questionDifficulty == "average") {
+        averageCount++;
+      }
+      if (question.questionDifficulty == "easy") {
+        easyCount++;
+      }
+      if (question.type == "conceptional") {
+        conceptionalCount++;
+      }
+      if (question.type == "computational") {
+        computationalCount++;
+      }
+      if (question.type == "trick") {
+        trickCount++;
+      }
+      if (question.type == "memorizational") {
+        memorizationalCount++;
+      }
+      if (question.type == "challenging") {
+        challengingCount++;
+      }
+    });
 
     createOnlineGradeReportDto.question.forEach((result) => {
       const question = questions.find((q) => q.id === result._id);
 
       if (question) {
-        if (result.value === question.correctAnswer) {
+        if (result.value == question.correctAnswer) {
           correctCount++;
+          if (question.questionDifficulty == "hard") {
+            correctHardCount++;
+          }
+          if (question.questionDifficulty == "average") {
+            correctAverageCount++;
+          }
+          if (question.questionDifficulty == "easy") {
+            correctEasyCount++;
+          }
+
+          if (question.type == "conceptional") {
+            correctConceptionalCount++;
+          }
+          if (question.type == "computational") {
+            correctComputationalCount++;
+          }
+          if (question.type == "trick") {
+            correctTrickCount++;
+          }
+          if (question.type == "memorizational") {
+            correctMemorizationalCount++;
+          }
+          if (question.type == "challenging") {
+            correctChallengingCount++;
+          }
+
           userAnswers.push({
             number: question.number,
-            answerResult: "صحیح",
+            answer: "صحیح",
             userAnswer: result.value,
             correctAnswer: question.correctAnswer,
             gradeLevels: question.gradeLevels.map((gradeLevel) => {
@@ -87,7 +172,7 @@ export class OnlineGradeReportRepository {
             questionType: question.type,
             questionDifficulty: question.questionDifficulty,
           });
-        } else if (result.value === "-") {
+        } else if (result.value == "-") {
           userAnswers.push({
             number: question.number,
             answer: "نزده",
@@ -112,6 +197,30 @@ export class OnlineGradeReportRepository {
             questionDifficulty: question.questionDifficulty,
           });
           unansweredCount++;
+          if (question.questionDifficulty == "hard") {
+            unansweredHardCount++;
+          }
+          if (question.questionDifficulty == "average") {
+            unansweredAverageCount++;
+          }
+          if (question.questionDifficulty == "easy") {
+            unansweredEasyCount++;
+          }
+          if (question.type == "conceptional") {
+            unansweredConceptionalCount++;
+          }
+          if (question.type == "computational") {
+            unansweredComputationalCount++;
+          }
+          if (question.type == "trick") {
+            unansweredTrickCount++;
+          }
+          if (question.type == "memorizational") {
+            unansweredMemorizationalCount++;
+          }
+          if (question.type == "challenging") {
+            unansweredChallengingCount++;
+          }
         } else {
           userAnswers.push({
             number: question.number,
@@ -137,6 +246,31 @@ export class OnlineGradeReportRepository {
             questionDifficulty: question.questionDifficulty,
           });
           incorrectCount++;
+          if (question.questionDifficulty == "hard") {
+            incorrectHardCount++;
+          }
+          if (question.questionDifficulty == "average") {
+            incorrectAverageCount++;
+          }
+          if (question.questionDifficulty == "easy") {
+            incorrectEasyCount++;
+          }
+
+          if (question.type == "conceptional") {
+            incorrectConceptionalCount++;
+          }
+          if (question.type == "computational") {
+            incorrectComputationalCount++;
+          }
+          if (question.type == "trick") {
+            incorrectTrickCount++;
+          }
+          if (question.type == "memorizational") {
+            incorrectMemorizationalCount++;
+          }
+          if (question.type == "challenging") {
+            incorrectChallengingCount++;
+          }
         }
       } else {
         userAnswers.push({
@@ -163,6 +297,30 @@ export class OnlineGradeReportRepository {
           questionDifficulty: question.questionDifficulty,
         });
         unansweredCount++;
+        if (question.questionDifficulty == "hard") {
+          unansweredHardCount++;
+        }
+        if (question.questionDifficulty == "average") {
+          unansweredAverageCount++;
+        }
+        if (question.questionDifficulty == "easy") {
+          unansweredEasyCount++;
+        }
+        if (question.type == "conceptional") {
+          unansweredConceptionalCount++;
+        }
+        if (question.type == "computational") {
+          unansweredComputationalCount++;
+        }
+        if (question.type == "trick") {
+          unansweredTrickCount++;
+        }
+        if (question.type == "memorizational") {
+          unansweredMemorizationalCount++;
+        }
+        if (question.type == "challenging") {
+          unansweredChallengingCount++;
+        }
       }
     });
 
@@ -173,9 +331,41 @@ export class OnlineGradeReportRepository {
       examNumber,
       examType,
       totalQuestions: questions.length,
-      correctCount: correctCount,
-      incorrectCount: incorrectCount,
-      unansweredCount: unansweredCount,
+      correctCount,
+      incorrectCount,
+      unansweredCount,
+      easyCount,
+      averageCount,
+      hardCount,
+      correctEasyCount,
+      correctAverageCount,
+      correctHardCount,
+      incorrectEasyCount,
+      incorrectAverageCount,
+      incorrectHardCount,
+      unansweredEasyCount,
+      unansweredAverageCount,
+      unansweredHardCount,
+      conceptionalCount,
+      correctConceptionalCount,
+      incorrectConceptionalCount,
+      unansweredConceptionalCount,
+      computationalCount,
+      correctComputationalCount,
+      incorrectComputationalCount,
+      unansweredComputationalCount,
+      trickCount,
+      correctTrickCount,
+      incorrectTrickCount,
+      unansweredTrickCount,
+      memorizationalCount,
+      correctMemorizationalCount,
+      incorrectMemorizationalCount,
+      unansweredMemorizationalCount,
+      challengingCount,
+      correctChallengingCount,
+      incorrectChallengingCount,
+      unansweredChallengingCount,
       gradeLevel: createOnlineGradeReportDto.gradeLevel,
     };
 
