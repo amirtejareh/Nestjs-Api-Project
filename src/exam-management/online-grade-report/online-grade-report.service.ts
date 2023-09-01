@@ -1,4 +1,4 @@
-import { Injectable, Res } from "@nestjs/common";
+import { Injectable, Param, Res } from "@nestjs/common";
 import { CreateOnlineGradeReportDto } from "./dto/create-online-grade-report.dto";
 import { UpdateOnlineGradeReportDto } from "./dto/update-online-grade-report.dto";
 import { OnlineGradeReportRepository } from "./online-grade-report.repository";
@@ -18,6 +18,14 @@ export class OnlineGradeReportService {
 
   findAll() {
     return this.onlineGradeReportRepository.findAll();
+  }
+
+  getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.onlineGradeReportRepository.getObjectiveTestsBasedNumber(
+      objectiveTests
+    );
   }
 
   findOne(id: string) {

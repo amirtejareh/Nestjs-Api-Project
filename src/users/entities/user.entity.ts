@@ -6,6 +6,9 @@ import { Permission } from "../../permission/entities/permission.entity";
 export type UserDocument = User & Document;
 @Schema()
 export class User {
+  @Prop({ unique: true })
+  _id: string;
+
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Role.name }],
   })

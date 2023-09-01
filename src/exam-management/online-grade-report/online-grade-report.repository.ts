@@ -1,30 +1,119 @@
-import { Body, HttpStatus, Injectable, Param, Res } from "@nestjs/common";
+import {
+  Body,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Param,
+  Res,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { OnlineGradeReport } from "./entities/online-grade-report.entity";
 import { CreateOnlineGradeReportDto } from "./dto/create-online-grade-report.dto";
 import { UpdateOnlineGradeReportDto } from "./dto/update-online-grade-report.dto";
+import { QuestionController } from "../question/question.controller";
+import { QuestionService } from "../question/question.service";
+import { User } from "../../users/entities/user.entity";
 
 @Injectable()
 export class OnlineGradeReportRepository {
   constructor(
     @InjectModel(OnlineGradeReport.name)
-    private readonly onlineGradeReportModel: Model<OnlineGradeReport>
+    private readonly onlineGradeReportModel: Model<OnlineGradeReport>,
+    private readonly questionService: QuestionService
   ) {}
 
-  async findOneByTitle(title: string) {
-    return this.onlineGradeReportModel.findOne({ title }).exec();
+  async findOneByExamNumber(objectiveTestId: string, user: User) {
+    const report = await this.onlineGradeReportModel
+      .findOne({
+        $and: [
+          { objectiveTests: { $in: objectiveTestId } },
+          { "user.username": user.username },
+        ],
+      })
+      .exec();
+
+    return report;
   }
+
   async create(
     @Res() res,
     @Body() createOnlineGradeReportDto: CreateOnlineGradeReportDto
   ) {
-    console.log(createOnlineGradeReportDto);
+    const user = createOnlineGradeReportDto.user.user;
+    const examId = createOnlineGradeReportDto.examId;
 
-    return;
+    if (await this.findOneByExamNumber(examId, user)) {
+      throw new ConflictException(
+        "امکان ثبت مجدد نتیجه آزمون وجود ندارد میتوانید در میز کار خود نتیجه آزمون فعلی را مشاهده کنید."
+      );
+    }
+    const examNumber = createOnlineGradeReportDto.examNumber;
+    const examType = createOnlineGradeReportDto.type;
+    const questions =
+      await this.questionService.findQuestionsBasedOnObjectiveTests(examId);
+
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let unansweredCount = 0;
+    let userAnswers = [];
+
+    createOnlineGradeReportDto.question.forEach((result) => {
+      const question = questions.find((q) => q.id === result._id);
+
+      if (question) {
+        if (result.value === question.correctAnswer) {
+          correctCount++;
+          userAnswers.push({
+            number: question.number,
+            answerResult: "صحیح",
+            userAnswer: result.value,
+            correctAnswer: question.correctAnswer,
+          });
+        } else if (result.value === "-") {
+          userAnswers.push({
+            number: question.number,
+            answer: "نزده",
+            userAnswer: result.value ?? "-",
+            correctAnswer: question.correctAnswer,
+          });
+          unansweredCount++;
+        } else {
+          userAnswers.push({
+            number: question.number,
+            answer: "غلط",
+            userAnswer: result.value,
+            correctAnswer: question.correctAnswer,
+          });
+          incorrectCount++;
+        }
+      } else {
+        userAnswers.push({
+          number: question.number,
+          answer: "نزده",
+          userAnswer: result.value ?? "-",
+          correctAnswer: question.correctAnswer,
+        });
+        unansweredCount++;
+      }
+    });
+
+    const report = {
+      user,
+      objectiveTests: examId,
+      userAnswers,
+      examNumber,
+      examType,
+      totalQuestions: questions.length,
+      correctCount: correctCount,
+      incorrectCount: incorrectCount,
+      unansweredCount: unansweredCount,
+      gradeLevel: createOnlineGradeReportDto.gradeLevel,
+    };
+
     try {
       const createOnlineGradeReportModel =
-        await this.onlineGradeReportModel.create(createOnlineGradeReportDto);
+        await this.onlineGradeReportModel.create(report);
       return res.status(200).json({
         statusCode: 200,
         message: "کارنامه شما با موفقیت صادر شد",
@@ -44,6 +133,16 @@ export class OnlineGradeReportRepository {
 
   findOne(@Param("id") id: string) {
     return this.onlineGradeReportModel.findOne({ _id: id });
+  }
+
+  getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.onlineGradeReportModel
+      .find({
+        objectiveTests,
+      })
+      .populate("gradeLevel");
   }
 
   async update(

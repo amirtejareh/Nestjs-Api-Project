@@ -22,3 +22,8 @@ export class GradeLevel {
 }
 
 export const GradeLevelSchema = SchemaFactory.createForClass(GradeLevel);
+GradeLevelSchema.virtual("onlinegradereports", {
+  ref: "OnlineGradeReport",
+  localField: "_id",
+  foreignField: "gradeLevel",
+});

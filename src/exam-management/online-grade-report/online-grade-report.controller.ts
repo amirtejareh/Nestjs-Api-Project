@@ -64,6 +64,15 @@ export class OnlineGradeReportController {
     );
   }
 
+  @Get("withObjectiveTests/:objectiveTestId")
+  async getObjectiveTestsBasedNumber(
+    @Param("objectiveTestId") objectiveTests: string
+  ) {
+    return this.onlineGradeReportService.getObjectiveTestsBasedNumber(
+      objectiveTests
+    );
+  }
+
   @Delete(":id")
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)

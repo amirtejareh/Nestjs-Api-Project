@@ -1,1 +1,3 @@
-export class CreateOnlineGradeReportDto {}
+export class CreateOnlineGradeReportDto {
+  [x: string]: any;
+}

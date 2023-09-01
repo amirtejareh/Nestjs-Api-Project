@@ -1,36 +1,50 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
-import { GradeLevel } from "../../../content-management/grade-level/entities/grade-level.entity";
-import { Book } from "../../../content-management/book/entities/book.entity";
-import { Section } from "../../../content-management/section/entities/section.entity";
-import { Subject } from "../../../content-management/subject/entities/subject.entity";
-import { Chapter } from "../../../content-management/chapter/entities/chapter.entity";
 import { ObjectiveTest } from "../../objective-test/entities/objective-test.entity";
-import { BookReference } from "../../../content-management/book-reference/entities/book-reference.entity";
 import { User } from "../../../users/entities/user.entity";
+import { GradeLevel } from "../../../content-management/grade-level/entities/grade-level.entity";
+
+interface IUserAnswers {
+  number: number;
+  answerResult: string;
+  correctAnswer: number;
+  userAnswer: number;
+}
 
 export type OnlineGradeReportDocument = OnlineGradeReport & Document;
 
 @Schema({ timestamps: true })
 export class OnlineGradeReport {
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: User.name }],
-  })
+  @Prop()
   user: User;
+
+  @Prop({ required: true })
+  userAnswers: IUserAnswers[];
+
+  @Prop({ required: true })
+  examNumber: number;
+
+  @Prop({ required: true })
+  examType: string;
+
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: ObjectiveTest.name }],
+  })
+  objectiveTests: ObjectiveTest;
+
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
   })
-  gradeLevels: GradeLevel[];
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
-  })
-  books: Book[];
-
-  @Prop({ required: true })
-  question: string;
+  gradeLevel: GradeLevel;
 
   @Prop({ required: false })
-  objectiveTests: ObjectiveTest[];
+  totalQuestions: number;
+  @Prop({ required: false })
+  correctCount: number;
+  @Prop({ required: false })
+  incorrectCount: number;
+  @Prop({ required: false })
+  unansweredCount: number;
 }
 
 export const OnlineGradeReportSchema =
