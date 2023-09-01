@@ -69,6 +69,23 @@ export class OnlineGradeReportRepository {
             answerResult: "صحیح",
             userAnswer: result.value,
             correctAnswer: question.correctAnswer,
+            gradeLevels: question.gradeLevels.map((gradeLevel) => {
+              return {
+                title: gradeLevel.title,
+              };
+            }),
+            chapters: question.chapters.map((chapter) => {
+              return {
+                title: chapter.title,
+              };
+            }),
+            subjects: question.subjects.map((subject) => {
+              return {
+                title: subject.title,
+              };
+            }),
+            questionType: question.type,
+            questionDifficulty: question.questionDifficulty,
           });
         } else if (result.value === "-") {
           userAnswers.push({
@@ -76,6 +93,23 @@ export class OnlineGradeReportRepository {
             answer: "نزده",
             userAnswer: result.value ?? "-",
             correctAnswer: question.correctAnswer,
+            gradeLevels: question.gradeLevels.map((gradeLevel) => {
+              return {
+                title: gradeLevel.title,
+              };
+            }),
+            chapters: question.chapters.map((chapter) => {
+              return {
+                title: chapter.title,
+              };
+            }),
+            subjects: question.subjects.map((subject) => {
+              return {
+                title: subject.title,
+              };
+            }),
+            questionType: question.type,
+            questionDifficulty: question.questionDifficulty,
           });
           unansweredCount++;
         } else {
@@ -84,6 +118,23 @@ export class OnlineGradeReportRepository {
             answer: "غلط",
             userAnswer: result.value,
             correctAnswer: question.correctAnswer,
+            gradeLevels: question.gradeLevels.map((gradeLevel) => {
+              return {
+                title: gradeLevel.title,
+              };
+            }),
+            chapters: question.chapters.map((chapter) => {
+              return {
+                title: chapter.title,
+              };
+            }),
+            subjects: question.subjects.map((subject) => {
+              return {
+                title: subject.title,
+              };
+            }),
+            questionType: question.type,
+            questionDifficulty: question.questionDifficulty,
           });
           incorrectCount++;
         }
@@ -93,6 +144,23 @@ export class OnlineGradeReportRepository {
           answer: "نزده",
           userAnswer: result.value ?? "-",
           correctAnswer: question.correctAnswer,
+          gradeLevels: question.gradeLevels.map((gradeLevel) => {
+            return {
+              title: gradeLevel.title,
+            };
+          }),
+          chapters: question.chapters.map((chapter) => {
+            return {
+              title: chapter.title,
+            };
+          }),
+          subjects: question.subjects.map((subject) => {
+            return {
+              title: subject.title,
+            };
+          }),
+          questionType: question.type,
+          questionDifficulty: question.questionDifficulty,
         });
         unansweredCount++;
       }

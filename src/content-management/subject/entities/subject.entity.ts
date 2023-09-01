@@ -39,3 +39,9 @@ export class Subject {
   terms: TermOfStudy[];
 }
 export const SubjectSchema = SchemaFactory.createForClass(Subject);
+
+SubjectSchema.virtual("questions", {
+  ref: "Question",
+  localField: "_id",
+  foreignField: "subjects",
+});

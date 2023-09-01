@@ -27,3 +27,9 @@ GradeLevelSchema.virtual("onlinegradereports", {
   localField: "_id",
   foreignField: "gradeLevel",
 });
+
+GradeLevelSchema.virtual("questions", {
+  ref: "Question",
+  localField: "_id",
+  foreignField: "gradeLevels",
+});

@@ -21,3 +21,8 @@ export class Chapter {
   books: Book[];
 }
 export const ChapterSchema = SchemaFactory.createForClass(Chapter);
+ChapterSchema.virtual("questions", {
+  ref: "Question",
+  localField: "_id",
+  foreignField: "chapters",
+});

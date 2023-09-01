@@ -198,11 +198,13 @@ export class QuestionRepository {
   }
 
   async findQuestionsBasedOnObjectiveTests(objectiveTests: string) {
-    const questions = await this.questionModel.find({
-      objectiveTests: {
-        $in: objectiveTests,
-      },
-    });
+    const questions = await this.questionModel
+      .find({
+        objectiveTests: {
+          $in: objectiveTests,
+        },
+      })
+      .populate(["gradeLevels", "chapters", "subjects"]);
 
     return questions;
   }
