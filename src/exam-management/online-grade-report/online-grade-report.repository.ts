@@ -1,38 +1,109 @@
-import { Injectable, Res } from "@nestjs/common";
-import { CreateOnlineGradeReportDto } from "./dto/create-online-grade-report.dto";
-import { UpdateOnlineGradeReportDto } from "./dto/update-online-grade-report.dto";
+import { Body, HttpStatus, Injectable, Param, Res } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { OnlineGradeReport } from "./entities/online-grade-report.entity";
+import { CreateOnlineGradeReportDto } from "./dto/create-online-grade-report.dto";
+import { UpdateOnlineGradeReportDto } from "./dto/update-online-grade-report.dto";
 
 @Injectable()
 export class OnlineGradeReportRepository {
   constructor(
     @InjectModel(OnlineGradeReport.name)
-    private readonly onlineGradeRepositoryModel: Model<OnlineGradeReport>
+    private readonly onlineGradeReportModel: Model<OnlineGradeReport>
   ) {}
 
-  create(@Res() res, createOnlineGradeReportDto: CreateOnlineGradeReportDto) {
-    return "This action adds a new onlineGradeReport";
+  async findOneByTitle(title: string) {
+    return this.onlineGradeReportModel.findOne({ title }).exec();
+  }
+  async create(
+    @Res() res,
+    @Body() createOnlineGradeReportDto: CreateOnlineGradeReportDto
+  ) {
+    console.log(createOnlineGradeReportDto);
+
+    return;
+    try {
+      const createOnlineGradeReportModel =
+        await this.onlineGradeReportModel.create(createOnlineGradeReportDto);
+      return res.status(200).json({
+        statusCode: 200,
+        message: "کارنامه شما با موفقیت صادر شد",
+        data: createOnlineGradeReportModel,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: e.message,
+      });
+    }
   }
 
   findAll() {
-    return `This action returns all onlineGradeReport`;
+    return this.onlineGradeReportModel.find({});
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} onlineGradeReport`;
+  findOne(@Param("id") id: string) {
+    return this.onlineGradeReportModel.findOne({ _id: id });
   }
 
-  update(
+  async update(
     @Res() res,
-    id: string,
-    updateOnlineGradeReportDto: UpdateOnlineGradeReportDto
+    @Param("id") id: string,
+    @Body() updateOnlineGradeReportDto: UpdateOnlineGradeReportDto
   ) {
-    return `This action updates a #${id} onlineGradeReport`;
+    try {
+      const updateSectionModel =
+        await this.onlineGradeReportModel.findOneAndUpdate(
+          { _id: id },
+          { $set: { ...updateOnlineGradeReportDto } },
+          { new: true }
+        );
+
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        message: "گزارش کارنامه مورد نظر با موفقیت بروزرسانی شد",
+        data: updateSectionModel,
+      });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "مشکلی در بروزرسانی گزارش کارنامه مورد نظر به وجود آمده است",
+        error: error.message,
+      });
+    }
   }
 
-  remove(@Res() res, id: string) {
-    return `This action removes a #${id} onlineGradeReport`;
+  async remove(@Res() res, @Param("id") id: string) {
+    try {
+      const findOneObjectiveTest = await this.findOne(id);
+      if (!findOneObjectiveTest) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "آزمون تستی مورد نظر پیدا نشد",
+        });
+      }
+
+      const deleteOnlineGradeReportModel =
+        await this.onlineGradeReportModel.deleteOne({
+          _id: id,
+        });
+      if (!deleteOnlineGradeReportModel) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: "کارنامه مورد نظر پیدا نشد",
+        });
+      }
+      return res.status(HttpStatus.OK).json({
+        statusCode: HttpStatus.OK,
+        message: "گزارش کارنامه مورد نظر با موفقیت حذف شد",
+        data: deleteOnlineGradeReportModel,
+      });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "مشکلی در حذف گزارش کارنامه مورد نظر به وجود آمده است",
+        error: error.message,
+      });
+    }
   }
 }
