@@ -30,12 +30,12 @@ export class ObjectiveTest {
   gradeLevel: GradeLevel;
 
   @Prop({
-    required: true,
+    required: false,
   })
   start: Date;
 
   @Prop({
-    required: true,
+    required: false,
   })
   end: Date;
 }
