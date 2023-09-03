@@ -120,6 +120,8 @@ export class OnlineGradeReportRepository {
     createOnlineGradeReportDto.question.forEach((result) => {
       const question = questions.find((q) => q.id === result._id);
 
+      const bookReferences = question.bookReferences[0];
+
       if (question) {
         if (result.value == question.correctAnswer) {
           correctCount++;
@@ -150,51 +152,107 @@ export class OnlineGradeReportRepository {
           }
 
           userAnswers.push({
-            number: question.number,
-            answer: "صحیح",
-            userAnswer: result.value,
-            correctAnswer: question.correctAnswer,
-            gradeLevels: question.gradeLevels.map((gradeLevel) => {
-              return {
-                title: gradeLevel.title,
-              };
-            }),
-            chapters: question.chapters.map((chapter) => {
-              return {
-                title: chapter.title,
-              };
-            }),
-            subjects: question.subjects.map((subject) => {
-              return {
-                title: subject.title,
-              };
-            }),
-            questionType: question.type,
-            questionDifficulty: question.questionDifficulty,
+            bookReferences: {
+              title: bookReferences.title,
+              children: {
+                number: question.number,
+                answer: "صحیح",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              },
+            },
+            total: {
+              number: question.number,
+              answer: "صحیح",
+              userAnswer: result.value,
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            },
           });
         } else if (result.value == "-") {
           userAnswers.push({
-            number: question.number,
-            answer: "نزده",
-            userAnswer: result.value ?? "-",
-            correctAnswer: question.correctAnswer,
-            gradeLevels: question.gradeLevels.map((gradeLevel) => {
-              return {
-                title: gradeLevel.title,
-              };
-            }),
-            chapters: question.chapters.map((chapter) => {
-              return {
-                title: chapter.title,
-              };
-            }),
-            subjects: question.subjects.map((subject) => {
-              return {
-                title: subject.title,
-              };
-            }),
-            questionType: question.type,
-            questionDifficulty: question.questionDifficulty,
+            bookReferences: {
+              title: bookReferences.title,
+              children: {
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value ?? "-",
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              },
+            },
+            total: {
+              number: question.number,
+              answer: "نزده",
+              userAnswer: result.value ?? "-",
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            },
           });
           unansweredCount++;
           if (question.questionDifficulty == "hard") {
@@ -223,27 +281,55 @@ export class OnlineGradeReportRepository {
           }
         } else {
           userAnswers.push({
-            number: question.number,
-            answer: "غلط",
-            userAnswer: result.value,
-            correctAnswer: question.correctAnswer,
-            gradeLevels: question.gradeLevels.map((gradeLevel) => {
-              return {
-                title: gradeLevel.title,
-              };
-            }),
-            chapters: question.chapters.map((chapter) => {
-              return {
-                title: chapter.title,
-              };
-            }),
-            subjects: question.subjects.map((subject) => {
-              return {
-                title: subject.title,
-              };
-            }),
-            questionType: question.type,
-            questionDifficulty: question.questionDifficulty,
+            bookReferences: {
+              title: bookReferences.title,
+              children: {
+                number: question.number,
+                answer: "غلط",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              },
+            },
+            total: {
+              number: question.number,
+              answer: "غلط",
+              userAnswer: result.value,
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            },
           });
           incorrectCount++;
           if (question.questionDifficulty == "hard") {
@@ -274,27 +360,55 @@ export class OnlineGradeReportRepository {
         }
       } else {
         userAnswers.push({
-          number: question.number,
-          answer: "نزده",
-          userAnswer: result.value ?? "-",
-          correctAnswer: question.correctAnswer,
-          gradeLevels: question.gradeLevels.map((gradeLevel) => {
-            return {
-              title: gradeLevel.title,
-            };
-          }),
-          chapters: question.chapters.map((chapter) => {
-            return {
-              title: chapter.title,
-            };
-          }),
-          subjects: question.subjects.map((subject) => {
-            return {
-              title: subject.title,
-            };
-          }),
-          questionType: question.type,
-          questionDifficulty: question.questionDifficulty,
+          bookReferences: {
+            title: bookReferences.title,
+            children: {
+              number: question.number,
+              answer: "نزده",
+              userAnswer: result.value ?? "-",
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            },
+            total: {
+              number: question.number,
+              answer: "نزده",
+              userAnswer: result.value ?? "-",
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            },
+          },
         });
         unansweredCount++;
         if (question.questionDifficulty == "hard") {

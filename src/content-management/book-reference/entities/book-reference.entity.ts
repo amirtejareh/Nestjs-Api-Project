@@ -22,3 +22,9 @@ BookReferenceSchema.virtual("questions", {
   localField: "_id",
   foreignField: "bookReferences",
 });
+
+BookReferenceSchema.virtual("questions", {
+  ref: "Question",
+  localField: "_id",
+  foreignField: "bookReferences",
+});
