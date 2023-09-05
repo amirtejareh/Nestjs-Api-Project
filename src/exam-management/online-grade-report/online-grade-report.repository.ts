@@ -7,11 +7,10 @@ import {
   Res,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { OnlineGradeReport } from "./entities/online-grade-report.entity";
 import { CreateOnlineGradeReportDto } from "./dto/create-online-grade-report.dto";
 import { UpdateOnlineGradeReportDto } from "./dto/update-online-grade-report.dto";
-import { QuestionController } from "../question/question.controller";
 import { QuestionService } from "../question/question.service";
 import { User } from "../../users/entities/user.entity";
 
@@ -151,6 +150,63 @@ export class OnlineGradeReportRepository {
             correctChallengingCount++;
           }
 
+          if (userAnswers.find((item) => item.title == "کل")) {
+            userAnswers
+              .find((item) => item.title == "کل")
+              .children.push({
+                number: question.number,
+                answer: "صحیح",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: "کل",
+              children: [
+                {
+                  number: question.number,
+                  answer: "صحیح",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
           if (
             userAnswers.find((item) => item.title == bookReferences[0].title)
           ) {
@@ -210,6 +266,63 @@ export class OnlineGradeReportRepository {
             });
           }
         } else if (result.value == "-") {
+          if (userAnswers.find((item) => item.title == "کل")) {
+            userAnswers
+              .find((item) => item.title == "کل")
+              .children.push({
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: "کل",
+              children: [
+                {
+                  number: question.number,
+                  answer: "نزده",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
           if (
             userAnswers.find((item) => item.book == bookReferences[0].title)
           ) {
@@ -268,6 +381,7 @@ export class OnlineGradeReportRepository {
               ],
             });
           }
+
           unansweredCount++;
           if (question.questionDifficulty == "hard") {
             unansweredHardCount++;
@@ -294,6 +408,63 @@ export class OnlineGradeReportRepository {
             unansweredChallengingCount++;
           }
         } else {
+          if (userAnswers.find((item) => item.title == "کل")) {
+            userAnswers
+              .find((item) => item.title == "کل")
+              .children.push({
+                number: question.number,
+                answer: "غلط",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: "کل",
+              children: [
+                {
+                  number: question.number,
+                  answer: "غلط",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
           if (
             userAnswers.find((item) => item.title == bookReferences[0].title)
           ) {
@@ -381,6 +552,63 @@ export class OnlineGradeReportRepository {
           }
         }
       } else {
+        if (userAnswers.find((item) => item.title == "کل")) {
+          userAnswers
+            .find((item) => item.title == "کل")
+            .children.push({
+              number: question.number,
+              answer: "نزده",
+              userAnswer: result.value,
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            });
+        } else {
+          userAnswers.push({
+            title: "کل",
+            children: [
+              {
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              },
+            ],
+          });
+        }
+
         if (userAnswers.find((item) => item.title == bookReferences[0].title)) {
           userAnswers
             .find((item) => item.title == bookReferences[0].title)
