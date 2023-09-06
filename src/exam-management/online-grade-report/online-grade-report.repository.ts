@@ -100,6 +100,10 @@ export class OnlineGradeReportRepository {
       if (question.questionDifficulty == "easy") {
         easyCount++;
       }
+      if (question.questionDifficulty == "challenging") {
+        challengingCount++;
+      }
+
       if (question.type == "conceptional") {
         conceptionalCount++;
       }
@@ -111,9 +115,6 @@ export class OnlineGradeReportRepository {
       }
       if (question.type == "memorizational") {
         memorizationalCount++;
-      }
-      if (question.type == "challenging") {
-        challengingCount++;
       }
     });
 
@@ -133,6 +134,10 @@ export class OnlineGradeReportRepository {
             correctEasyCount++;
           }
 
+          if (question.questionDifficulty == "challenging") {
+            correctChallengingCount++;
+          }
+
           if (question.type == "conceptional") {
             correctConceptionalCount++;
           }
@@ -144,9 +149,6 @@ export class OnlineGradeReportRepository {
           }
           if (question.type == "memorizational") {
             correctMemorizationalCount++;
-          }
-          if (question.type == "challenging") {
-            correctChallengingCount++;
           }
 
           userAnswers.push({
@@ -206,6 +208,9 @@ export class OnlineGradeReportRepository {
           if (question.questionDifficulty == "easy") {
             unansweredEasyCount++;
           }
+          if (question.questionDifficulty == "challenging") {
+            unansweredChallengingCount++;
+          }
           if (question.type == "conceptional") {
             unansweredConceptionalCount++;
           }
@@ -217,9 +222,6 @@ export class OnlineGradeReportRepository {
           }
           if (question.type == "memorizational") {
             unansweredMemorizationalCount++;
-          }
-          if (question.type == "challenging") {
-            unansweredChallengingCount++;
           }
         } else {
           userAnswers.push({
@@ -255,6 +257,9 @@ export class OnlineGradeReportRepository {
           if (question.questionDifficulty == "easy") {
             incorrectEasyCount++;
           }
+          if (question.questionDifficulty == "challenging") {
+            incorrectChallengingCount++;
+          }
 
           if (question.type == "conceptional") {
             incorrectConceptionalCount++;
@@ -267,9 +272,6 @@ export class OnlineGradeReportRepository {
           }
           if (question.type == "memorizational") {
             incorrectMemorizationalCount++;
-          }
-          if (question.type == "challenging") {
-            incorrectChallengingCount++;
           }
         }
       } else {
@@ -306,6 +308,9 @@ export class OnlineGradeReportRepository {
         if (question.questionDifficulty == "easy") {
           unansweredEasyCount++;
         }
+        if (question.questionDifficulty == "challenging") {
+          unansweredChallengingCount++;
+        }
         if (question.type == "conceptional") {
           unansweredConceptionalCount++;
         }
@@ -317,9 +322,6 @@ export class OnlineGradeReportRepository {
         }
         if (question.type == "memorizational") {
           unansweredMemorizationalCount++;
-        }
-        if (question.type == "challenging") {
-          unansweredChallengingCount++;
         }
       }
     });
