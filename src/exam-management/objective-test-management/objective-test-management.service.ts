@@ -19,8 +19,8 @@ export class ObjectiveTestManagementService {
     );
   }
 
-  findAll() {
-    return this.objectiveTestRepository.findAll();
+  findAll(page: number = 1, limit: number = 10) {
+    return this.objectiveTestRepository.findAll(page, limit);
   }
 
   findOne(@Param("id") id: string) {

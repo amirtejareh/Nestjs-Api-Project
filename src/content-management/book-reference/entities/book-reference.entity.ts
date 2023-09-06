@@ -28,3 +28,9 @@ BookReferenceSchema.virtual("questions", {
   localField: "_id",
   foreignField: "bookReferences",
 });
+
+BookReferenceSchema.virtual("objectivetestmanagements", {
+  ref: "ObjectiveTestManagement",
+  localField: "_id",
+  foreignField: "bookReferences",
+});

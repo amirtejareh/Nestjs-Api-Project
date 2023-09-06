@@ -42,12 +42,50 @@ export class ObjectiveTestManagementRepository {
     }
   }
 
-  findAll() {
-    const today = new Date().toISOString();
+  async findAll(page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
 
-    return this.objectiveTestModel
-      .find({ end: { $gte: today } })
-      .sort({ start: "asc" });
+    const objectiveTestIds = await this.objectiveTestModel
+      .find({})
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalObjectiveTests = await this.objectiveTestModel.countDocuments(
+      {}
+    );
+
+    const objectiveTests = await this.objectiveTestModel
+      .find({
+        _id: {
+          $in: objectiveTestIds,
+        },
+      })
+      .populate([
+        {
+          path: "bookReferences",
+          populate: {
+            path: "gradeLevels",
+          },
+        },
+        {
+          path: "objectiveTest",
+          populate: {
+            path: "gradeLevel",
+          },
+        },
+      ]);
+
+    if (objectiveTests.length === 0) {
+      return [];
+    }
+
+    return {
+      objectiveTests,
+      currentPage: page,
+      totalPages: Math.ceil(totalObjectiveTests / limit),
+      totalItems: totalObjectiveTests,
+    };
   }
 
   findOne(@Param("id") id: string) {

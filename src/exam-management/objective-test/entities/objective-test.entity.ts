@@ -41,3 +41,9 @@ export class ObjectiveTest {
 }
 
 export const ObjectiveTestSchema = SchemaFactory.createForClass(ObjectiveTest);
+
+ObjectiveTestSchema.virtual("objectivetestmanagements", {
+  ref: "ObjectiveTestManagement",
+  localField: "_id",
+  foreignField: "objectiveTest",
+});

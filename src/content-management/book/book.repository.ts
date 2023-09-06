@@ -72,10 +72,23 @@ export class BookRepository {
     return books;
   }
 
-  async findBooksBasedOnBookReferences(bookReferences: string[]) {
+  async findBooksBasedOnBookReferences(
+    gradeLevels: string[],
+    bookReferences: string[]
+  ) {
+    const validBookReferences = bookReferences.filter((id: string) =>
+      Types.ObjectId.isValid(id)
+    );
+    const validGradeLevels = gradeLevels.filter((id: string) =>
+      Types.ObjectId.isValid(id)
+    );
+
     const books = await this.bookModel.find({
       bookReferences: {
-        $in: bookReferences.map((id: string) => new Types.ObjectId(id)),
+        $in: validBookReferences.map((id: string) => new Types.ObjectId(id)),
+      },
+      gradeLevels: {
+        $in: validGradeLevels.map((id: string) => new Types.ObjectId(id)),
       },
     });
 

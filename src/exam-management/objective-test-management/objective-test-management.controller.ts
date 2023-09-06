@@ -9,6 +9,7 @@ import {
   UseGuards,
   Res,
   ParseArrayPipe,
+  Query,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -39,8 +40,8 @@ export class ObjectiveTestManagementController {
   }
 
   @Get()
-  findAll() {
-    return this.objectiveTestService.findAll();
+  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
+    return this.objectiveTestService.findAll(page, limit);
   }
 
   @Get("withObjectiveTests/:objectiveTestId")
