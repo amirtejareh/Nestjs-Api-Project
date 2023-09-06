@@ -204,7 +204,7 @@ export class QuestionRepository {
           $in: objectiveTests,
         },
       })
-      .populate(["gradeLevels", "chapters", "subjects"]);
+      .populate(["gradeLevels", "chapters", "subjects", "bookReferences"]);
 
     return questions;
   }

@@ -7,11 +7,10 @@ import {
   Res,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { OnlineGradeReport } from "./entities/online-grade-report.entity";
 import { CreateOnlineGradeReportDto } from "./dto/create-online-grade-report.dto";
 import { UpdateOnlineGradeReportDto } from "./dto/update-online-grade-report.dto";
-import { QuestionController } from "../question/question.controller";
 import { QuestionService } from "../question/question.service";
 import { User } from "../../users/entities/user.entity";
 
@@ -121,6 +120,8 @@ export class OnlineGradeReportRepository {
     createOnlineGradeReportDto.question.forEach((result) => {
       const question = questions.find((q) => q.id === result._id);
 
+      const bookReferences = question.bookReferences;
+
       if (question) {
         if (result.value == question.correctAnswer) {
           correctCount++;
@@ -151,53 +152,238 @@ export class OnlineGradeReportRepository {
             correctMemorizationalCount++;
           }
 
-          userAnswers.push({
-            number: question.number,
-            answer: "صحیح",
-            userAnswer: result.value,
-            correctAnswer: question.correctAnswer,
-            gradeLevels: question.gradeLevels.map((gradeLevel) => {
-              return {
-                title: gradeLevel.title,
-              };
-            }),
-            chapters: question.chapters.map((chapter) => {
-              return {
-                title: chapter.title,
-              };
-            }),
-            subjects: question.subjects.map((subject) => {
-              return {
-                title: subject.title,
-              };
-            }),
-            questionType: question.type,
-            questionDifficulty: question.questionDifficulty,
-          });
+          if (userAnswers.find((item) => item.title == "کل")) {
+            userAnswers
+              .find((item) => item.title == "کل")
+              .children.push({
+                number: question.number,
+                answer: "صحیح",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: "کل",
+              children: [
+                {
+                  number: question.number,
+                  answer: "صحیح",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
+          if (
+            userAnswers.find((item) => item.title == bookReferences[0].title)
+          ) {
+            userAnswers
+              .find((item) => item.title == bookReferences[0].title)
+              .children.push({
+                number: question.number,
+                answer: "صحیح",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: bookReferences[0].title,
+              children: [
+                {
+                  number: question.number,
+                  answer: "صحیح",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
         } else if (result.value == "-") {
-          userAnswers.push({
-            number: question.number,
-            answer: "نزده",
-            userAnswer: result.value ?? "-",
-            correctAnswer: question.correctAnswer,
-            gradeLevels: question.gradeLevels.map((gradeLevel) => {
-              return {
-                title: gradeLevel.title,
-              };
-            }),
-            chapters: question.chapters.map((chapter) => {
-              return {
-                title: chapter.title,
-              };
-            }),
-            subjects: question.subjects.map((subject) => {
-              return {
-                title: subject.title,
-              };
-            }),
-            questionType: question.type,
-            questionDifficulty: question.questionDifficulty,
-          });
+          if (userAnswers.find((item) => item.title == "کل")) {
+            userAnswers
+              .find((item) => item.title == "کل")
+              .children.push({
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: "کل",
+              children: [
+                {
+                  number: question.number,
+                  answer: "نزده",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
+          if (
+            userAnswers.find((item) => item.book == bookReferences[0].title)
+          ) {
+            userAnswers
+              .find((item) => item.title == bookReferences[0].title)
+              .children.push({
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value ?? "-",
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: bookReferences[0].title,
+              children: [
+                {
+                  number: question.number,
+                  answer: "نزده",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
           unansweredCount++;
           if (question.questionDifficulty == "hard") {
             unansweredHardCount++;
@@ -224,29 +410,122 @@ export class OnlineGradeReportRepository {
             unansweredMemorizationalCount++;
           }
         } else {
-          userAnswers.push({
-            number: question.number,
-            answer: "غلط",
-            userAnswer: result.value,
-            correctAnswer: question.correctAnswer,
-            gradeLevels: question.gradeLevels.map((gradeLevel) => {
-              return {
-                title: gradeLevel.title,
-              };
-            }),
-            chapters: question.chapters.map((chapter) => {
-              return {
-                title: chapter.title,
-              };
-            }),
-            subjects: question.subjects.map((subject) => {
-              return {
-                title: subject.title,
-              };
-            }),
-            questionType: question.type,
-            questionDifficulty: question.questionDifficulty,
-          });
+          if (userAnswers.find((item) => item.title == "کل")) {
+            userAnswers
+              .find((item) => item.title == "کل")
+              .children.push({
+                number: question.number,
+                answer: "غلط",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: "کل",
+              children: [
+                {
+                  number: question.number,
+                  answer: "غلط",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
+          if (
+            userAnswers.find((item) => item.title == bookReferences[0].title)
+          ) {
+            userAnswers
+              .find((item) => item.title == bookReferences[0].title)
+              .children.push({
+                number: question.number,
+                answer: "غلط",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              });
+          } else {
+            userAnswers.push({
+              title: bookReferences[0].title,
+              children: [
+                {
+                  number: question.number,
+                  answer: "غلط",
+                  userAnswer: result.value,
+                  correctAnswer: question.correctAnswer,
+                  gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                    return {
+                      title: gradeLevel.title,
+                    };
+                  }),
+                  chapters: question.chapters.map((chapter) => {
+                    return {
+                      title: chapter.title,
+                    };
+                  }),
+                  subjects: question.subjects.map((subject) => {
+                    return {
+                      title: subject.title,
+                    };
+                  }),
+                  questionType: question.type,
+                  questionDifficulty: question.questionDifficulty,
+                },
+              ],
+            });
+          }
+
           incorrectCount++;
           if (question.questionDifficulty == "hard") {
             incorrectHardCount++;
@@ -275,29 +554,120 @@ export class OnlineGradeReportRepository {
           }
         }
       } else {
-        userAnswers.push({
-          number: question.number,
-          answer: "نزده",
-          userAnswer: result.value ?? "-",
-          correctAnswer: question.correctAnswer,
-          gradeLevels: question.gradeLevels.map((gradeLevel) => {
-            return {
-              title: gradeLevel.title,
-            };
-          }),
-          chapters: question.chapters.map((chapter) => {
-            return {
-              title: chapter.title,
-            };
-          }),
-          subjects: question.subjects.map((subject) => {
-            return {
-              title: subject.title,
-            };
-          }),
-          questionType: question.type,
-          questionDifficulty: question.questionDifficulty,
-        });
+        if (userAnswers.find((item) => item.title == "کل")) {
+          userAnswers
+            .find((item) => item.title == "کل")
+            .children.push({
+              number: question.number,
+              answer: "نزده",
+              userAnswer: result.value,
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            });
+        } else {
+          userAnswers.push({
+            title: "کل",
+            children: [
+              {
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              },
+            ],
+          });
+        }
+
+        if (userAnswers.find((item) => item.title == bookReferences[0].title)) {
+          userAnswers
+            .find((item) => item.title == bookReferences[0].title)
+            .children.push({
+              number: question.number,
+              answer: "نزده",
+              userAnswer: result.value ?? "-",
+              correctAnswer: question.correctAnswer,
+              gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                return {
+                  title: gradeLevel.title,
+                };
+              }),
+              chapters: question.chapters.map((chapter) => {
+                return {
+                  title: chapter.title,
+                };
+              }),
+              subjects: question.subjects.map((subject) => {
+                return {
+                  title: subject.title,
+                };
+              }),
+              questionType: question.type,
+              questionDifficulty: question.questionDifficulty,
+            });
+        } else {
+          userAnswers.push({
+            title: bookReferences[0].title,
+            children: [
+              {
+                number: question.number,
+                answer: "نزده",
+                userAnswer: result.value,
+                correctAnswer: question.correctAnswer,
+                gradeLevels: question.gradeLevels.map((gradeLevel) => {
+                  return {
+                    title: gradeLevel.title,
+                  };
+                }),
+                chapters: question.chapters.map((chapter) => {
+                  return {
+                    title: chapter.title,
+                  };
+                }),
+                subjects: question.subjects.map((subject) => {
+                  return {
+                    title: subject.title,
+                  };
+                }),
+                questionType: question.type,
+                questionDifficulty: question.questionDifficulty,
+              },
+            ],
+          });
+        }
+
         unansweredCount++;
         if (question.questionDifficulty == "hard") {
           unansweredHardCount++;
