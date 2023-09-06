@@ -19,15 +19,8 @@ export class ChapterRepository {
     private readonly chapterModel: Model<Chapter>
   ) {}
 
-  async findOneByTitle(title: string) {
-    return this.chapterModel.findOne({ title }).exec();
-  }
   async create(@Res() res, @Body() createChapterDto: CreateChapterDto) {
     try {
-      if (await this.findOneByTitle(createChapterDto.title)) {
-        throw new ConflictException("درج فصل تکراری امکان‌پذیر نمی‌باشد.");
-      }
-
       const createChapterModel = await this.chapterModel.create(
         createChapterDto
       );

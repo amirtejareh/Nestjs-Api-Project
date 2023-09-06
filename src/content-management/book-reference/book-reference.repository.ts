@@ -26,18 +26,8 @@ export class BookReferenceRepository {
     private readonly imageService: ImageService
   ) {}
 
-  async findOneByTitle(title: string) {
-    return this.BookReferenceModel.findOne({ title }).exec();
-  }
-
   async create(@Res() res, createBookReferenceDto: CreateBookReferenceDto) {
     try {
-      if (await this.findOneByTitle(createBookReferenceDto.title)) {
-        throw new ConflictException(
-          "درج کتاب مرجع تکراری امکان‌پذیر نمی‌باشد."
-        );
-      }
-
       const createBookReferenceModel = await this.BookReferenceModel.create(
         createBookReferenceDto
       );

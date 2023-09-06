@@ -33,3 +33,9 @@ GradeLevelSchema.virtual("questions", {
   localField: "_id",
   foreignField: "gradeLevels",
 });
+
+GradeLevelSchema.virtual("objectivetests", {
+  ref: "ObjectiveTest",
+  localField: "_id",
+  foreignField: "gradeLevel",
+});

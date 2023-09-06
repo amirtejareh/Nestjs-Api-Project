@@ -17,6 +17,18 @@ export class ObjectiveTestService {
     return this.objectiveTestRepository.findAll();
   }
 
+  async findObjectiveTestsBasedOnGradeLevels(
+    page: number = 1,
+    limit: number = 10,
+    gradeLevels: string[]
+  ) {
+    return this.objectiveTestRepository.findObjectiveTestsBasedOnGradeLevels(
+      page,
+      limit,
+      gradeLevels
+    );
+  }
+
   findOne(@Param("id") id: string) {
     return this.objectiveTestRepository.findOne(id);
   }

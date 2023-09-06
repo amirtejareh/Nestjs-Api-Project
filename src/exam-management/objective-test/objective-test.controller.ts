@@ -8,6 +8,8 @@ import {
   Delete,
   UseGuards,
   Res,
+  ParseArrayPipe,
+  Query,
 } from "@nestjs/common";
 import { ObjectiveTestService } from "./objective-test.service";
 import { CreateObjectiveTestDto } from "./dto/create-objective-test.dto";
@@ -32,6 +34,23 @@ export class ObjectiveTestController {
   @Get()
   findAll() {
     return this.objectiveTestService.findAll();
+  }
+
+  @Get("withGradeLevels/:gradeLevelId")
+  async findObjectiveTestsBasedOnGradeLevels(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10,
+    @Param("gradeLevelId", ParseArrayPipe) gradeLevels: string[]
+  ) {
+    if (gradeLevels[0] == "null") {
+      return [];
+    }
+
+    return this.objectiveTestService.findObjectiveTestsBasedOnGradeLevels(
+      page,
+      limit,
+      gradeLevels
+    );
   }
 
   @Get("mainTest")
