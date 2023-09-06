@@ -23,8 +23,6 @@ export class LearningMaterialController {
     @UploadedFiles() pdfFiles: Array<Express.Multer.File>,
     @Body() createLearningMaterialDto: CreateLearningMaterialDto
   ) {
-    console.log('createLearningMaterialDto => ', createLearningMaterialDto);
-
     return this.learningMaterialService.create(res, pdfFiles, createLearningMaterialDto);
   }
 
