@@ -19,15 +19,8 @@ export class SectionRepository {
     private readonly sectionModel: Model<Section>
   ) {}
 
-  async findOneByTitle(title: string) {
-    return this.sectionModel.findOne({ title }).exec();
-  }
   async create(@Res() res, @Body() createSectionDto: CreateSectionDto) {
     try {
-      if (await this.findOneByTitle(createSectionDto.title)) {
-        throw new ConflictException("درج بخش تکراری امکان‌پذیر نمی‌باشد.");
-      }
-
       const createSectionModel = await this.sectionModel.create(
         createSectionDto
       );

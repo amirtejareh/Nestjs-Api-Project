@@ -3,7 +3,7 @@ import { CreateObjectiveTestDto } from "./dto/create-objective-test.dto";
 import { UpdateObjectiveTestDto } from "./dto/update-objective-test.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { ObjectiveTest } from "./entities/objective-test.entity";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 @Injectable()
 export class ObjectiveTestRepository {
@@ -39,13 +39,60 @@ export class ObjectiveTestRepository {
   findAll() {
     const today = new Date().toISOString();
 
-    return this.objectiveTestModel.find({}).sort({ start: "asc" });
+    return this.objectiveTestModel
+      .find({})
+      .populate("gradeLevel")
+      .sort({ start: "asc" });
+  }
+
+  async findObjectiveTestsBasedOnGradeLevels(
+    page: number = 1,
+    limit: number = 10,
+    gradeLevels: string[]
+  ) {
+    const skip = (page - 1) * limit;
+
+    const objectiveTestIds = await this.objectiveTestModel
+      .find({
+        gradeLevel: gradeLevels,
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalObjectiveTests = await this.objectiveTestModel.countDocuments({
+      gradeLevel: {
+        $in: [gradeLevels],
+      },
+    });
+
+    const objectiveTests = await this.objectiveTestModel
+      .find({
+        _id: {
+          $in: objectiveTestIds,
+        },
+      })
+      .populate("gradeLevel");
+
+    if (objectiveTests.length === 0) {
+      return [];
+    }
+
+    return {
+      objectiveTests,
+      currentPage: page,
+      totalPages: Math.ceil(totalObjectiveTests / limit),
+      totalItems: totalObjectiveTests,
+    };
   }
 
   findMainObjectiveTest() {
     const today = new Date().toISOString();
 
-    return this.objectiveTestModel.find({}).sort({ start: "asc" });
+    return this.objectiveTestModel
+      .find({})
+      .populate("gradeLevel")
+      .sort({ start: "asc" });
   }
 
   findOne(@Param("id") id: string) {
