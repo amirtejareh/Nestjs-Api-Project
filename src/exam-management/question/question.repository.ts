@@ -247,18 +247,18 @@ export class QuestionRepository {
       if (!deleteSectionModel) {
         return res.status(HttpStatus.NOT_FOUND).json({
           statusCode: HttpStatus.NOT_FOUND,
-          message: "بخش مورد نظر پیدا نشد",
+          message: "سوال مورد نظر پیدا نشد",
         });
       }
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        message: "بخش مورد نظر با موفقیت حذف شد",
+        message: "سوال مورد نظر با موفقیت حذف شد",
         data: deleteSectionModel,
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در حذف بخش مورد نظر به وجود آمده است",
+        message: "مشکلی در حذف سوال مورد نظر به وجود آمده است",
         error: error.message,
       });
     }
