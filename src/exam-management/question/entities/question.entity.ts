@@ -38,17 +38,11 @@ export class Question {
   })
   subjects: Subject[];
 
-  @Prop({ required: true, enum: ["easy", "average", "hard"] })
+  @Prop({ required: true, enum: ["easy", "average", "hard", "challenging"] })
   questionDifficulty: string;
   @Prop({
     required: true,
-    enum: [
-      "conceptional",
-      "computational",
-      "trick",
-      "memorizational",
-      "challenging",
-    ],
+    enum: ["conceptional", "computational", "trick", "memorizational"],
   })
   type: string;
 

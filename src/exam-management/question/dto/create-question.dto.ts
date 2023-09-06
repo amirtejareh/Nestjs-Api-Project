@@ -18,17 +18,11 @@ export class CreateQuestionDto {
   @ApiProperty({ type: [String] })
   subjects: string[];
 
-  @ApiProperty({ enum: ["easy", "average", "hard"] })
+  @ApiProperty({ enum: ["easy", "average", "hard", "challenging"] })
   questionDifficulty: string;
 
   @ApiProperty({
-    enum: [
-      "conceptional",
-      "computational",
-      "trick",
-      "memorizational",
-      "challenging",
-    ],
+    enum: ["conceptional", "computational", "trick", "memorizational"],
   })
   questionType: string;
 
