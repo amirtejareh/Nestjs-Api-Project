@@ -22,7 +22,7 @@ import { AnswersheetManagementService } from "./answersheet-management.service";
 import { CreateAnswersheetManagementDto } from "./dto/create-answersheet-management.dto";
 import { UpdateAnswersheetManagementDto } from "./dto/update-answersheet-management.dto";
 
-@ApiTags("Ansersheet Management")
+@ApiTags("Answersheet Management")
 @Controller("answersheet-management")
 export class AnswersheetManagementController {
   constructor(
