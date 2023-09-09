@@ -23,6 +23,7 @@ import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and
 import { KaranbalaModule } from "../educational-management/karanbala/karanbala.module";
 import { BookExercisesModule } from "../educational-management/book-exercises/book-exercises.module";
 import { OnlineGradeReportModule } from "../exam-management/online-grade-report/online-grade-report.module";
+import { AnswersheetManagementModule } from "../exam-management/answersheet-management/answersheet-management.module";
 
 @Global()
 @Module({
@@ -42,6 +43,7 @@ import { OnlineGradeReportModule } from "../exam-management/online-grade-report/
     ObjectiveTestModule,
     QuestionModule,
     OnlineGradeReportModule,
+    AnswersheetManagementModule,
     LearningMaterialModule,
     ObjectiveTestManagementModule,
     EssayQuestionModule,
