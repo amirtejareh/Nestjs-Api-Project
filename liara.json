@@ -11,6 +11,10 @@
     {
       "name": "disk3",
       "mountTo": "uploads/learning_material"
+    },
+    {
+      "name": "disk4",
+      "mountTo": "uploads/answersheet-management"
     }
   ]
 }
