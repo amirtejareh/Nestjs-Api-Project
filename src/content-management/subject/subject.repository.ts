@@ -24,10 +24,6 @@ export class SubjectRepository {
   }
   async create(@Res() res, @Body() createSubjectDto: CreateSubjectDto) {
     try {
-      if (await this.findOneByTitle(createSubjectDto.title)) {
-        throw new ConflictException("درج موضوع تکراری امکان‌پذیر نمی‌باشد.");
-      }
-
       const createSubjectModel = await this.subjectModel.create(
         createSubjectDto
       );

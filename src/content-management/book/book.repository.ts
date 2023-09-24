@@ -35,10 +35,6 @@ export class BookRepository {
     createBookDto: CreateBookDto
   ) {
     try {
-      if (await this.findOneByTitle(createBookDto.title)) {
-        throw new ConflictException("درج کتاب تکراری امکان‌پذیر نمی‌باشد.");
-      }
-
       if (file) {
         const fileName = await this.imageService.saveImage("image_book", file);
         createBookDto.image = fileName;

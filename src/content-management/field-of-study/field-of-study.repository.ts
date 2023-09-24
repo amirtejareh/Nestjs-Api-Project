@@ -19,12 +19,6 @@ export class FieldOfStudyRepository {
 
   async create(@Res() res, createFieldOfStudyDto: CreateFieldOfStudyDto) {
     try {
-      if (await this.findOneByTitle(createFieldOfStudyDto.title)) {
-        throw new ConflictException(
-          "درج رشته تحصیلی تکراری امکان‌پذیر نمی‌باشد."
-        );
-      }
-
       const createdFieldOfStudy = await this.fieldOfStudyModel.create(
         createFieldOfStudyDto
       );
