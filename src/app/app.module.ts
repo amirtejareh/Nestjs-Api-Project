@@ -24,6 +24,7 @@ import { KaranbalaModule } from "../educational-management/karanbala/karanbala.m
 import { BookExercisesModule } from "../educational-management/book-exercises/book-exercises.module";
 import { OnlineGradeReportModule } from "../exam-management/online-grade-report/online-grade-report.module";
 import { AnswersheetManagementModule } from "../exam-management/answersheet-management/answersheet-management.module";
+import { DescriptiveTestModule } from "../exam-management/descriptive-test/descriptive-test.module";
 
 @Global()
 @Module({
@@ -50,9 +51,10 @@ import { AnswersheetManagementModule } from "../exam-management/answersheet-mana
     TipAndTestModule,
     KaranbalaModule,
     BookExercisesModule,
+    DescriptiveTestModule,
   ],
   providers: [ImageService],
 
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }
