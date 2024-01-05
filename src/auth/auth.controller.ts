@@ -35,6 +35,9 @@ export class AuthController {
     });
     const existingUserByMobile = await this.usersService.getUser({ mobile });
     const existingUserEmail = await this.usersService.getUser({ email });
+    const existingUserNationalIdNumber = await this.usersService.getUser({
+      national_id_number,
+    });
     if (existingUserByUsername) {
       throw new ConflictException(
         "کاربری با این نام کاربری قبلاً ثبت نام کرده است"
@@ -52,6 +55,10 @@ export class AuthController {
 
     if (!NationalCodeHelper.isValidIranianNationalId(national_id_number)) {
       throw new InvalidNationalIdException();
+    }
+
+    if (existingUserNationalIdNumber) {
+      throw new ConflictException("کاربری با این کدملی قبلاً ثبت نام کرده است");
     }
 
     const hashedPassword = await bcrypt.hash(

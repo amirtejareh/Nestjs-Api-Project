@@ -1,14 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, Schema as mongooseSchema } from "mongoose";
+import mongoose, { Document, Schema as mongooseSchema } from "mongoose";
 import { Role } from "../../role/entities/role.entity";
 import { Permission } from "../../permission/entities/permission.entity";
 
 export type UserDocument = User & Document;
 @Schema()
 export class User {
-  @Prop({ unique: true })
-  _id: string;
-
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Role.name }],
   })

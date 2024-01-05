@@ -4,7 +4,6 @@ import { UsersController } from "./users.controller";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "./entities/user.entity";
 import { UserRepository } from "./user.repository";
-import { RoleModule } from "../role/role.module";
 import { RoleService } from "../role/role.service";
 import { RoleRepository } from "../role/role.repository";
 import { RoleSchema } from "../role/entities/role.entity";
