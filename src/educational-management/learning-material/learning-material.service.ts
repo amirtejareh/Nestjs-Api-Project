@@ -1,19 +1,24 @@
-import { Injectable, Res, UploadedFile } from '@nestjs/common';
-import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
-import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
-import { LearningMaterialRepository } from './learning-material.repository';
+import { Injectable, Res, UploadedFile } from "@nestjs/common";
+import { CreateLearningMaterialDto } from "./dto/create-learning-material.dto";
+import { UpdateLearningMaterialDto } from "./dto/update-learning-material.dto";
+import { LearningMaterialRepository } from "./learning-material.repository";
 
 @Injectable()
 export class LearningMaterialService {
-  constructor(private readonly learningMaterialRepository: LearningMaterialRepository) { }
+  constructor(
+    private readonly learningMaterialRepository: LearningMaterialRepository
+  ) {}
 
   create(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],
     createLearningMaterialDto: CreateLearningMaterialDto
   ) {
-
-    return this.learningMaterialRepository.create(res, pdfFiles, createLearningMaterialDto);
+    return this.learningMaterialRepository.create(
+      res,
+      pdfFiles,
+      createLearningMaterialDto
+    );
   }
 
   findAll() {
@@ -28,13 +33,26 @@ export class LearningMaterialService {
     return this.learningMaterialRepository.findBasedOnSubjects(subjects);
   }
 
+  async findBasedOnBooks(books: string[]) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.learningMaterialRepository.findBasedOnBooks(books);
+  }
+
   update(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],
     id: string,
     updateLearningMaterialDto: UpdateLearningMaterialDto
   ) {
-    return this.learningMaterialRepository.update(res, pdfFiles, id, updateLearningMaterialDto);
+    return this.learningMaterialRepository.update(
+      res,
+      pdfFiles,
+      id,
+      updateLearningMaterialDto
+    );
   }
 
   remove(@Res() res, id: string) {

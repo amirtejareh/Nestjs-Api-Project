@@ -1,12 +1,21 @@
-import { ConflictException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException, Param, Res, UploadedFile } from '@nestjs/common';
-import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
-import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { LearningMaterial } from './entities/learning-material.entity';
-import { Model, Types } from 'mongoose';
-import { ImageService } from '../../common/services/imageService';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
+  Res,
+  UploadedFile,
+} from "@nestjs/common";
+import { CreateLearningMaterialDto } from "./dto/create-learning-material.dto";
+import { UpdateLearningMaterialDto } from "./dto/update-learning-material.dto";
+import { InjectModel } from "@nestjs/mongoose";
+import { LearningMaterial } from "./entities/learning-material.entity";
+import { Model, Types } from "mongoose";
+import { ImageService } from "../../common/services/imageService";
 import * as fs from "fs";
-import { existsSync } from 'fs';
+import { existsSync } from "fs";
 
 @Injectable()
 export class LearningMaterialRepository {
@@ -14,7 +23,7 @@ export class LearningMaterialRepository {
     @InjectModel(LearningMaterial.name)
     private readonly learningMaterialModel: Model<LearningMaterial>,
     private readonly imageService: ImageService
-  ) { }
+  ) {}
 
   async findOneByTitle(title: string) {
     return this.learningMaterialModel.findOne({ title }).exec();
@@ -27,15 +36,20 @@ export class LearningMaterialRepository {
   ) {
     try {
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("learning_material", file);
+          const fileName = await this.imageService.saveImage(
+            "learning_material",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         createLearningMaterialDto.pdfFiles = pdfFilesPath;
       }
-      const createLearningMaterial = await this.learningMaterialModel.create(createLearningMaterialDto);
+      const createLearningMaterial = await this.learningMaterialModel.create(
+        createLearningMaterialDto
+      );
       return res.status(200).json({
         statusCode: 200,
         message: "یک درس نامه با موفقیت ایجاد شد.",
@@ -67,6 +81,16 @@ export class LearningMaterialRepository {
     return learningMaterials;
   }
 
+  async findBasedOnBooks(books: string[]) {
+    const learningMaterials = await this.learningMaterialModel.find({
+      book: {
+        $in: books.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
+
+    return learningMaterials;
+  }
+
   async update(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],
@@ -74,18 +98,23 @@ export class LearningMaterialRepository {
     updateLearningMaterialDto: UpdateLearningMaterialDto
   ) {
     try {
-      const learningMaterial = await this.learningMaterialModel.findOne({ _id: id });
+      const learningMaterial = await this.learningMaterialModel.findOne({
+        _id: id,
+      });
 
       if (!learningMaterial) {
         throw new NotFoundException("درس نامه مورد نظر یافت نشد.");
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("learning_material", file);
+          const fileName = await this.imageService.saveImage(
+            "learning_material",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         updateLearningMaterialDto.pdfFiles = pdfFilesPath;
@@ -104,16 +133,16 @@ export class LearningMaterialRepository {
             }
           }
         }
-
       }
 
-      const updateLearningMaterialModel = await this.learningMaterialModel.findByIdAndUpdate(
-        id,
-        updateLearningMaterialDto,
-        {
-          new: true,
-        }
-      );
+      const updateLearningMaterialModel =
+        await this.learningMaterialModel.findByIdAndUpdate(
+          id,
+          updateLearningMaterialDto,
+          {
+            new: true,
+          }
+        );
 
       return res.status(200).json({
         statusCode: 200,
@@ -130,7 +159,9 @@ export class LearningMaterialRepository {
 
   async remove(@Res() res, id: string) {
     try {
-      const findLearningMaterial = await this.learningMaterialModel.findOne({ _id: id });
+      const findLearningMaterial = await this.learningMaterialModel.findOne({
+        _id: id,
+      });
 
       if (findLearningMaterial) {
         const deleteBook = await this.learningMaterialModel.deleteOne({
@@ -144,7 +175,6 @@ export class LearningMaterialRepository {
         }
 
         if (findLearningMaterial && findLearningMaterial.pdfFiles.length > 0) {
-
           if (findLearningMaterial.pdfFiles.length > 0) {
             for (let i = 0; i < findLearningMaterial.pdfFiles.length; i++) {
               const file = findLearningMaterial.pdfFiles[i];
@@ -159,7 +189,6 @@ export class LearningMaterialRepository {
               }
             }
           }
-
         }
 
         return res.status(HttpStatus.OK).json({
