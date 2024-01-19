@@ -82,11 +82,13 @@ export class LearningMaterialRepository {
   }
 
   async findBasedOnBooks(books: string[]) {
-    const learningMaterials = await this.learningMaterialModel.find({
-      book: {
-        $in: books.map((id: string) => new Types.ObjectId(id)),
-      },
-    });
+    const learningMaterials = await this.learningMaterialModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book", "chapter"]);
 
     return learningMaterials;
   }

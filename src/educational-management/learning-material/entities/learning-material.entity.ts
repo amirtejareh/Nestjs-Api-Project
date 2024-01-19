@@ -11,40 +11,41 @@ export type LearningMaterialDocument = LearningMaterial & Document;
 
 @Schema({ timestamps: true })
 export class LearningMaterial {
-    @Prop({
-        type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
-    })
-    gradeLevel: GradeLevel;
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
+  })
+  gradeLevel: GradeLevel;
 
-    @Prop({
-        type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
-    })
-    book: Book;
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
+  })
+  book: Book;
 
-    @Prop({
-        type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
-    })
-    chapter: Chapter;
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
+  })
+  chapter: Chapter;
 
-    @Prop({
-        type: [{ type: mongooseSchema.Types.ObjectId, ref: Section.name }],
-    })
-    section: Section;
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Section.name }],
+  })
+  section: Section;
 
-    @Prop({
-        type: [{ type: mongooseSchema.Types.ObjectId, ref: Subject.name }],
-    })
-    subject: Subject;
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Subject.name }],
+  })
+  subject: Subject;
 
-    @Prop({
-        required: true,
-    })
-    videos: IVideo[];
+  @Prop({
+    required: true,
+  })
+  videos: IVideo[];
 
-    @Prop({
-        required: true,
-    })
-    pdfFiles: string[];
+  @Prop({
+    required: true,
+  })
+  pdfFiles: string[];
 }
 
-export const LearningMaterialSchema = SchemaFactory.createForClass(LearningMaterial);
+export const LearningMaterialSchema =
+  SchemaFactory.createForClass(LearningMaterial);

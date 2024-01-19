@@ -41,3 +41,15 @@ BookSchema.virtual("onlinegradereports", {
   localField: "_id",
   foreignField: "objectiveTests",
 });
+
+BookSchema.virtual("learningmaterials", {
+  ref: "LearningMaterial",
+  localField: "_id",
+  foreignField: "book",
+});
+
+BookSchema.virtual("learningmaterials", {
+  ref: "LearningMaterial",
+  localField: "_id",
+  foreignField: "chapter",
+});
