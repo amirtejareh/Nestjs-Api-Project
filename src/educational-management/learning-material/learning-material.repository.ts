@@ -88,7 +88,7 @@ export class LearningMaterialRepository {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
       })
-      .populate(["book", "chapter"]);
+      .populate(["book", "chapter", "section", "subject"]);
 
     return learningMaterials;
   }

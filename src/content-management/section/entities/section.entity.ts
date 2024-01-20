@@ -27,3 +27,9 @@ export class Section {
   chapters: Chapter[];
 }
 export const SectionSchema = SchemaFactory.createForClass(Section);
+
+SectionSchema.virtual("learningmaterials", {
+  ref: "LearningMaterial",
+  localField: "_id",
+  foreignField: "sections",
+});
