@@ -1,12 +1,21 @@
-import { ConflictException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException, Param, Res, UploadedFile } from '@nestjs/common';
-import { CreateEssayQuestionsDto } from './dto/create-essay-questions.dto';
-import { UpdateEssayQuestionDto } from './dto/update-essay-questions.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { EssayQuestion } from './entities/essay-questions.entity';
-import { Model, Types } from 'mongoose';
-import { ImageService } from '../../common/services/imageService';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
+  Res,
+  UploadedFile,
+} from "@nestjs/common";
+import { CreateEssayQuestionsDto } from "./dto/create-essay-questions.dto";
+import { UpdateEssayQuestionDto } from "./dto/update-essay-questions.dto";
+import { InjectModel } from "@nestjs/mongoose";
+import { EssayQuestion } from "./entities/essay-questions.entity";
+import { Model, Types } from "mongoose";
+import { ImageService } from "../../common/services/imageService";
 import * as fs from "fs";
-import { existsSync } from 'fs';
+import { existsSync } from "fs";
 
 @Injectable()
 export class EssayQuestionRepository {
@@ -14,7 +23,7 @@ export class EssayQuestionRepository {
     @InjectModel(EssayQuestion.name)
     private readonly essayQuestionModel: Model<EssayQuestion>,
     private readonly imageService: ImageService
-  ) { }
+  ) {}
 
   async findOneByTitle(title: string) {
     return this.essayQuestionModel.findOne({ title }).exec();
@@ -27,15 +36,20 @@ export class EssayQuestionRepository {
   ) {
     try {
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("essay_question", file);
+          const fileName = await this.imageService.saveImage(
+            "essay_question",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         createEssayQuestionDto.pdfFiles = pdfFilesPath;
       }
-      const createLearningMaterial = await this.essayQuestionModel.create(createEssayQuestionDto);
+      const createLearningMaterial = await this.essayQuestionModel.create(
+        createEssayQuestionDto
+      );
       return res.status(200).json({
         statusCode: 200,
         message: "یک سوال تشریحی با موفقیت ایجاد شد.",
@@ -81,11 +95,14 @@ export class EssayQuestionRepository {
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("essay_question", file);
+          const fileName = await this.imageService.saveImage(
+            "essay_question",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         updateEssayQuestionDto.pdfFiles = pdfFilesPath;
@@ -104,16 +121,16 @@ export class EssayQuestionRepository {
             }
           }
         }
-
       }
 
-      const updateLearningMaterialModel = await this.essayQuestionModel.findByIdAndUpdate(
-        id,
-        updateEssayQuestionDto,
-        {
-          new: true,
-        }
-      );
+      const updateLearningMaterialModel =
+        await this.essayQuestionModel.findByIdAndUpdate(
+          id,
+          updateEssayQuestionDto,
+          {
+            new: true,
+          }
+        );
 
       return res.status(200).json({
         statusCode: 200,
@@ -128,9 +145,23 @@ export class EssayQuestionRepository {
     }
   }
 
+  async findBasedOnBooks(books: string[]) {
+    const essayQuestions = await this.essayQuestionModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book", "chapter", "section", "subject"]);
+
+    return essayQuestions;
+  }
+
   async remove(@Res() res, id: string) {
     try {
-      const findLearningMaterial = await this.essayQuestionModel.findOne({ _id: id });
+      const findLearningMaterial = await this.essayQuestionModel.findOne({
+        _id: id,
+      });
 
       if (findLearningMaterial) {
         const deleteEssayQuestion = await this.essayQuestionModel.deleteOne({
@@ -144,7 +175,6 @@ export class EssayQuestionRepository {
         }
 
         if (findLearningMaterial && findLearningMaterial.pdfFiles.length > 0) {
-
           if (findLearningMaterial.pdfFiles.length > 0) {
             for (let i = 0; i < findLearningMaterial.pdfFiles.length; i++) {
               const file = findLearningMaterial.pdfFiles[i];
@@ -159,7 +189,6 @@ export class EssayQuestionRepository {
               }
             }
           }
-
         }
 
         return res.status(HttpStatus.OK).json({
