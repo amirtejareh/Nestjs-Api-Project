@@ -26,3 +26,15 @@ ChapterSchema.virtual("questions", {
   localField: "_id",
   foreignField: "chapters",
 });
+
+ChapterSchema.virtual("learningmaterials", {
+  ref: "LearningMaterial",
+  localField: "_id",
+  foreignField: "chapters",
+});
+
+ChapterSchema.virtual("essayquestions", {
+  ref: "EssayQuestion",
+  localField: "_id",
+  foreignField: "chapters",
+});

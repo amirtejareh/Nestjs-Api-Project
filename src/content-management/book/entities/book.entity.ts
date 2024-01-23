@@ -53,3 +53,9 @@ BookSchema.virtual("learningmaterials", {
   localField: "_id",
   foreignField: "chapter",
 });
+
+BookSchema.virtual("essayquestions", {
+  ref: "EssayQuestion",
+  localField: "_id",
+  foreignField: "sections",
+});
