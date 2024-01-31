@@ -29,7 +29,7 @@ export class TipAndTestRepository {
   }
 
   async findBasedOnBooks(books: string[]) {
-    const learningMaterials = await this.tipAndTestModel
+    const tipAndTests = await this.tipAndTestModel
       .find({
         book: {
           $in: books.map((id: string) => new Types.ObjectId(id)),
@@ -37,7 +37,7 @@ export class TipAndTestRepository {
       })
       .populate(["book", "chapter", "section", "subject"]);
 
-    return learningMaterials;
+    return tipAndTests;
   }
 
   async create(
