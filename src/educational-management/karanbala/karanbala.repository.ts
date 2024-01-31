@@ -1,12 +1,21 @@
-import { ConflictException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException, Param, Res, UploadedFile } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { ImageService } from '../../common/services/imageService';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
+  Res,
+  UploadedFile,
+} from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model, Types } from "mongoose";
+import { ImageService } from "../../common/services/imageService";
 import * as fs from "fs";
-import { existsSync } from 'fs';
-import { Karanbala } from './entities/karanbala.entity';
-import { CreateKaranbalaDto } from './dto/create-karanbala.dto';
-import { UpdateKaranbalaDto } from './dto/update-karanbala.dto';
+import { existsSync } from "fs";
+import { Karanbala } from "./entities/karanbala.entity";
+import { CreateKaranbalaDto } from "./dto/create-karanbala.dto";
+import { UpdateKaranbalaDto } from "./dto/update-karanbala.dto";
 
 @Injectable()
 export class KaranbalaRepository {
@@ -14,7 +23,7 @@ export class KaranbalaRepository {
     @InjectModel(Karanbala.name)
     private readonly karanbalaModel: Model<Karanbala>,
     private readonly imageService: ImageService
-  ) { }
+  ) {}
 
   async findOneByTitle(title: string) {
     return this.karanbalaModel.findOne({ title }).exec();
@@ -27,7 +36,7 @@ export class KaranbalaRepository {
   ) {
     try {
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage("karanbala", file);
@@ -35,7 +44,9 @@ export class KaranbalaRepository {
         }
         createKaranbalaDto.pdfFiles = pdfFilesPath;
       }
-      const createKaranbala = await this.karanbalaModel.create(createKaranbalaDto);
+      const createKaranbala = await this.karanbalaModel.create(
+        createKaranbalaDto
+      );
       return res.status(200).json({
         statusCode: 200,
         message: "یک کران بالا با موفقیت ایجاد شد.",
@@ -55,6 +66,18 @@ export class KaranbalaRepository {
 
   findOne(id: string) {
     return this.karanbalaModel.findOne({ _id: id });
+  }
+
+  async findBasedOnBooks(books: string[]) {
+    const essayQuestions = await this.karanbalaModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book", "chapter", "section", "subject"]);
+
+    return essayQuestions;
   }
 
   async findBasedOnSubjects(subjects: string[]) {
@@ -81,7 +104,7 @@ export class KaranbalaRepository {
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
@@ -104,7 +127,6 @@ export class KaranbalaRepository {
             }
           }
         }
-
       }
 
       const updateKaranbalaModel = await this.karanbalaModel.findByIdAndUpdate(
@@ -144,7 +166,6 @@ export class KaranbalaRepository {
         }
 
         if (findKaranbala && findKaranbala.pdfFiles.length > 0) {
-
           if (findKaranbala.pdfFiles.length > 0) {
             for (let i = 0; i < findKaranbala.pdfFiles.length; i++) {
               const file = findKaranbala.pdfFiles[i];
@@ -159,7 +180,6 @@ export class KaranbalaRepository {
               }
             }
           }
-
         }
 
         return res.status(HttpStatus.OK).json({
