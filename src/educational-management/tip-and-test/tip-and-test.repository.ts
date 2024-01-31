@@ -1,12 +1,20 @@
-import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException, Param, Res, UploadedFile } from '@nestjs/common';
-import { CreateTipAndTestDto } from './dto/create-tip-and-test.dto';
-import { UpdateTipAndTestDto } from './dto/update-tip-and-test.dto';
-import { TipAndTest } from './entities/tip-and-test.entity';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { ImageService } from '../../common/services/imageService';
+import {
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
+  Res,
+  UploadedFile,
+} from "@nestjs/common";
+import { CreateTipAndTestDto } from "./dto/create-tip-and-test.dto";
+import { UpdateTipAndTestDto } from "./dto/update-tip-and-test.dto";
+import { TipAndTest } from "./entities/tip-and-test.entity";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model, Types } from "mongoose";
+import { ImageService } from "../../common/services/imageService";
 import * as fs from "fs";
-import { existsSync } from 'fs';
+import { existsSync } from "fs";
 
 @Injectable()
 export class TipAndTestRepository {
@@ -14,10 +22,22 @@ export class TipAndTestRepository {
     @InjectModel(TipAndTest.name)
     private readonly tipAndTestModel: Model<TipAndTest>,
     private readonly imageService: ImageService
-  ) { }
+  ) {}
 
   async findOneByTitle(title: string) {
     return this.tipAndTestModel.findOne({ title }).exec();
+  }
+
+  async findBasedOnBooks(books: string[]) {
+    const learningMaterials = await this.tipAndTestModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book", "chapter", "section", "subject"]);
+
+    return learningMaterials;
   }
 
   async create(
@@ -27,15 +47,20 @@ export class TipAndTestRepository {
   ) {
     try {
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("tip-and-test", file);
+          const fileName = await this.imageService.saveImage(
+            "tip-and-test",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         createTipAndTestDto.pdfFiles = pdfFilesPath;
       }
-      const createTipAndTest = await this.tipAndTestModel.create(createTipAndTestDto);
+      const createTipAndTest = await this.tipAndTestModel.create(
+        createTipAndTestDto
+      );
       return res.status(200).json({
         statusCode: 200,
         message: "یک نکته و تست با موفقیت ایجاد شد.",
@@ -81,11 +106,14 @@ export class TipAndTestRepository {
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = []
+        let pdfFilesPath: string[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("tip-and-test", file);
+          const fileName = await this.imageService.saveImage(
+            "tip-and-test",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         updateTipAndTestDto.pdfFiles = pdfFilesPath;
@@ -104,16 +132,12 @@ export class TipAndTestRepository {
             }
           }
         }
-
       }
 
-      const updateTipAndTestModel = await this.tipAndTestModel.findByIdAndUpdate(
-        id,
-        updateTipAndTestDto,
-        {
+      const updateTipAndTestModel =
+        await this.tipAndTestModel.findByIdAndUpdate(id, updateTipAndTestDto, {
           new: true,
-        }
-      );
+        });
 
       return res.status(200).json({
         statusCode: 200,
@@ -144,7 +168,6 @@ export class TipAndTestRepository {
         }
 
         if (findTipAndTest && findTipAndTest.pdfFiles.length > 0) {
-
           if (findTipAndTest.pdfFiles.length > 0) {
             for (let i = 0; i < findTipAndTest.pdfFiles.length; i++) {
               const file = findTipAndTest.pdfFiles[i];
@@ -159,7 +182,6 @@ export class TipAndTestRepository {
               }
             }
           }
-
         }
 
         return res.status(HttpStatus.OK).json({

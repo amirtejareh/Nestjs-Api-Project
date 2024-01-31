@@ -39,3 +39,9 @@ SectionSchema.virtual("essayquestions", {
   localField: "_id",
   foreignField: "sections",
 });
+
+SectionSchema.virtual("tipandtests", {
+  ref: "TipAndTest",
+  localField: "_id",
+  foreignField: "sections",
+});
