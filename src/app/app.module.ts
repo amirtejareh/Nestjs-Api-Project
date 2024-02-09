@@ -4,7 +4,6 @@ import { AppController } from "./app.controller";
 import { UsersModule } from "../users/users.module";
 import { AuthModule } from "../auth/auth.module";
 import { SeedModule } from "../seed/seed.module";
-
 import { FieldOfStudyModule } from "../content-management/field-of-study/field-of-study.module";
 import { GradeLevelModule } from "../content-management/grade-level/grade-level.module";
 import { TermOfStudyModule } from "../content-management/term-of-study/term-of-study.module";
@@ -24,6 +23,7 @@ import { KaranbalaModule } from "../educational-management/karanbala/karanbala.m
 import { BookExercisesModule } from "../educational-management/book-exercises/book-exercises.module";
 import { OnlineGradeReportModule } from "../exam-management/online-grade-report/online-grade-report.module";
 import { AnswersheetManagementModule } from "../exam-management/answersheet-management/answersheet-management.module";
+import { SampleExampleQuestionsModule } from "../educational-management/sample-example-questions/sample-example-questions.module";
 
 @Global()
 @Module({
@@ -45,6 +45,7 @@ import { AnswersheetManagementModule } from "../exam-management/answersheet-mana
     OnlineGradeReportModule,
     AnswersheetManagementModule,
     LearningMaterialModule,
+    SampleExampleQuestionsModule,
     ObjectiveTestManagementModule,
     EssayQuestionModule,
     TipAndTestModule,
