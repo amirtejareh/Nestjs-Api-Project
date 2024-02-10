@@ -15,7 +15,7 @@ import {
 import { BookService } from "./book.service";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -28,6 +28,7 @@ export class BookController {
 
   @Post()
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   @UseInterceptors(FileInterceptor("image"))
@@ -81,6 +82,7 @@ export class BookController {
 
   @Patch(":id")
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @UseInterceptors(FileInterceptor("image"))
   @Roles("SuperAdmin")

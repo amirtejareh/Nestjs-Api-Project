@@ -18,7 +18,7 @@ import { TipAndTestService } from "./tip-and-test.service";
 // import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
 import { CreateTipAndTestDto } from "./dto/create-tip-and-test.dto";
 import { UpdateTipAndTestDto } from "./dto/update-tip-and-test.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
@@ -35,6 +35,7 @@ export class TipAndTestController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
+  @ApiConsumes("multipart/form-data")
   @Roles("SuperAdmin")
   @UseInterceptors(AnyFilesInterceptor())
   create(
@@ -68,6 +69,7 @@ export class TipAndTestController {
 
   @Patch(":id")
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseInterceptors(AnyFilesInterceptor())
   update(
     @Res() res,

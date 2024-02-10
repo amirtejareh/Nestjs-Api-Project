@@ -14,7 +14,7 @@ import {
 import { GradeLevelService } from "./grade-level.service";
 import { CreateGradeLevelDto } from "./dto/create-grade-level.dto";
 import { UpdateGradeLevelDto } from "./dto/update-grade-level.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -27,6 +27,7 @@ export class GradeLevelController {
 
   @Post()
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   @UseInterceptors(FileInterceptor("image"))
@@ -56,6 +57,7 @@ export class GradeLevelController {
 
   @Patch(":id")
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @UseInterceptors(FileInterceptor("image"))
   @Roles("SuperAdmin")

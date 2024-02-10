@@ -13,7 +13,7 @@ import {
   UploadedFile,
 } from "@nestjs/common";
 
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
@@ -31,6 +31,7 @@ export class AnswersheetManagementController {
 
   @Post()
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   @UseInterceptors(AnyFilesInterceptor())
@@ -59,6 +60,7 @@ export class AnswersheetManagementController {
 
   @Patch(":id")
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseInterceptors(AnyFilesInterceptor())
   update(
     @Res() res,
