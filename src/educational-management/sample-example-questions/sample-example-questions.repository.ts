@@ -20,12 +20,12 @@ import * as fs from "fs";
 export class SampleExampleQuestionsRepository {
   constructor(
     @InjectModel(SampleExampleQuestions.name)
-    private readonly learningMaterialModel: Model<SampleExampleQuestions>,
+    private readonly sampleExampleQuestionsModel: Model<SampleExampleQuestions>,
     private readonly imageService: ImageService
   ) {}
 
   async findOneByTitle(title: string) {
-    return this.learningMaterialModel.findOne({ title }).exec();
+    return this.sampleExampleQuestionsModel.findOne({ title }).exec();
   }
 
   async create(
@@ -47,12 +47,12 @@ export class SampleExampleQuestionsRepository {
         createSampleExampleQuestionsDto.pdfFiles = pdfFilesPath;
       }
       const createSampleExampleQuestions =
-        await this.learningMaterialModel.create(
+        await this.sampleExampleQuestionsModel.create(
           createSampleExampleQuestionsDto
         );
       return res.status(200).json({
         statusCode: 200,
-        message: "یک درس نامه با موفقیت ایجاد شد.",
+        message: "یک تمرین با موفقیت ایجاد شد.",
         data: createSampleExampleQuestions,
       });
     } catch (e) {
@@ -64,25 +64,27 @@ export class SampleExampleQuestionsRepository {
   }
 
   findAll() {
-    return this.learningMaterialModel.find({});
+    return this.sampleExampleQuestionsModel.find({});
   }
 
   findOne(id: string) {
-    return this.learningMaterialModel.findOne({ _id: id });
+    return this.sampleExampleQuestionsModel.findOne({ _id: id });
   }
 
   async findBasedOnSubjects(subjects: string[]) {
-    const learningMaterials = await this.learningMaterialModel.find({
-      subject: {
-        $in: subjects.map((id: string) => new Types.ObjectId(id)),
-      },
-    });
+    const sampleExampleQuestionss = await this.sampleExampleQuestionsModel.find(
+      {
+        subject: {
+          $in: subjects.map((id: string) => new Types.ObjectId(id)),
+        },
+      }
+    );
 
-    return learningMaterials;
+    return sampleExampleQuestionss;
   }
 
   async findBasedOnBooks(books: string[]) {
-    const learningMaterials = await this.learningMaterialModel
+    const sampleExampleQuestionss = await this.sampleExampleQuestionsModel
       .find({
         book: {
           $in: books.map((id: string) => new Types.ObjectId(id)),
@@ -90,7 +92,7 @@ export class SampleExampleQuestionsRepository {
       })
       .populate(["book", "chapter", "section", "subject"]);
 
-    return learningMaterials;
+    return sampleExampleQuestionss;
   }
 
   async update(
@@ -100,11 +102,12 @@ export class SampleExampleQuestionsRepository {
     updateSampleExampleQuestionsDto: UpdateSampleExampleQuestionsDto
   ) {
     try {
-      const learningMaterial = await this.learningMaterialModel.findOne({
-        _id: id,
-      });
+      const sampleExampleQuestions =
+        await this.sampleExampleQuestionsModel.findOne({
+          _id: id,
+        });
 
-      if (!learningMaterial) {
+      if (!sampleExampleQuestions) {
         throw new NotFoundException("درس نامه مورد نظر یافت نشد.");
       }
 
@@ -121,9 +124,9 @@ export class SampleExampleQuestionsRepository {
         }
         updateSampleExampleQuestionsDto.pdfFiles = pdfFilesPath;
 
-        if (learningMaterial.pdfFiles.length > 0) {
-          for (let i = 0; i < learningMaterial.pdfFiles.length; i++) {
-            const file = learningMaterial.pdfFiles[i];
+        if (sampleExampleQuestions.pdfFiles.length > 0) {
+          for (let i = 0; i < sampleExampleQuestions.pdfFiles.length; i++) {
+            const file = sampleExampleQuestions.pdfFiles[i];
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -138,7 +141,7 @@ export class SampleExampleQuestionsRepository {
       }
 
       const updateSampleExampleQuestionsModel =
-        await this.learningMaterialModel.findByIdAndUpdate(
+        await this.sampleExampleQuestionsModel.findByIdAndUpdate(
           id,
           updateSampleExampleQuestionsDto,
           {
@@ -162,12 +165,12 @@ export class SampleExampleQuestionsRepository {
   async remove(@Res() res, id: string) {
     try {
       const findSampleExampleQuestions =
-        await this.learningMaterialModel.findOne({
+        await this.sampleExampleQuestionsModel.findOne({
           _id: id,
         });
 
       if (findSampleExampleQuestions) {
-        const deleteBook = await this.learningMaterialModel.deleteOne({
+        const deleteBook = await this.sampleExampleQuestionsModel.deleteOne({
           _id: id,
         });
         if (!deleteBook) {
