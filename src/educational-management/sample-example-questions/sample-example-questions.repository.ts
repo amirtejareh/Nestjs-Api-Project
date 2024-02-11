@@ -39,7 +39,7 @@ export class SampleExampleQuestionsRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "learning_material",
+            "sample-example-question",
             file
           );
           pdfFilesPath.push(fileName);
@@ -108,7 +108,7 @@ export class SampleExampleQuestionsRepository {
         });
 
       if (!sampleExampleQuestions) {
-        throw new NotFoundException("درس نامه مورد نظر یافت نشد.");
+        throw new NotFoundException("تمرین مورد نظر یافت نشد.");
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
@@ -117,7 +117,7 @@ export class SampleExampleQuestionsRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "learning_material",
+            "sample-example-question",
             file
           );
           pdfFilesPath.push(fileName);
@@ -151,7 +151,7 @@ export class SampleExampleQuestionsRepository {
 
       return res.status(200).json({
         statusCode: 200,
-        message: "درس نامه با موفقیت بروزرسانی شد.",
+        message: "تمرین با موفقیت بروزرسانی شد.",
         data: updateSampleExampleQuestionsModel,
       });
     } catch (e) {
@@ -176,7 +176,7 @@ export class SampleExampleQuestionsRepository {
         if (!deleteBook) {
           return res.status(HttpStatus.NOT_FOUND).json({
             statusCode: HttpStatus.NOT_FOUND,
-            message: "درس نامه مورد نظر پیدا نشد",
+            message: "تمرین مورد نظر پیدا نشد",
           });
         }
 
@@ -206,18 +206,18 @@ export class SampleExampleQuestionsRepository {
 
         return res.status(HttpStatus.OK).json({
           statusCode: HttpStatus.OK,
-          message: "درس نامه مورد نظر با موفقیت حذف شد",
+          message: "تمرین مورد نظر با موفقیت حذف شد",
           data: deleteBook,
         });
       }
       return res.status(HttpStatus.NOT_FOUND).json({
         statusCode: HttpStatus.NOT_FOUND,
-        message: "درس نامه مورد نظر پیدا نشد",
+        message: "تمرین مورد نظر پیدا نشد",
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در حذف درس نامه مورد نظر به وجود آمده است",
+        message: "مشکلی در حذف تمرین مورد نظر به وجود آمده است",
         error: error.message,
       });
     }

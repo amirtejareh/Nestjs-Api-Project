@@ -24,6 +24,7 @@ import { BookExercisesModule } from "../educational-management/book-exercises/bo
 import { OnlineGradeReportModule } from "../exam-management/online-grade-report/online-grade-report.module";
 import { AnswersheetManagementModule } from "../exam-management/answersheet-management/answersheet-management.module";
 import { SampleExampleQuestionsModule } from "../educational-management/sample-example-questions/sample-example-questions.module";
+import { AttachModule } from "../educational-management/attach/attach.module";
 
 @Global()
 @Module({
@@ -46,6 +47,7 @@ import { SampleExampleQuestionsModule } from "../educational-management/sample-e
     AnswersheetManagementModule,
     LearningMaterialModule,
     SampleExampleQuestionsModule,
+    AttachModule,
     ObjectiveTestManagementModule,
     EssayQuestionModule,
     TipAndTestModule,
