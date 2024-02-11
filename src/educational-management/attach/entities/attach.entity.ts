@@ -36,9 +36,6 @@ export class Attach {
   })
   subject: Subject;
 
-  @Prop({ required: true })
-  title: string;
-
   @Prop({
     required: true,
   })
