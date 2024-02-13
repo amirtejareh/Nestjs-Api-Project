@@ -47,7 +47,7 @@ export class AttachRepository {
       const createAttach = await this.attachModel.create(createAttachDto);
       return res.status(200).json({
         statusCode: 200,
-        message: "یک تمرین با موفقیت ایجاد شد.",
+        message: "یک ضمیمه با موفقیت ایجاد شد.",
         data: createAttach,
       });
     } catch (e) {
@@ -67,11 +67,13 @@ export class AttachRepository {
   }
 
   async findBasedOnChapters(chapters: string[]) {
-    const attachs = await this.attachModel.find({
-      chapter: {
-        $in: chapters.map((id: string) => new Types.ObjectId(id)),
-      },
-    });
+    const attachs = await this.attachModel
+      .find({
+        chapter: {
+          $in: chapters.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["chapter"]);
 
     return attachs;
   }
@@ -100,7 +102,7 @@ export class AttachRepository {
       });
 
       if (!attach) {
-        throw new NotFoundException("درس نامه مورد نظر یافت نشد.");
+        throw new NotFoundException("ضمیمه مورد نظر یافت نشد.");
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
@@ -139,7 +141,7 @@ export class AttachRepository {
 
       return res.status(200).json({
         statusCode: 200,
-        message: "درس نامه با موفقیت بروزرسانی شد.",
+        message: "ضمیمه مورد نظر با موفقیت بروزرسانی شد.",
         data: updateAttachModel,
       });
     } catch (e) {
@@ -163,7 +165,7 @@ export class AttachRepository {
         if (!deleteBook) {
           return res.status(HttpStatus.NOT_FOUND).json({
             statusCode: HttpStatus.NOT_FOUND,
-            message: "درس نامه مورد نظر پیدا نشد",
+            message: "ضمیمه مورد نظر پیدا نشد",
           });
         }
 
