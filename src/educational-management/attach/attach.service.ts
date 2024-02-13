@@ -23,8 +23,8 @@ export class AttachService {
     return this.attachRepository.findOne(id);
   }
 
-  async findBasedOnSubjects(subjects: string[]) {
-    return this.attachRepository.findBasedOnSubjects(subjects);
+  async findBasedOnChapters(chapters: string[]) {
+    return this.attachRepository.findBasedOnChapters(chapters);
   }
 
   async findBasedOnBooks(books: string[]) {

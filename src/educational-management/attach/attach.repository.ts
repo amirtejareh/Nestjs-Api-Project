@@ -66,10 +66,10 @@ export class AttachRepository {
     return this.attachModel.findOne({ _id: id });
   }
 
-  async findBasedOnSubjects(subjects: string[]) {
+  async findBasedOnChapters(chapters: string[]) {
     const attachs = await this.attachModel.find({
-      subject: {
-        $in: subjects.map((id: string) => new Types.ObjectId(id)),
+      chapter: {
+        $in: chapters.map((id: string) => new Types.ObjectId(id)),
       },
     });
 

@@ -54,15 +54,15 @@ export class AttachController {
     return this.attachService.findOne(id);
   }
 
-  @Get("withSubjects/:subjectsId")
-  async findAttachBasedOnSubject(
-    @Param("subjectsId", ParseArrayPipe) subjects: string[]
+  @Get("withChapters/:chaptersId")
+  async findAttachBasedOnChapter(
+    @Param("chaptersId", ParseArrayPipe) chapters: string[]
   ) {
-    if (subjects[0] == "null") {
+    if (chapters[0] == "null") {
       return [];
     }
 
-    return this.attachService.findBasedOnSubjects(subjects);
+    return this.attachService.findBasedOnChapters(chapters);
   }
 
   @Get("withBooks/:booksId")
