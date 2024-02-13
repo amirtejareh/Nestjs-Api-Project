@@ -27,14 +27,10 @@ export class Attach {
   chapter: Chapter;
 
   @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: Section.name }],
+    required: true,
+    enum: ["summary", "attaches", "tables"],
   })
-  section: Section;
-
-  @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: Subject.name }],
-  })
-  subject: Subject;
+  type: string;
 
   @Prop({
     required: true,
