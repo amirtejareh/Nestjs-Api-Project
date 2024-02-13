@@ -27,18 +27,6 @@ export class CreateAttachDto {
   readonly chapter: Chapter;
 
   @ApiProperty({
-    description: "Section id",
-    example: "64d5513027862ad356480ff0",
-  })
-  readonly section: Section;
-
-  @ApiProperty({
-    description: "Subject id",
-    example: "64d5513027862ad356480ff0",
-  })
-  readonly subject: Subject;
-
-  @ApiProperty({
     description: "List of video object",
     example: `{"title": "", "link": '#'}`,
   })
