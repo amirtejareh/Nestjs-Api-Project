@@ -50,7 +50,7 @@ ChapterSchema.virtual("tipandtests", {
   foreignField: "chapters",
 });
 
-ChapterSchema.virtual("attachs", {
+ChapterSchema.virtual("attaches", {
   ref: "Attach",
   localField: "_id",
   foreignField: "chapters",

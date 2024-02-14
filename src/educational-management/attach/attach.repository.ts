@@ -67,7 +67,7 @@ export class AttachRepository {
   }
 
   async findBasedOnChapters(chapters: string[]) {
-    const attachs = await this.attachModel
+    const attaches = await this.attachModel
       .find({
         chapter: {
           $in: chapters.map((id: string) => new Types.ObjectId(id)),
@@ -75,19 +75,19 @@ export class AttachRepository {
       })
       .populate(["chapter"]);
 
-    return attachs;
+    return attaches;
   }
 
   async findBasedOnBooks(books: string[]) {
-    const attachs = await this.attachModel
+    const attaches = await this.attachModel
       .find({
         book: {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
       })
-      .populate(["book", "chapter", "section", "subject"]);
+      .populate(["book", "chapter"]);
 
-    return attachs;
+    return attaches;
   }
 
   async update(
