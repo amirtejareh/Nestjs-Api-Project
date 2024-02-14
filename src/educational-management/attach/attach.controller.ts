@@ -69,8 +69,6 @@ export class AttachController {
   async findAttachBasedOnBooks(
     @Param("booksId", ParseArrayPipe) books: string[]
   ) {
-    console.log(books, "books");
-
     if (books[0] == "null") {
       return [];
     }
