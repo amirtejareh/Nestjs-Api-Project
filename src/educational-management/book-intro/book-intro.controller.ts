@@ -58,6 +58,17 @@ export class BookIntroController {
     return this.bookIntroService.findOne(id);
   }
 
+  @Get("withBooks/:booksId")
+  async findBookIntroBasedOnBooks(
+    @Param("booksId", ParseArrayPipe) books: string[]
+  ) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.bookIntroService.findBasedOnBooks(books);
+  }
+
   @Patch(":id")
   @ApiBearerAuth()
   @ApiConsumes("multipart/form-data")

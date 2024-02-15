@@ -23,6 +23,13 @@ export class BookIntroService {
     return this.bookIntroRepository.findOne(id);
   }
 
+  async findBasedOnBooks(books: string[]) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.bookIntroRepository.findBasedOnBooks(books);
+  }
   update(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],

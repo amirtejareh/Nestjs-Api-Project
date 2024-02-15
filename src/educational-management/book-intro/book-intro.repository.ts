@@ -70,6 +70,18 @@ export class BookIntroRepository {
     return this.bookIntroModel.findOne({ _id: id });
   }
 
+  async findBasedOnBooks(books: string[]) {
+    const bookIntro = await this.bookIntroModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book"]);
+
+    return bookIntro;
+  }
+
   async update(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],
