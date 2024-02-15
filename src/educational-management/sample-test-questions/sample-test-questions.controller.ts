@@ -15,12 +15,12 @@ import {
 import { CreateSampleTestQuestionsDto } from "./dto/create-sample-test-question.dto";
 import { UpdateSampleTestQuestionsDto } from "./dto/update-sample-test-question.dto";
 import { AnyFilesInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiConsumes } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { SampleTestQuestionsService } from "./sample-test-questions.service";
-
+@ApiTags("Sample Test Questions")
 @Controller("sample-test-questions")
 export class SampleTestQuestionsController {
   constructor(
