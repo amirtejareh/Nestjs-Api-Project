@@ -15,7 +15,7 @@ import {
 import { CreateSampleTestQuestionsDto } from "./dto/create-sample-test-question.dto";
 import { UpdateSampleTestQuestionsDto } from "./dto/update-sample-test-question.dto";
 import { AnyFilesInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -30,6 +30,7 @@ export class SampleTestQuestionsController {
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
+  @ApiConsumes("multipart/form-data")
   @Roles("SuperAdmin")
   @UseInterceptors(AnyFilesInterceptor())
   create(
@@ -79,6 +80,7 @@ export class SampleTestQuestionsController {
   @Patch(":id")
   @ApiBearerAuth()
   @UseInterceptors(AnyFilesInterceptor())
+  @ApiConsumes("multipart/form-data")
   update(
     @Res() res,
     @UploadedFiles() pdfFiles: Array<Express.Multer.File>,

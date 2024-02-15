@@ -13,7 +13,7 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { SampleExampleQuestionsService } from "./sample-example-questions.service";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AnyFilesInterceptor } from "@nestjs/platform-express";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
@@ -30,6 +30,7 @@ export class SampleExampleQuestionsController {
 
   @Post()
   @ApiBearerAuth()
+  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   @UseInterceptors(AnyFilesInterceptor())
@@ -80,6 +81,7 @@ export class SampleExampleQuestionsController {
   @Patch(":id")
   @ApiBearerAuth()
   @UseInterceptors(AnyFilesInterceptor())
+  @ApiConsumes("multipart/form-data")
   update(
     @Res() res,
     @UploadedFiles() pdfFiles: Array<Express.Multer.File>,
