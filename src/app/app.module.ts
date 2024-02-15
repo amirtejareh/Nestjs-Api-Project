@@ -25,7 +25,6 @@ import { OnlineGradeReportModule } from "../exam-management/online-grade-report/
 import { AnswersheetManagementModule } from "../exam-management/answersheet-management/answersheet-management.module";
 import { SampleExampleQuestionsModule } from "../educational-management/sample-example-questions/sample-example-questions.module";
 import { AttachModule } from "../educational-management/attach/attach.module";
-import { SampleTestQuestions } from "../educational-management/sample-test-questions/entities/sample-test-question.entity";
 import { SampleTestQuestionsModule } from "../educational-management/sample-test-questions/sample-test-questions.module";
 
 @Global()
