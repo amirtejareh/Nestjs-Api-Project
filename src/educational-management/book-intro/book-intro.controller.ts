@@ -25,8 +25,8 @@ import { BookIntroService } from "./book-intro.service";
 import { CreateBookIntroDto } from "./dto/create-book-intro.dto";
 import { UpdateBookIntroDto } from "./dto/update-book-intro.dto";
 
-@ApiTags("Book Exercises")
-@Controller("book-exercises")
+@ApiTags("Book Intro")
+@Controller("book-intro")
 export class BookIntroController {
   constructor(private readonly bookIntroService: BookIntroService) {}
 
