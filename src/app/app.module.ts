@@ -20,7 +20,7 @@ import { EssayQuestionModule } from "../educational-management/essay-questions/e
 import { BookReferenceModule } from "../content-management/book-reference/book-reference.module";
 import { TipAndTestModule } from "../educational-management/tip-and-test/tip-and-test.module";
 import { KaranbalaModule } from "../educational-management/karanbala/karanbala.module";
-import { BookExercisesModule } from "../educational-management/book-exercises/book-exercises.module";
+import { BookIntroModule } from "../educational-management/book-intro/book-intro.module";
 import { OnlineGradeReportModule } from "../exam-management/online-grade-report/online-grade-report.module";
 import { AnswersheetManagementModule } from "../exam-management/answersheet-management/answersheet-management.module";
 import { SampleExampleQuestionsModule } from "../educational-management/sample-example-questions/sample-example-questions.module";
@@ -54,7 +54,7 @@ import { SampleTestQuestionsModule } from "../educational-management/sample-test
     EssayQuestionModule,
     TipAndTestModule,
     KaranbalaModule,
-    BookExercisesModule,
+    BookIntroModule,
   ],
   providers: [ImageService],
 
