@@ -25,7 +25,7 @@ export class SampleTestQuestions {
   chapter: Chapter;
 
   @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: TermOfStudy.name }],
   })
   term: TermOfStudy;
 
