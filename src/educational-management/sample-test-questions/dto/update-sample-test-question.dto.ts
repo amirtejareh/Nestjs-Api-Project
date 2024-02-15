@@ -13,6 +13,7 @@ export class UpdateSampleTestQuestionsDto extends PartialType(
   readonly gradeLevel?: GradeLevel;
   readonly book?: Book;
   readonly chapterTerm?: Chapter | TermOfStudy;
+  readonly type: ["authorship", "general"];
   readonly videos?: IVideo[];
   @ApiProperty({ type: "string", format: "binary" })
   public pdfFiles?: string[];

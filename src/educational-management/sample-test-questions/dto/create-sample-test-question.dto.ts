@@ -26,6 +26,12 @@ export class CreateSampleTestQuestionsDto {
   readonly chapterTerm: Chapter | TermOfStudy;
 
   @ApiProperty({
+    description: "type ",
+    example: ["authorship", "general"],
+  })
+  readonly type: ["authorship", "general"];
+
+  @ApiProperty({
     description: "List of video object",
     example: `{"title": "", "link": '#'}`,
   })

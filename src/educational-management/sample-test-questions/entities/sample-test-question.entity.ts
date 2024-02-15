@@ -5,6 +5,9 @@ import { IVideo } from "../../../interface/IEntity";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
 import { TermOfStudy } from "../../../content-management/term-of-study/entities/term-of-study.entity";
+export type SampleTestQuestionsDocument = SampleTestQuestions & Document;
+
+@Schema({ timestamps: true })
 export class SampleTestQuestions {
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
@@ -17,14 +20,20 @@ export class SampleTestQuestions {
   book: Book;
 
   @Prop({
-    type: [
-      {
-        type: mongooseSchema.Types.ObjectId,
-        ref: [Chapter.name, TermOfStudy.name],
-      },
-    ],
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
   })
-  chapterTerm: Chapter | TermOfStudy;
+  chapter: Chapter;
+
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
+  })
+  term: TermOfStudy;
+
+  @Prop({
+    required: true,
+    enum: ["authorship", "general"],
+  })
+  type: string;
 
   @Prop({
     required: true,

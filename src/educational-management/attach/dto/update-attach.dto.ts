@@ -12,6 +12,7 @@ export class UpdateAttachDto extends PartialType(CreateAttachDto) {
   readonly gradeLevel?: GradeLevel;
   readonly book?: Book;
   readonly chapter?: Chapter;
+  readonly type: ["summary", "attaches", "tables"];
   readonly videos?: IVideo[];
   @ApiProperty({ type: "string", format: "binary" })
   public pdfFiles?: string[];

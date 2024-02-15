@@ -46,6 +46,7 @@ export class SampleTestQuestionsRepository {
         }
         createSampleTestQuestionsDto.pdfFiles = pdfFilesPath;
       }
+
       const createSampleTestQuestions =
         await this.sampleTestQuestionsModel.create(
           createSampleTestQuestionsDto
@@ -88,7 +89,7 @@ export class SampleTestQuestionsRepository {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
       })
-      .populate(["book", "chapter"]);
+      .populate(["book", "chapter", "term"]);
 
     return sampleTestQuestions;
   }

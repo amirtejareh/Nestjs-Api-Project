@@ -27,6 +27,12 @@ export class CreateAttachDto {
   readonly chapter: Chapter;
 
   @ApiProperty({
+    description: "type ",
+    example: ["summary", "attaches", "tables"],
+  })
+  readonly type: ["summary", "attaches", "tables"];
+
+  @ApiProperty({
     description: "List of video object",
     example: `{"title": "", "link": '#'}`,
   })
