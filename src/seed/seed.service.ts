@@ -45,6 +45,10 @@ export class SeederService {
           title: `ترم ${number}`,
         });
       });
+
+      this.termOfStudyModel.create({
+        title: "کل کتاب",
+      });
     }
 
     for (const permission of permissions) {
