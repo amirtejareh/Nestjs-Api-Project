@@ -29,8 +29,8 @@ export class SampleTestQuestionsService {
     return this.sampleTestQuestionsRepository.findOne(id);
   }
 
-  async findBasedOnSubjects(subjects: string[]) {
-    return this.sampleTestQuestionsRepository.findBasedOnSubjects(subjects);
+  async findBasedOnChapters(chapters: string[]) {
+    return this.sampleTestQuestionsRepository.findBasedOnChapters(chapters);
   }
 
   async findBasedOnBooks(books: string[]) {

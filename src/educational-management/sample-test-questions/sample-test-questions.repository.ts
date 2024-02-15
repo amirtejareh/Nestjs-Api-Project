@@ -20,12 +20,12 @@ import { UpdateSampleTestQuestionsDto } from "./dto/update-sample-test-question.
 export class SampleTestQuestionsRepository {
   constructor(
     @InjectModel(SampleTestQuestions.name)
-    private readonly sampleExampleQuestionsModel: Model<SampleTestQuestions>,
+    private readonly sampleTestQuestionsModel: Model<SampleTestQuestions>,
     private readonly imageService: ImageService
   ) {}
 
   async findOneByTitle(title: string) {
-    return this.sampleExampleQuestionsModel.findOne({ title }).exec();
+    return this.sampleTestQuestionsModel.findOne({ title }).exec();
   }
 
   async create(
@@ -47,7 +47,7 @@ export class SampleTestQuestionsRepository {
         createSampleTestQuestionsDto.pdfFiles = pdfFilesPath;
       }
       const createSampleTestQuestions =
-        await this.sampleExampleQuestionsModel.create(
+        await this.sampleTestQuestionsModel.create(
           createSampleTestQuestionsDto
         );
       return res.status(200).json({
@@ -64,35 +64,33 @@ export class SampleTestQuestionsRepository {
   }
 
   findAll() {
-    return this.sampleExampleQuestionsModel.find({});
+    return this.sampleTestQuestionsModel.find({});
   }
 
   findOne(id: string) {
-    return this.sampleExampleQuestionsModel.findOne({ _id: id });
+    return this.sampleTestQuestionsModel.findOne({ _id: id });
   }
 
-  async findBasedOnSubjects(subjects: string[]) {
-    const sampleExampleQuestionss = await this.sampleExampleQuestionsModel.find(
-      {
-        subject: {
-          $in: subjects.map((id: string) => new Types.ObjectId(id)),
-        },
-      }
-    );
+  async findBasedOnChapters(chapters: string[]) {
+    const sampleTestQuestions = await this.sampleTestQuestionsModel.find({
+      chapterTerm: {
+        $in: chapters.map((id: string) => new Types.ObjectId(id)),
+      },
+    });
 
-    return sampleExampleQuestionss;
+    return sampleTestQuestions;
   }
 
   async findBasedOnBooks(books: string[]) {
-    const sampleExampleQuestionss = await this.sampleExampleQuestionsModel
+    const sampleTestQuestions = await this.sampleTestQuestionsModel
       .find({
         book: {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
       })
-      .populate(["book", "chapter", "section", "subject"]);
+      .populate(["book", "chapter"]);
 
-    return sampleExampleQuestionss;
+    return sampleTestQuestions;
   }
 
   async update(
@@ -102,12 +100,11 @@ export class SampleTestQuestionsRepository {
     updateSampleTestQuestionsDto: UpdateSampleTestQuestionsDto
   ) {
     try {
-      const sampleExampleQuestions =
-        await this.sampleExampleQuestionsModel.findOne({
-          _id: id,
-        });
+      const sampleTestQuestions = await this.sampleTestQuestionsModel.findOne({
+        _id: id,
+      });
 
-      if (!sampleExampleQuestions) {
+      if (!sampleTestQuestions) {
         throw new NotFoundException("نمونه سوال امتحانی مورد نظر یافت نشد.");
       }
 
@@ -124,9 +121,9 @@ export class SampleTestQuestionsRepository {
         }
         updateSampleTestQuestionsDto.pdfFiles = pdfFilesPath;
 
-        if (sampleExampleQuestions.pdfFiles.length > 0) {
-          for (let i = 0; i < sampleExampleQuestions.pdfFiles.length; i++) {
-            const file = sampleExampleQuestions.pdfFiles[i];
+        if (sampleTestQuestions.pdfFiles.length > 0) {
+          for (let i = 0; i < sampleTestQuestions.pdfFiles.length; i++) {
+            const file = sampleTestQuestions.pdfFiles[i];
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -141,7 +138,7 @@ export class SampleTestQuestionsRepository {
       }
 
       const updateSampleTestQuestionsModel =
-        await this.sampleExampleQuestionsModel.findByIdAndUpdate(
+        await this.sampleTestQuestionsModel.findByIdAndUpdate(
           id,
           updateSampleTestQuestionsDto,
           {
@@ -165,12 +162,12 @@ export class SampleTestQuestionsRepository {
   async remove(@Res() res, id: string) {
     try {
       const findSampleTestQuestions =
-        await this.sampleExampleQuestionsModel.findOne({
+        await this.sampleTestQuestionsModel.findOne({
           _id: id,
         });
 
       if (findSampleTestQuestions) {
-        const deleteBook = await this.sampleExampleQuestionsModel.deleteOne({
+        const deleteBook = await this.sampleTestQuestionsModel.deleteOne({
           _id: id,
         });
         if (!deleteBook) {

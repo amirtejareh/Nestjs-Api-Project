@@ -55,15 +55,15 @@ export class SampleTestQuestionsController {
     return this.sampleTestQuestionsService.findOne(id);
   }
 
-  @Get("withSubjects/:subjectsId")
-  async findSampleTestQuestionsBasedOnSubject(
-    @Param("subjectsId", ParseArrayPipe) subjects: string[]
+  @Get("withChapters/:chaptersId")
+  async findAttachBasedOnChapter(
+    @Param("chaptersId", ParseArrayPipe) chapters: string[]
   ) {
-    if (subjects[0] == "null") {
+    if (chapters[0] == "null") {
       return [];
     }
 
-    return this.sampleTestQuestionsService.findBasedOnSubjects(subjects);
+    return this.sampleTestQuestionsService.findBasedOnChapters(chapters);
   }
 
   @Get("withBooks/:booksId")
