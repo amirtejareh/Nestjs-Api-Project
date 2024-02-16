@@ -30,6 +30,15 @@ export class BookIntroService {
 
     return this.bookIntroRepository.findBasedOnBooks(books);
   }
+
+  async findBasedOnBooksAndType(books: string[], type: string) {
+    if (books[0] == "null" || type == "") {
+      return [];
+    }
+
+    return this.bookIntroRepository.findBasedOnBooksAndType(books, type);
+  }
+
   update(
     @Res() res,
     @UploadedFile() pdfFiles: Express.Multer.File[],

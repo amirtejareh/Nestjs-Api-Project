@@ -12,6 +12,7 @@ import {
   UploadedFile,
   UploadedFiles,
   ParseArrayPipe,
+  Query,
 } from "@nestjs/common";
 // import { LearningMaterialService } from './learning-material.service';
 // import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
@@ -67,6 +68,18 @@ export class BookIntroController {
     }
 
     return this.bookIntroService.findBasedOnBooks(books);
+  }
+
+  @Get("withBooksAndType/:booksId")
+  async findBookIntroBasedOnBooksAndType(
+    @Param("booksId", ParseArrayPipe) books: string[],
+    @Query("type") type: string
+  ) {
+    if (books[0] === "null" || type == "") {
+      return [];
+    }
+
+    return this.bookIntroService.findBasedOnBooksAndType(books, type);
   }
 
   @Patch(":id")

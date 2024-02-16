@@ -69,13 +69,25 @@ export class BookIntroRepository {
   findOne(id: string) {
     return this.bookIntroModel.findOne({ _id: id });
   }
-
   async findBasedOnBooks(books: string[]) {
     const bookIntro = await this.bookIntroModel
       .find({
         book: {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
+      })
+      .populate(["book"]);
+
+    return bookIntro;
+  }
+
+  async findBasedOnBooksAndType(books: string[], type: string) {
+    const bookIntro = await this.bookIntroModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+        type: type,
       })
       .populate(["book"]);
 
