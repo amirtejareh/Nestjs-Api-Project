@@ -14,9 +14,7 @@ import {
   ParseArrayPipe,
   Query,
 } from "@nestjs/common";
-// import { LearningMaterialService } from './learning-material.service';
-// import { CreateLearningMaterialDto } from './dto/create-learning-material.dto';
-// import { UpdateLearningMaterialDto } from './dto/update-learning-material.dto';
+
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { Roles } from "../../common/decorators/roles.decorator";
 import { AuthGuard } from "../../auth/guards/auth.guard";
