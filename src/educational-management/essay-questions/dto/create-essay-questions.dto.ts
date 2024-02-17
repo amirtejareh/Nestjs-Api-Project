@@ -6,39 +6,39 @@ import { Section } from "../../../content-management/section/entities/section.en
 import { Subject } from "../../../content-management/subject/entities/subject.entity";
 
 export class CreateEssayQuestionsDto {
-    readonly _id?: string;
-    @ApiProperty({
-        description: "Grade level id",
-        example: "64d5513027862ad356480ff0",
-    })
-    readonly gradeLevel: GradeLevel;
+  readonly _id?: string;
+  @ApiProperty({
+    description: "Grade level id",
+    example: "64d5513027862ad356480ff0",
+  })
+  readonly gradeLevel: GradeLevel;
 
-    @ApiProperty({
-        description: "Book id",
-        example: "64d5513027862ad356480ff0",
-    })
-    readonly book: Book;
+  @ApiProperty({
+    description: "Book id",
+    example: "64d5513027862ad356480ff0",
+  })
+  readonly book: Book;
 
-    @ApiProperty({
-        description: "Chapter id",
-        example: "64d5513027862ad356480ff0",
-    })
-    readonly chapter: Chapter;
+  @ApiProperty({
+    description: "Chapter id",
+    example: "64d5513027862ad356480ff0",
+  })
+  readonly chapter: Chapter;
 
-    @ApiProperty({
-        description: "Section id",
-        example: "64d5513027862ad356480ff0",
-    })
-    readonly section: Section;
+  @ApiProperty({
+    description: "Section id",
+    example: "64d5513027862ad356480ff0",
+  })
+  readonly section: Section;
 
-    @ApiProperty({
-        description: "Subject id",
-        example: "64d5513027862ad356480ff0",
-    })
-    readonly subject: Subject;
+  @ApiProperty({
+    description: "Subject id",
+    example: "64d5513027862ad356480ff0",
+  })
+  readonly subject: Subject;
 
-    @ApiProperty({ type: "string", format: "binary" })
-    public pdfFiles: string[];
-    readonly createdAt?: Date;
-    readonly updatedAt?: Date;
+  @ApiProperty({ type: "string", format: "binary" })
+  public pdfFiles: any;
+  readonly createdAt?: Date;
+  readonly updatedAt?: Date;
 }

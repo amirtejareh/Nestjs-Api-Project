@@ -38,7 +38,7 @@ export class CreateSampleTestQuestionsDto {
   readonly videos: IVideo[];
 
   @ApiProperty({ type: "string", format: "binary" })
-  public pdfFiles: string[];
+  public pdfFiles: any;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
