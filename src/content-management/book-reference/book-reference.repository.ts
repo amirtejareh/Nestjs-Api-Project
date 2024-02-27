@@ -45,7 +45,7 @@ export class BookReferenceRepository {
   }
 
   findAll() {
-    return this.BookReferenceModel.find({});
+    return this.BookReferenceModel.find({}).populate(["gradeLevels"]);
   }
 
   async findBookReferencesBasedOnGradeLevels(gradeLevels: string[]) {
