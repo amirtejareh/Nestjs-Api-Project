@@ -30,9 +30,7 @@ import { SampleTestQuestionsModule } from "../educational-management/sample-test
 @Global()
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      "mongodb://root:n5TR2JZ4kn3k1VJtOsbDDHfN@karanbala:27017/karanbala?authSource=admin"
-    ),
+    MongooseModule.forRoot("mongodb://127.0.0.1:27017/karanbala"),
     UsersModule,
     SeedModule,
     AuthModule,
