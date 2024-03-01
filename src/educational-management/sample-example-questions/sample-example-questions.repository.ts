@@ -39,7 +39,7 @@ export class SampleExampleQuestionsRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "sample-example-question",
+            "educational_management/sample-example-question",
             file
           );
           pdfFilesPath.push({
@@ -120,7 +120,7 @@ export class SampleExampleQuestionsRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "sample-example-questions",
+            "educational_management/sample-example-question",
             file
           );
           pdfFilesPath.push(fileName);

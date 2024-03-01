@@ -59,7 +59,7 @@ export class AnswersheetManagementRepository {
         for (let i = 0; i < AnswerSheetSourcePdfFile.length; i++) {
           const file = AnswerSheetSourcePdfFile[i];
           const fileName = await this.imageService.saveImage(
-            "answersheet_management",
+            "exam_management/answersheet_management",
             file
           );
           answersheetPdfPath.push(fileName);
@@ -115,7 +115,7 @@ export class AnswersheetManagementRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "learning_material",
+            "exam_management/answersheet_management",
             file
           );
           pdfFilesPath.push(fileName);

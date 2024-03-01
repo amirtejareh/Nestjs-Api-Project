@@ -40,7 +40,7 @@ export class EssayQuestionRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "essay_question",
+            "educational_management/essay_question",
             file
           );
           pdfFilesPath.push({
@@ -103,7 +103,7 @@ export class EssayQuestionRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "essay_question",
+            "educational_management/essay_question",
             file
           );
           pdfFilesPath.push(fileName);

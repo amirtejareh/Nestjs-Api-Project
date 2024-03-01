@@ -39,7 +39,7 @@ export class BookIntroRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "book-description",
+            "educational_management/book-description",
             file
           );
 
@@ -117,7 +117,7 @@ export class BookIntroRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "book-exercises",
+            "educational_management/book-description",
             file
           );
           pdfFilesPath.push(fileName);

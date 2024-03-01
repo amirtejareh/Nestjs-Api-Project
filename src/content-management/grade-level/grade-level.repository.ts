@@ -44,7 +44,7 @@ export class GradeLevelRepository {
 
       if (file) {
         const fileName = await this.imageService.saveImage(
-          "image_grade_level",
+          "content_management/image_grade_level",
           file
         );
         createGradeLevelDto.image = fileName;
@@ -89,7 +89,7 @@ export class GradeLevelRepository {
 
       if (file) {
         const fileName = await this.imageService.saveImage(
-          "image_grade_level",
+          "content_management/image_grade_level",
           file
         );
         updateGradeLevelDto.image = fileName;

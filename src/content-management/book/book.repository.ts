@@ -36,7 +36,10 @@ export class BookRepository {
   ) {
     try {
       if (file) {
-        const fileName = await this.imageService.saveImage("image_book", file);
+        const fileName = await this.imageService.saveImage(
+          "content_management/image_book",
+          file
+        );
         createBookDto.image = fileName;
       }
 
@@ -109,7 +112,10 @@ export class BookRepository {
       }
 
       if (file) {
-        const fileName = await this.imageService.saveImage("image_book", file);
+        const fileName = await this.imageService.saveImage(
+          "content_management/image_book",
+          file
+        );
         updateBookDto.image = fileName;
 
         if (existsSync(book.image)) {

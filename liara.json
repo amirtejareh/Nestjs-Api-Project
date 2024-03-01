@@ -2,19 +2,15 @@
   "disks": [
     {
       "name": "disk1",
-      "mountTo": "uploads/image_grade_level"
+      "mountTo": "uploads/content_management"
     },
     {
       "name": "disk2",
-      "mountTo": "uploads/image_book"
+      "mountTo": "uploads/educational_management"
     },
     {
       "name": "disk3",
-      "mountTo": "uploads/learning_material"
-    },
-    {
-      "name": "disk4",
-      "mountTo": "uploads/answersheet-management"
+      "mountTo": "uploads/exam_management"
     }
   ]
 }

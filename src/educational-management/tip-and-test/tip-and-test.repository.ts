@@ -51,7 +51,7 @@ export class TipAndTestRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "tip-and-test",
+            "educational_management/tip-and-test",
             file
           );
           pdfFilesPath.push({
@@ -114,7 +114,7 @@ export class TipAndTestRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "tip-and-test",
+            "educational_management/tip-and-test",
             file
           );
           pdfFilesPath.push(fileName);

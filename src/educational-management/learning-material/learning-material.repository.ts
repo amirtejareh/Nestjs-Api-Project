@@ -40,7 +40,7 @@ export class LearningMaterialRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "learning_material",
+            "educational_management/learning_material",
             file
           );
           pdfFilesPath.push({
@@ -117,7 +117,7 @@ export class LearningMaterialRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "learning_material",
+            "educational_management/learning_material",
             file
           );
           pdfFilesPath.push(fileName);

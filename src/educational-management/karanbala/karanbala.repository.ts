@@ -39,7 +39,10 @@ export class KaranbalaRepository {
         let pdfFilesPath: { title: string; link: string }[] = [];
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("karanbala", file);
+          const fileName = await this.imageService.saveImage(
+            "educational_management/karanbala",
+            file
+          );
           pdfFilesPath.push({
             title: Buffer.from(file.originalname, "ascii").toString("utf8"),
             link: fileName,
@@ -111,7 +114,10 @@ export class KaranbalaRepository {
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
-          const fileName = await this.imageService.saveImage("karanbala", file);
+          const fileName = await this.imageService.saveImage(
+            "educational_management/karanbala",
+            file
+          );
           pdfFilesPath.push(fileName);
         }
         updateKaranbalaDto.pdfFiles = pdfFilesPath;
