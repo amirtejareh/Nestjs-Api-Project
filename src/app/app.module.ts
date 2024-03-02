@@ -26,6 +26,7 @@ import { AnswersheetManagementModule } from "../exam-management/answersheet-mana
 import { SampleExampleQuestionsModule } from "../educational-management/sample-example-questions/sample-example-questions.module";
 import { AttachModule } from "../educational-management/attach/attach.module";
 import { SampleTestQuestionsModule } from "../educational-management/sample-test-questions/sample-test-questions.module";
+import { StandardModule } from "../educational-management/exam/standard/standard.module";
 
 @Global()
 @Module({
@@ -43,6 +44,7 @@ import { SampleTestQuestionsModule } from "../educational-management/sample-test
     SectionModule,
     SubjectModule,
     SampleTestQuestionsModule,
+    StandardModule,
     ObjectiveTestModule,
     QuestionModule,
     OnlineGradeReportModule,
