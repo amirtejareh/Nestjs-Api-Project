@@ -21,8 +21,6 @@ export class CreateExamRepository {
         createCreateExamDto
       );
 
-      console.log(createCreateExamDto, "createCreateExamDto");
-
       return res.status(200).json({
         statusCode: 200,
         message: "شناسنامه سوال با موفقیت ایجاد شد",
