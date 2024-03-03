@@ -7,10 +7,6 @@ import { TermOfStudy } from "../../../../content-management/term-of-study/entiti
 
 export class UpdateStandardDto extends PartialType(CreateStandardDto) {
   readonly _id?: string;
-  readonly gradeLevel?: GradeLevel;
-  readonly book?: Book;
-  readonly chapters?: string[];
-  readonly chapterTerm?: Chapter | TermOfStudy;
   readonly correctAnswer: number;
   readonly examNumber: number;
   readonly questionNumber: number;

@@ -11,24 +11,24 @@ import {
   Query,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { StandardService } from "./standard.service";
 import { AuthGuard } from "../../../auth/guards/auth.guard";
 import { RoleGuard } from "../../../auth/guards/role.guard";
 import { Roles } from "../../../common/decorators/roles.decorator";
-import { CreateStandardDto } from "./dto/create-standard.dto";
-import { UpdateStandardDto } from "./dto/update-standard.dto";
+import { UpdateCreateExamDto } from "./dto/update-create.dto";
+import { CreateExamService } from "./create.service";
+import { CreateCreateExamDto } from "./dto/create-create.dto";
 
-@ApiTags("Standard")
-@Controller("standard")
-export class StandardController {
-  constructor(private readonly standardService: StandardService) {}
+@ApiTags("Create Exam")
+@Controller("create-exam")
+export class CreateExamController {
+  constructor(private readonly createExamService: CreateExamService) {}
 
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Res() res, @Body() createStandardDto: CreateStandardDto) {
-    return this.standardService.create(res, createStandardDto);
+  create(@Res() res, @Body() createCreateExamDto: CreateCreateExamDto) {
+    return this.createExamService.create(res, createCreateExamDto);
   }
 
   @Get()
@@ -37,11 +37,11 @@ export class StandardController {
     @Query("limit") limit: number = 10,
     @Query("objectiveTestId") objectiveTests: string
   ) {
-    return this.standardService.findAll(page, limit, objectiveTests);
+    return this.createExamService.findAll(page, limit, objectiveTests);
   }
 
   @Get("withBooks/:BookId")
-  async findStandardsBasedOnBooks(
+  async findCreateExamsBasedOnBooks(
     @Query("page") page: number,
     @Query("limit") limit: number,
     @Query("BookId") books: string
@@ -50,12 +50,16 @@ export class StandardController {
       return [];
     }
 
-    return this.standardService.findStandardsBasedOnBooks(page, limit, books);
+    return this.createExamService.findCreateExamsBasedOnBooks(
+      page,
+      limit,
+      books
+    );
   }
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.standardService.findOne(id);
+    return this.createExamService.findOne(id);
   }
 
   @Patch(":id")
@@ -65,9 +69,9 @@ export class StandardController {
   update(
     @Res() res,
     @Param("id") id: string,
-    @Body() updateStandardDto: UpdateStandardDto
+    @Body() updateCreateExamDto: UpdateCreateExamDto
   ) {
-    return this.standardService.update(res, id, updateStandardDto);
+    return this.createExamService.update(res, id, updateCreateExamDto);
   }
 
   @Delete(":id")
@@ -75,6 +79,6 @@ export class StandardController {
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
   remove(@Res() res, @Param("id") id: string) {
-    return this.standardService.remove(res, id);
+    return this.createExamService.remove(res, id);
   }
 }
