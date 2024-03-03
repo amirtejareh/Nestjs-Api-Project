@@ -11,12 +11,8 @@ export class CreateExamService {
     return this.createExamRepository.create(res, createCreateExamDto);
   }
 
-  findAll(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
-    @Query("objectiveTestId") objectiveTests: string
-  ) {
-    return this.createExamRepository.findAll(page, limit, objectiveTests);
+  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
+    return this.createExamRepository.findAll(page, limit);
   }
 
   async findCreateExamsBasedOnBooks(

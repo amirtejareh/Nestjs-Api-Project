@@ -32,12 +32,8 @@ export class StandardController {
   }
 
   @Get()
-  findAll(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
-    @Query("objectiveTestId") objectiveTests: string
-  ) {
-    return this.standardService.findAll(page, limit, objectiveTests);
+  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
+    return this.standardService.findAll(page, limit);
   }
 
   @Get("withBooks/:BookId")

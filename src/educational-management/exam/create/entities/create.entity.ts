@@ -36,6 +36,11 @@ export class CreateExam {
 
   @Prop({
     required: true,
+  })
+  number: string;
+
+  @Prop({
+    required: true,
     default: false,
   })
   isPublished?: boolean;

@@ -33,24 +33,11 @@ export class StandardRepository {
     }
   }
 
-  async findAll(page: number = 1, limit: number = 10, objectiveTests: string) {
+  async findAll(page: number = 1, limit: number = 10) {
     const skip = (page - 1) * limit;
 
-    const standards = await this.standardModel
-      .find({
-        objectiveTests: {
-          $in: objectiveTests,
-        },
-      })
-      .skip(skip)
-      .limit(limit);
-    const totalStandards = await this.standardModel
-      .find({
-        objectiveTests: {
-          $in: objectiveTests,
-        },
-      })
-      .count();
+    const standards = await this.standardModel.find({}).skip(skip).limit(limit);
+    const totalStandards = await this.standardModel.find({}).count();
 
     if (standards.length == 0) {
       return [];

@@ -11,12 +11,8 @@ export class StandardService {
     return this.standardRepository.create(res, createStandardDto);
   }
 
-  findAll(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10,
-    @Query("objectiveTestId") objectiveTests: string
-  ) {
-    return this.standardRepository.findAll(page, limit, objectiveTests);
+  findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
+    return this.standardRepository.findAll(page, limit);
   }
 
   async findStandardsBasedOnBooks(

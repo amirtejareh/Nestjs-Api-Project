@@ -1,9 +1,15 @@
-import { Prop, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document, Schema as mongooseSchema } from "mongoose";
+import { CreateExam } from "../../create/entities/create.entity";
 
 export type StandardDocument = Standard & Document;
-
+@Schema({ timestamps: true })
 export class Standard {
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: CreateExam.name }],
+  })
+  createExam: CreateExam;
+
   @Prop({ required: true })
   question: string;
 

@@ -34,24 +34,14 @@ export class CreateExamRepository {
     }
   }
 
-  async findAll(page: number = 1, limit: number = 10, objectiveTests: string) {
+  async findAll(page: number = 1, limit: number = 10) {
     const skip = (page - 1) * limit;
 
     const createExams = await this.createExamModel
-      .find({
-        objectiveTests: {
-          $in: objectiveTests,
-        },
-      })
+      .find({})
       .skip(skip)
       .limit(limit);
-    const totalCreateExams = await this.createExamModel
-      .find({
-        objectiveTests: {
-          $in: objectiveTests,
-        },
-      })
-      .count();
+    const totalCreateExams = await this.createExamModel.find({}).count();
 
     if (createExams.length == 0) {
       return [];
