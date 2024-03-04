@@ -36,6 +36,28 @@ export class CreateExamController {
     return this.createExamService.findAll(page, limit);
   }
 
+  @Get("withStandardExam")
+  async findAllCreateExamsBasedOnStandardExam(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10
+  ) {
+    return this.createExamService.findAllCreateExamsBasedOnStandardExam(
+      page,
+      limit
+    );
+  }
+
+  @Get("withSubjectiveExam")
+  async findAllCreateExamsBasedOnSubjectiveExam(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10
+  ) {
+    return this.createExamService.findAllCreateExamsBasedOnSubjectiveExam(
+      page,
+      limit
+    );
+  }
+
   @Get("withBooks/:BookId")
   async findCreateExamsBasedOnBooks(
     @Query("page") page: number,

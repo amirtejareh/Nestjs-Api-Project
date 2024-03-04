@@ -15,6 +15,26 @@ export class CreateExamService {
     return this.createExamRepository.findAll(page, limit);
   }
 
+  findAllCreateExamsBasedOnStandardExam(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10
+  ) {
+    return this.createExamRepository.findAllCreateExamsBasedOnStandardExam(
+      page,
+      limit
+    );
+  }
+
+  findAllCreateExamsBasedOnSubjectiveExam(
+    @Query("page") page: number = 1,
+    @Query("limit") limit: number = 10
+  ) {
+    return this.createExamRepository.findAllCreateExamsBasedOnSubjectiveExam(
+      page,
+      limit
+    );
+  }
+
   async findCreateExamsBasedOnBooks(
     page: number = 1,
     limit: number = 10,

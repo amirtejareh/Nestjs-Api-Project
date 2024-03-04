@@ -53,6 +53,55 @@ export class CreateExamRepository {
       totalItems: totalCreateExams,
     };
   }
+  async findAllCreateExamsBasedOnStandardExam(
+    page: number = 1,
+    limit: number = 10
+  ) {
+    const skip = (page - 1) * limit;
+
+    const createExams = await this.createExamModel
+      .find({ type: "standard" })
+      .skip(skip)
+      .limit(limit);
+    const totalCreateExams = await this.createExamModel
+      .find({ type: "standard" })
+      .count();
+
+    if (createExams.length == 0) {
+      return [];
+    }
+    return {
+      createExams,
+      currentPage: page,
+      totalPages: Math.ceil(totalCreateExams / limit),
+      totalItems: totalCreateExams,
+    };
+  }
+
+  async findAllCreateExamsBasedOnSubjectiveExam(
+    page: number = 1,
+    limit: number = 10
+  ) {
+    const skip = (page - 1) * limit;
+
+    const createExams = await this.createExamModel
+      .find({ type: "subjective" })
+      .skip(skip)
+      .limit(limit);
+    const totalCreateExams = await this.createExamModel
+      .find({ type: "subjective" })
+      .count();
+
+    if (createExams.length == 0) {
+      return [];
+    }
+    return {
+      createExams,
+      currentPage: page,
+      totalPages: Math.ceil(totalCreateExams / limit),
+      totalItems: totalCreateExams,
+    };
+  }
 
   async findCreateExamsBasedOnBooks(
     page: number = 1,

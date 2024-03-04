@@ -28,6 +28,7 @@ import { AttachModule } from "../educational-management/attach/attach.module";
 import { SampleTestQuestionsModule } from "../educational-management/sample-test-questions/sample-test-questions.module";
 import { StandardModule } from "../educational-management/exam/standard/standard.module";
 import { CreateExamModule } from "../educational-management/exam/create/create.module";
+import { SubjectiveModule } from "../educational-management/exam/subjective/subjective.module";
 
 @Global()
 @Module({
@@ -46,6 +47,7 @@ import { CreateExamModule } from "../educational-management/exam/create/create.m
     SubjectModule,
     SampleTestQuestionsModule,
     StandardModule,
+    SubjectiveModule,
     ObjectiveTestModule,
     QuestionModule,
     CreateExamModule,
