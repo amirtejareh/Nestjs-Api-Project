@@ -10,6 +10,12 @@ export class Standard {
   })
   createExam: CreateExam;
 
+  @Prop({
+    required: true,
+    default: false,
+  })
+  isMultipleChoiceTest?: boolean;
+
   @Prop({ required: true })
   question: string;
 
