@@ -10,6 +10,7 @@ export class UpdateStandardDto extends PartialType(CreateStandardDto) {
   readonly correctAnswer: number;
   readonly examNumber: number;
   readonly questionNumber: number;
+  readonly time: string;
   readonly examType: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;

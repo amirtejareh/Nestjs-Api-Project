@@ -54,6 +54,18 @@ BookSchema.virtual("karanbalas", {
   foreignField: "book",
 });
 
+BookSchema.virtual("standards", {
+  ref: "Standard",
+  localField: "_id",
+  foreignField: "books",
+});
+
+BookSchema.virtual("createexams", {
+  ref: "CreateExam",
+  localField: "_id",
+  foreignField: "books",
+});
+
 BookSchema.virtual("learningmaterials", {
   ref: "LearningMaterial",
   localField: "_id",
