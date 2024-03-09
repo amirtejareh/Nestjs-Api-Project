@@ -9,14 +9,17 @@ import {
   UseGuards,
   Res,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../../auth/guards/auth.guard";
 import { RoleGuard } from "../../../auth/guards/role.guard";
 import { Roles } from "../../../common/decorators/roles.decorator";
 import { UpdateCreateExamDto } from "./dto/update-create.dto";
 import { CreateExamService } from "./create.service";
 import { CreateCreateExamDto } from "./dto/create-create.dto";
+import { AnyFilesInterceptor } from "@nestjs/platform-express";
 
 @ApiTags("Create Exam")
 @Controller("create-exam")
@@ -27,8 +30,18 @@ export class CreateExamController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  create(@Res() res, @Body() createCreateExamDto: CreateCreateExamDto) {
-    return this.createExamService.create(res, createCreateExamDto);
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(AnyFilesInterceptor())
+  create(
+    @Res() res,
+    @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
+    @Body() createCreateExamDto: CreateCreateExamDto
+  ) {
+    return this.createExamService.create(
+      res,
+      AnswerSheetSourcePdfFile,
+      createCreateExamDto
+    );
   }
 
   @Get()
@@ -84,12 +97,20 @@ export class CreateExamController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
+  @ApiConsumes("multipart/form-data")
+  @UseInterceptors(AnyFilesInterceptor())
   update(
     @Res() res,
+    @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
     @Param("id") id: string,
     @Body() updateCreateExamDto: UpdateCreateExamDto
   ) {
-    return this.createExamService.update(res, id, updateCreateExamDto);
+    return this.createExamService.update(
+      res,
+      id,
+      AnswerSheetSourcePdfFile,
+      updateCreateExamDto
+    );
   }
 
   @Delete(":id")

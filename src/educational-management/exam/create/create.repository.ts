@@ -1,22 +1,53 @@
-import { Body, HttpStatus, Injectable, Param, Req, Res } from "@nestjs/common";
+import {
+  Body,
+  HttpStatus,
+  Injectable,
+  Param,
+  Req,
+  Res,
+  UploadedFiles,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { CreateExam } from "./entities/create.entity";
 import { CreateCreateExamDto } from "./dto/create-create.dto";
 import { UpdateCreateExamDto } from "./dto/update-create.dto";
+import { ImageService } from "../../../common/services/imageService";
 
 @Injectable()
 export class CreateExamRepository {
   constructor(
     @InjectModel(CreateExam.name)
-    private readonly createExamModel: Model<CreateExam>
+    private readonly createExamModel: Model<CreateExam>,
+    private readonly imageService: ImageService
   ) {}
 
   async findOneByTitle(title: string) {
     return this.createExamModel.findOne({ title }).exec();
   }
-  async create(@Res() res, @Body() createCreateExamDto: CreateCreateExamDto) {
+  async create(
+    @Res() res,
+    @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
+    @Body() createCreateExamDto: CreateCreateExamDto
+  ) {
+    console.log(AnswerSheetSourcePdfFile, "AnswerSheetSourcePdfFile");
+
     try {
+      if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length > 0) {
+        let answersheetPdfPath: string[] = [];
+
+        for (let i = 0; i < AnswerSheetSourcePdfFile.length; i++) {
+          const file = AnswerSheetSourcePdfFile[i];
+          const fileName = await this.imageService.saveImage(
+            "educational_management/create_exam",
+            file
+          );
+          answersheetPdfPath.push(fileName);
+        }
+
+        createCreateExamDto.AnswerSheetSourcePdfFile = answersheetPdfPath;
+      }
+
       const createCreateExamModel = await this.createExamModel.create(
         createCreateExamDto
       );
@@ -152,10 +183,27 @@ export class CreateExamRepository {
 
   async update(
     @Res() res,
+
     @Param("id") id: string,
+    @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
     @Body() updateCreateExamDto: UpdateCreateExamDto
   ) {
     try {
+      if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length > 0) {
+        let answersheetPdfPath: string[] = [];
+
+        for (let i = 0; i < AnswerSheetSourcePdfFile.length; i++) {
+          const file = AnswerSheetSourcePdfFile[i];
+          const fileName = await this.imageService.saveImage(
+            "educational_management/create_exam",
+            file
+          );
+          answersheetPdfPath.push(fileName);
+        }
+
+        updateCreateExamDto.AnswerSheetSourcePdfFile = answersheetPdfPath;
+      }
+
       const updateCreateExamModel = await this.createExamModel.findOneAndUpdate(
         { _id: id },
         { $set: { ...updateCreateExamDto } },

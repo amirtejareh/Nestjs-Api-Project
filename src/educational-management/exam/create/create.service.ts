@@ -1,4 +1,12 @@
-import { Body, Injectable, Param, Query, Req, Res } from "@nestjs/common";
+import {
+  Body,
+  Injectable,
+  Param,
+  Query,
+  Req,
+  Res,
+  UploadedFiles,
+} from "@nestjs/common";
 import { CreateCreateExamDto } from "./dto/create-create.dto";
 import { UpdateCreateExamDto } from "./dto/update-create.dto";
 import { CreateExamRepository } from "./create.repository";
@@ -7,8 +15,16 @@ import { CreateExamRepository } from "./create.repository";
 export class CreateExamService {
   constructor(private readonly createExamRepository: CreateExamRepository) {}
 
-  create(@Res() res, @Body() createCreateExamDto: CreateCreateExamDto) {
-    return this.createExamRepository.create(res, createCreateExamDto);
+  create(
+    @Res() res,
+    @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
+    @Body() createCreateExamDto: CreateCreateExamDto
+  ) {
+    return this.createExamRepository.create(
+      res,
+      AnswerSheetSourcePdfFile,
+      createCreateExamDto
+    );
   }
 
   findAll(@Query("page") page: number = 1, @Query("limit") limit: number = 10) {
@@ -54,9 +70,15 @@ export class CreateExamService {
   update(
     @Res() res,
     @Param("id") id: string,
+    @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
     @Body() updateCreateExamDto: UpdateCreateExamDto
   ) {
-    return this.createExamRepository.update(res, id, updateCreateExamDto);
+    return this.createExamRepository.update(
+      res,
+      id,
+      AnswerSheetSourcePdfFile,
+      updateCreateExamDto
+    );
   }
 
   remove(@Res() res, @Param("id") id: string) {

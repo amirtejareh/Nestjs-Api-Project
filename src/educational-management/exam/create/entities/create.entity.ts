@@ -41,6 +41,11 @@ export class CreateExam {
 
   @Prop({
     required: true,
+  })
+  AnswerSheetSourcePdfFile: string[];
+
+  @Prop({
+    required: true,
     default: false,
   })
   isPublished?: boolean;
