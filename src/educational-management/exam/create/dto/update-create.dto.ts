@@ -9,8 +9,11 @@ export class UpdateCreateExamDto extends PartialType(CreateCreateExamDto) {
   readonly _id?: string;
   readonly type?: string;
   readonly gradeLevel?: GradeLevel;
-  public AnswerSheetSourcePdfFile: string[];
+  public AnswerSheetSourcePdfFile?: string[];
   readonly book?: Book;
+  readonly examType?: string;
+  readonly time?: string;
+  readonly isPublished?: boolean;
   readonly chapterTerm?: Chapter | TermOfStudy;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;

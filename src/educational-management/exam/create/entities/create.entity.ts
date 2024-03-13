@@ -36,6 +36,12 @@ export class CreateExam {
 
   @Prop({
     required: true,
+    enum: ["multipleChoiceTest", "essayTest"],
+  })
+  examType: string;
+
+  @Prop({
+    required: true,
   })
   number: string;
 

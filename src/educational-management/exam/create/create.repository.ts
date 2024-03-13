@@ -30,8 +30,6 @@ export class CreateExamRepository {
     @UploadedFiles() AnswerSheetSourcePdfFile: Express.Multer.File[],
     @Body() createCreateExamDto: CreateCreateExamDto
   ) {
-    console.log(AnswerSheetSourcePdfFile, "AnswerSheetSourcePdfFile");
-
     try {
       if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length > 0) {
         let answersheetPdfPath: string[] = [];

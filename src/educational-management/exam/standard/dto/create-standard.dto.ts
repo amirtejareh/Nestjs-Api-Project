@@ -15,8 +15,6 @@ export class CreateStandardDto {
   @ApiProperty()
   time: string;
 
-  @ApiProperty({ enum: ["multipleChoiceTest", "essayTest"] })
-  examType: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
