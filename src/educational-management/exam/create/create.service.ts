@@ -41,6 +41,42 @@ export class CreateExamService {
     );
   }
 
+  async findCreateStandardExamsBasedOnChapters(
+    page: number = 1,
+    limit: number = 10,
+    chapters: string
+  ) {
+    return this.createExamRepository.findCreateStandardExamsBasedOnChapters(
+      page,
+      limit,
+      chapters
+    );
+  }
+
+  async findCreateStandardExamsBasedOnTerms(
+    page: number = 1,
+    limit: number = 10,
+    terms: string
+  ) {
+    return this.createExamRepository.findCreateStandardExamsBasedOnTerms(
+      page,
+      limit,
+      terms
+    );
+  }
+
+  async findCreateSubjectiveExamsBasedOnSubjects(
+    page: number = 1,
+    limit: number = 10,
+    subjects: string
+  ) {
+    return this.createExamRepository.findCreateSubjectiveExamsBasedOnSubjects(
+      page,
+      limit,
+      subjects
+    );
+  }
+
   findAllCreateExamsBasedOnSubjectiveExam(
     @Query("page") page: number = 1,
     @Query("limit") limit: number = 10

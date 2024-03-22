@@ -88,6 +88,57 @@ export class CreateExamController {
     );
   }
 
+  @Get("standard/withChapters/:ChapterId")
+  async findCreateStandardExamsBasedOnChapters(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("ChapterId") chapters: string
+  ) {
+    if (chapters[0] == "null") {
+      return [];
+    }
+
+    return this.createExamService.findCreateStandardExamsBasedOnChapters(
+      page,
+      limit,
+      chapters
+    );
+  }
+
+  @Get("standard/withTerms/:TermId")
+  async findCreateStandardExamsBasedOnTerms(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("TermId") terms: string
+  ) {
+    if (terms[0] == "null") {
+      return [];
+    }
+
+    return this.createExamService.findCreateStandardExamsBasedOnTerms(
+      page,
+      limit,
+      terms
+    );
+  }
+
+  @Get("subjective/withSubject/:SubjectId")
+  async findCreateSubjectiveExamsBasedOnSubjects(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("SubjectId") subjects: string
+  ) {
+    if (subjects[0] == "null") {
+      return [];
+    }
+
+    return this.createExamService.findCreateSubjectiveExamsBasedOnSubjects(
+      page,
+      limit,
+      subjects
+    );
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.createExamService.findOne(id);

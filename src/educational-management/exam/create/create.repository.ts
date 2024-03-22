@@ -109,6 +109,126 @@ export class CreateExamRepository {
     };
   }
 
+  async findCreateStandardExamsBasedOnChapters(
+    page: number = 1,
+    limit: number = 10,
+    chapters: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    const createExamIds = await this.createExamModel
+      .find({
+        chapter: chapters,
+        type: "standard",
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalCreateExams = await this.createExamModel.countDocuments({
+      chapter: {
+        $in: [chapters],
+      },
+    });
+
+    const createExams = await this.createExamModel.find({
+      _id: {
+        $in: createExamIds,
+      },
+    });
+
+    if (createExams.length === 0) {
+      return [];
+    }
+
+    return {
+      createExams,
+      currentPage: page,
+      totalPages: Math.ceil(totalCreateExams / limit),
+      totalItems: totalCreateExams,
+    };
+  }
+
+  async findCreateStandardExamsBasedOnTerms(
+    page: number = 1,
+    limit: number = 10,
+    terms: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    const createExamIds = await this.createExamModel
+      .find({
+        term: terms,
+        type: "standard",
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalCreateExams = await this.createExamModel.countDocuments({
+      term: {
+        $in: [terms],
+      },
+    });
+
+    const createExams = await this.createExamModel.find({
+      _id: {
+        $in: createExamIds,
+      },
+    });
+
+    if (createExams.length === 0) {
+      return [];
+    }
+
+    return {
+      createExams,
+      currentPage: page,
+      totalPages: Math.ceil(totalCreateExams / limit),
+      totalItems: totalCreateExams,
+    };
+  }
+
+  async findCreateSubjectiveExamsBasedOnSubjects(
+    page: number = 1,
+    limit: number = 10,
+    subjects: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    const createExamIds = await this.createExamModel
+      .find({
+        subject: subjects,
+        type: "subjective",
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalCreateExams = await this.createExamModel.countDocuments({
+      subject: {
+        $in: [subjects],
+      },
+    });
+
+    const createExams = await this.createExamModel.find({
+      _id: {
+        $in: createExamIds,
+      },
+    });
+
+    if (createExams.length === 0) {
+      return [];
+    }
+
+    return {
+      createExams,
+      currentPage: page,
+      totalPages: Math.ceil(totalCreateExams / limit),
+      totalItems: totalCreateExams,
+    };
+  }
+
   async findAllCreateExamsBasedOnSubjectiveExam(
     page: number = 1,
     limit: number = 10

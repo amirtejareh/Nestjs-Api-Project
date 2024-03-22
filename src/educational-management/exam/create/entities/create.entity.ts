@@ -4,6 +4,7 @@ import { TermOfStudy } from "../../../../content-management/term-of-study/entiti
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
 import { Chapter } from "../../../../content-management/chapter/entities/chapter.entity";
+import { Section } from "../../../../content-management/section/entities/section.entity";
 
 export type CreateExamDocument = CreateExam & Document;
 
@@ -25,6 +26,17 @@ export class CreateExam {
   chapter: Chapter;
 
   @Prop({
+    type: [
+      {
+        type: mongooseSchema.Types.ObjectId,
+        ref: Section.name,
+        required: false,
+      },
+    ],
+  })
+  section: Section;
+
+  @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: TermOfStudy.name }],
   })
   term: TermOfStudy;
@@ -41,9 +53,20 @@ export class CreateExam {
   examType: string;
 
   @Prop({
-    required: true,
+    required: false,
+    enum: ["easy", "average", "challenging", "hard"],
+  })
+  examLevel: string;
+
+  @Prop({
+    required: false,
   })
   number: string;
+
+  @Prop({
+    required: false,
+  })
+  time: string;
 
   @Prop({
     required: true,
