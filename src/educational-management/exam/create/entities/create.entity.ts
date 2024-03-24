@@ -5,6 +5,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
 import { Chapter } from "../../../../content-management/chapter/entities/chapter.entity";
 import { Section } from "../../../../content-management/section/entities/section.entity";
+import { Subject } from "../../../../content-management/subject/entities/subject.entity";
 
 export type CreateExamDocument = CreateExam & Document;
 
@@ -24,6 +25,11 @@ export class CreateExam {
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Chapter.name }],
   })
   chapter: Chapter;
+
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Subject.name }],
+  })
+  subject: Subject;
 
   @Prop({
     type: [
