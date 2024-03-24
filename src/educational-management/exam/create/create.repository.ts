@@ -2,6 +2,7 @@ import {
   Body,
   HttpStatus,
   Injectable,
+  InternalServerErrorException,
   Param,
   Req,
   Res,
@@ -13,7 +14,8 @@ import { CreateExam } from "./entities/create.entity";
 import { CreateCreateExamDto } from "./dto/create-create.dto";
 import { UpdateCreateExamDto } from "./dto/update-create.dto";
 import { ImageService } from "../../../common/services/imageService";
-
+import * as fs from "fs";
+import { existsSync } from "fs";
 @Injectable()
 export class CreateExamRepository {
   constructor(
@@ -121,6 +123,7 @@ export class CreateExamRepository {
         chapter: chapters,
         type: "standard",
       })
+
       .skip(skip)
       .limit(limit)
       .select("_id");
@@ -130,13 +133,13 @@ export class CreateExamRepository {
         $in: [chapters],
       },
     });
-
-    const createExams = await this.createExamModel.find({
-      _id: {
-        $in: createExamIds,
-      },
-    });
-
+    const createExams = await this.createExamModel
+      .find({
+        _id: {
+          $in: createExamIds,
+        },
+      })
+      .populate(["chapter", "gradeLevel", "books"]);
     if (createExams.length === 0) {
       return [];
     }
@@ -216,7 +219,6 @@ export class CreateExamRepository {
         $in: createExamIds,
       },
     });
-
     if (createExams.length === 0) {
       return [];
     }
@@ -328,6 +330,39 @@ export class CreateExamRepository {
         { new: true }
       );
 
+      if (
+        AnswerSheetSourcePdfFile &&
+        AnswerSheetSourcePdfFile.length == 0 &&
+        updateCreateExamModel &&
+        updateCreateExamModel.AnswerSheetSourcePdfFile.length > 0
+      ) {
+        if (updateCreateExamModel.AnswerSheetSourcePdfFile.length > 0) {
+          for (
+            let i = 0;
+            i < updateCreateExamModel.AnswerSheetSourcePdfFile.length;
+            i++
+          ) {
+            const file = updateCreateExamModel.AnswerSheetSourcePdfFile[i];
+
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+
+                await this.createExamModel.findOneAndUpdate(
+                  { _id: id },
+                  { $set: { AnswerSheetSourcePdfFile: "" } },
+                  { new: true }
+                );
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل رخ داده است."
+                );
+              }
+            }
+          }
+        }
+      }
+
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: " آزمون استاندارد یا موضوعی مورد نظر با موفقیت بروزرسانی شد",
@@ -345,6 +380,21 @@ export class CreateExamRepository {
 
   async remove(@Res() res, @Param("id") id: string) {
     try {
+      const findCreateExam = await this.findOne(id);
+      if (findCreateExam) {
+        const file = findCreateExam.AnswerSheetSourcePdfFile[0];
+
+        if (existsSync(file)) {
+          try {
+            fs.unlinkSync(`${file}`);
+          } catch (err) {
+            throw new InternalServerErrorException(
+              "خطایی در حذف فایل رخ داده است."
+            );
+          }
+        }
+      }
+
       const deleteSectionModel = await this.createExamModel.deleteOne({
         _id: id,
       });
@@ -354,6 +404,7 @@ export class CreateExamRepository {
           message: "آزمون استاندارد یا موضوعی مورد نظر پیدا نشد",
         });
       }
+
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: "آزمون استاندارد یا موضوعی مورد نظر با موفقیت حذف شد",

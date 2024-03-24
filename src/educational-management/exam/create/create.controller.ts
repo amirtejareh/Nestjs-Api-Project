@@ -77,7 +77,7 @@ export class CreateExamController {
     @Query("limit") limit: number,
     @Query("BookId") books: string
   ) {
-    if (books[0] == "null") {
+    if (books == "") {
       return [];
     }
 
@@ -94,7 +94,7 @@ export class CreateExamController {
     @Query("limit") limit: number,
     @Query("ChapterId") chapters: string
   ) {
-    if (chapters[0] == "null") {
+    if (chapters == "") {
       return [];
     }
 
@@ -111,7 +111,7 @@ export class CreateExamController {
     @Query("limit") limit: number,
     @Query("TermId") terms: string
   ) {
-    if (terms[0] == "null") {
+    if (terms == "") {
       return [];
     }
 
@@ -128,7 +128,7 @@ export class CreateExamController {
     @Query("limit") limit: number,
     @Query("SubjectId") subjects: string
   ) {
-    if (subjects[0] == "null") {
+    if (subjects == "") {
       return [];
     }
 

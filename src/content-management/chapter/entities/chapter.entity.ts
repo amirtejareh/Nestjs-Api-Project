@@ -55,3 +55,9 @@ ChapterSchema.virtual("attaches", {
   localField: "_id",
   foreignField: "chapters",
 });
+
+ChapterSchema.virtual("createexams", {
+  ref: "CreateExam",
+  localField: "_id",
+  foreignField: "chapter",
+});
