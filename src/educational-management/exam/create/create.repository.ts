@@ -214,11 +214,13 @@ export class CreateExamRepository {
       },
     });
 
-    const createExams = await this.createExamModel.find({
-      _id: {
-        $in: createExamIds,
-      },
-    });
+    const createExams = await this.createExamModel
+      .find({
+        _id: {
+          $in: createExamIds,
+        },
+      })
+      .populate(["gradeLevel", "books", "chapter", "section"]);
     if (createExams.length === 0) {
       return [];
     }
