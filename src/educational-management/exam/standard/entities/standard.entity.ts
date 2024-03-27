@@ -20,9 +20,6 @@ export class Standard {
   question: string;
 
   @Prop({ required: true })
-  time: string;
-
-  @Prop({ required: true })
   correctAnswer: number;
 
   @Prop({ required: true })
