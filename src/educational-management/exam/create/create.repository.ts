@@ -92,12 +92,11 @@ export class CreateExamRepository {
 
     const createExams = await this.createExamModel
       .find({ type: "standard" })
-      .populate(["books", "gradeLevel"])
+      .populate(["books", "gradeLevel", "chapter", "term"])
       .skip(skip)
       .limit(limit);
     const totalCreateExams = await this.createExamModel
       .find({ type: "standard" })
-      .populate(["books", "gradeLevel"])
       .count();
 
     if (createExams.length == 0) {
@@ -241,7 +240,7 @@ export class CreateExamRepository {
 
     const createExams = await this.createExamModel
       .find({ type: "subjective" })
-      .populate(["gradeLevel", "section", "subject","chapter","books"])
+      .populate(["gradeLevel", "section", "subject", "chapter", "books"])
       .skip(skip)
       .limit(limit);
     const totalCreateExams = await this.createExamModel

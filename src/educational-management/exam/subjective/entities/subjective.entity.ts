@@ -13,6 +13,12 @@ export class Subjective {
   @Prop({ required: true })
   question: string;
 
+  @Prop({
+    required: true,
+    default: false,
+  })
+  isMultipleChoiceTest?: boolean;
+
   @Prop({ required: true })
   correctAnswer: number;
 
