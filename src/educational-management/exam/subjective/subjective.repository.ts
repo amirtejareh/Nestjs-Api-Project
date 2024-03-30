@@ -38,6 +38,16 @@ export class SubjectiveRepository {
 
     const subjectives = await this.subjectiveModel
       .find({})
+      .populate({
+        path: "createExam",
+        populate: [
+          { path: "gradeLevel" },
+          { path: "books" },
+          { path: "chapter" },
+          { path: "subject" },
+          { path: "section" },
+        ],
+      })
       .skip(skip)
       .limit(limit);
     const totalSubjectives = await this.subjectiveModel.find({}).count();
@@ -112,13 +122,13 @@ export class SubjectiveRepository {
 
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        message: " آزمون استاندارد مورد نظر با موفقیت بروزرسانی شد",
+        message: " آزمون موضوعی مورد نظر با موفقیت بروزرسانی شد",
         data: updateSubjectiveModel,
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در بروزرسانی آزمون استاندارد مورد نظر به وجود آمده است",
+        message: "مشکلی در بروزرسانی آزمون موضوعی مورد نظر به وجود آمده است",
         error: error.message,
       });
     }
@@ -132,18 +142,18 @@ export class SubjectiveRepository {
       if (!deleteSectionModel) {
         return res.status(HttpStatus.NOT_FOUND).json({
           statusCode: HttpStatus.NOT_FOUND,
-          message: "آزمون استاندارد مورد نظر پیدا نشد",
+          message: "آزمون موضوعی مورد نظر پیدا نشد",
         });
       }
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
-        message: "آزمون استاندارد مورد نظر با موفقیت حذف شد",
+        message: "آزمون موضوعی مورد نظر با موفقیت حذف شد",
         data: deleteSectionModel,
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: "مشکلی در حذف آزمون استاندارد مورد نظر به وجود آمده است",
+        message: "مشکلی در حذف آزمون موضوعی مورد نظر به وجود آمده است",
         error: error.message,
       });
     }

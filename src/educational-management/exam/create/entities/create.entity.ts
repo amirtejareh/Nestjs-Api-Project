@@ -87,3 +87,9 @@ export class CreateExam {
 }
 
 export const CreateExamSchema = SchemaFactory.createForClass(CreateExam);
+
+CreateExamSchema.virtual("subjective", {
+  ref: "Subjective",
+  localField: "_id",
+  foreignField: "createExam",
+});

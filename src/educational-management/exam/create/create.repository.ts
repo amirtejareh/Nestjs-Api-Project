@@ -241,6 +241,7 @@ export class CreateExamRepository {
 
     const createExams = await this.createExamModel
       .find({ type: "subjective" })
+      .populate(["gradeLevel", "section", "subject","chapter","books"])
       .skip(skip)
       .limit(limit);
     const totalCreateExams = await this.createExamModel
