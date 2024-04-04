@@ -88,6 +88,44 @@ export class CreateExamController {
     );
   }
 
+  @Get("standard/withChapters/:ChapterId/withExamType/:ExamTypeId")
+  async findCreateStandardExamsBasedOnChaptersAndExamTypes(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("ChapterId") chapters: string,
+    @Query("ExamTypeId") types: string
+  ) {
+    if (chapters == "") {
+      return [];
+    }
+
+    return this.createExamService.findCreateStandardExamsBasedOnChaptersAndExamTypes(
+      page,
+      limit,
+      chapters,
+      types
+    );
+  }
+
+  @Get("standard/withTerms/:TermId/withExamType/:ExamTypeId")
+  async findCreateStandardExamsBasedOnTermsAndExamTypes(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("TermId") terms: string,
+    @Query("ExamTypeId") types: string
+  ) {
+    if (terms == "") {
+      return [];
+    }
+
+    return this.createExamService.findCreateStandardExamsBasedOnTermsAndExamTypes(
+      page,
+      limit,
+      terms,
+      types
+    );
+  }
+
   @Get("standard/withChapters/:ChapterId")
   async findCreateStandardExamsBasedOnChapters(
     @Query("page") page: number,
@@ -136,6 +174,37 @@ export class CreateExamController {
       page,
       limit,
       subjects
+    );
+  }
+
+  @Get(
+    "subjective/withSubject/:SubjectId/withExamLevel/:ExamLevelId/:withExamType/:ExamTypeId"
+  )
+  async findCreateSubjectiveExamsBasedOnSubjectsExamLevelAndExamType(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("SubjectId") subjects: string,
+    @Query("ExamLevelId") examLevel: string,
+    @Query("ExamTypeId") examType: string
+  ) {
+    if (subjects == "") {
+      return [];
+    }
+
+    if (examLevel == "") {
+      return [];
+    }
+
+    if (examType == "") {
+      return [];
+    }
+
+    return this.createExamService.findCreateSubjectiveExamsBasedOnSubjectsExamLevelAndExamType(
+      page,
+      limit,
+      subjects,
+      examLevel,
+      examType
     );
   }
 

@@ -41,6 +41,20 @@ export class CreateExamService {
     );
   }
 
+  async findCreateStandardExamsBasedOnChaptersAndExamTypes(
+    page: number = 1,
+    limit: number = 10,
+    chapters: string,
+    types: string
+  ) {
+    return this.createExamRepository.findCreateStandardExamsBasedOnChaptersAndExamTypes(
+      page,
+      limit,
+      chapters,
+      types
+    );
+  }
+
   async findCreateStandardExamsBasedOnChapters(
     page: number = 1,
     limit: number = 10,
@@ -50,6 +64,19 @@ export class CreateExamService {
       page,
       limit,
       chapters
+    );
+  }
+  async findCreateStandardExamsBasedOnTermsAndExamTypes(
+    page: number = 1,
+    limit: number = 10,
+    terms: string,
+    types: string
+  ) {
+    return this.createExamRepository.findCreateStandardExamsBasedOnTermsAndExamTypes(
+      page,
+      limit,
+      terms,
+      types
     );
   }
 
@@ -74,6 +101,22 @@ export class CreateExamService {
       page,
       limit,
       subjects
+    );
+  }
+
+  async findCreateSubjectiveExamsBasedOnSubjectsExamLevelAndExamType(
+    page: number = 1,
+    limit: number = 10,
+    subjects: string,
+    examLevel: string,
+    examType: string
+  ) {
+    return this.createExamRepository.findCreateSubjectiveExamsBasedOnSubjectsExamLevelAndExamType(
+      page,
+      limit,
+      subjects,
+      examLevel,
+      examType
     );
   }
 
