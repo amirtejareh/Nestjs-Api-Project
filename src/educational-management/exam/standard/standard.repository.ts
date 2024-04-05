@@ -91,6 +91,55 @@ export class StandardRepository {
     };
   }
 
+  async findStandardExamsBasedOnCreateExam(
+    page: number = 1,
+    limit: number = 10,
+    createExam: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    const standardIds = await this.standardModel
+      .find({
+        createExam,
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalStandards = await this.standardModel.countDocuments({
+      createExam: {
+        $in: [createExam],
+      },
+    });
+
+    const standards = await this.standardModel
+      .find({
+        _id: {
+          $in: standardIds,
+        },
+      })
+      .populate({
+        path: "createExam",
+        populate: [
+          { path: "gradeLevel" },
+          { path: "books" },
+          { path: "chapter" },
+          { path: "subject" },
+          { path: "section" },
+        ],
+      });
+    if (standards.length === 0) {
+      return [];
+    }
+
+    return {
+      standards,
+      currentPage: page,
+      totalPages: Math.ceil(totalStandards / limit),
+      totalItems: totalStandards,
+    };
+  }
+
   findOne(@Param("id") id: string) {
     return this.standardModel.findOne({ _id: id });
   }

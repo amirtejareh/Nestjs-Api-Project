@@ -27,6 +27,18 @@ export class StandardService {
     );
   }
 
+  async findStandardExamsBasedOnCreateExam(
+    page: number = 1,
+    limit: number = 10,
+    createExam: string
+  ) {
+    return this.standardRepository.findStandardExamsBasedOnCreateExam(
+      page,
+      limit,
+      createExam
+    );
+  }
+
   findOne(@Param("id") id: string) {
     return this.standardRepository.findOne(id);
   }

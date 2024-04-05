@@ -49,6 +49,23 @@ export class StandardController {
     return this.standardService.findStandardsBasedOnBooks(page, limit, books);
   }
 
+  @Get("withCreateExam/:CreateExamId")
+  async findStandardExamsBasedOnCreateExam(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("CreateExamId") createExam: string
+  ) {
+    if (createExam[0] == "null") {
+      return [];
+    }
+
+    return this.standardService.findStandardExamsBasedOnCreateExam(
+      page,
+      limit,
+      createExam
+    );
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.standardService.findOne(id);
