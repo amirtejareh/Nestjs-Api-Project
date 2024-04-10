@@ -27,6 +27,18 @@ export class SubjectiveService {
     );
   }
 
+  async findSubjectiveExamsBasedOnCreateExam(
+    page: number = 1,
+    limit: number = 10,
+    createExam: string
+  ) {
+    return this.subjectiveRepository.findSubjectiveExamsBasedOnCreateExam(
+      page,
+      limit,
+      createExam
+    );
+  }
+
   findOne(@Param("id") id: string) {
     return this.subjectiveRepository.findOne(id);
   }

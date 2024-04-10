@@ -58,6 +58,23 @@ export class SubjectiveController {
     return this.subjectiveService.findOne(id);
   }
 
+  @Get("withCreateExam/:CreateExamId")
+  async findSubjectiveExamsBasedOnCreateExam(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
+    @Query("CreateExamId") createExam: string
+  ) {
+    if (createExam[0] == "null") {
+      return [];
+    }
+
+    return this.subjectiveService.findSubjectiveExamsBasedOnCreateExam(
+      page,
+      limit,
+      createExam
+    );
+  }
+
   @Patch(":id")
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)

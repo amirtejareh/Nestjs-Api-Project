@@ -104,6 +104,57 @@ export class SubjectiveRepository {
     };
   }
 
+  async findSubjectiveExamsBasedOnCreateExam(
+    page: number = 1,
+    limit: number = 10,
+    createExam: string
+  ) {
+    const skip = (page - 1) * limit;
+
+    console.log(createExam, "createExam");
+
+    const subjectiveIds = await this.subjectiveModel
+      .find({
+        createExam,
+      })
+      .skip(skip)
+      .limit(limit)
+      .select("_id");
+
+    const totalsubjectives = await this.subjectiveModel.countDocuments({
+      createExam: {
+        $in: [createExam],
+      },
+    });
+
+    const subjectives = await this.subjectiveModel
+      .find({
+        _id: {
+          $in: subjectiveIds,
+        },
+      })
+      .populate({
+        path: "createExam",
+        populate: [
+          { path: "gradeLevel" },
+          { path: "books" },
+          { path: "chapter" },
+          { path: "subject" },
+          { path: "section" },
+        ],
+      });
+    if (subjectives.length === 0) {
+      return [];
+    }
+
+    return {
+      subjectives,
+      currentPage: page,
+      totalPages: Math.ceil(totalsubjectives / limit),
+      totalItems: totalsubjectives,
+    };
+  }
+
   findOne(@Param("id") id: string) {
     return this.subjectiveModel.findOne({ _id: id });
   }
