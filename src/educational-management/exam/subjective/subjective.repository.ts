@@ -111,8 +111,6 @@ export class SubjectiveRepository {
   ) {
     const skip = (page - 1) * limit;
 
-    console.log(createExam, "createExam");
-
     const subjectiveIds = await this.subjectiveModel
       .find({
         createExam,
