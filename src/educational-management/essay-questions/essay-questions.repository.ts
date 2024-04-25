@@ -98,7 +98,7 @@ export class EssayQuestionRepository {
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = [];
+        let pdfFilesPath: { title: string; link: string }[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
@@ -106,13 +106,17 @@ export class EssayQuestionRepository {
             "educational_management/essay_question",
             file
           );
-          pdfFilesPath.push(fileName);
+          pdfFilesPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
         }
+
         updateEssayQuestionDto.pdfFiles = pdfFilesPath;
 
         if (essayQuestion.pdfFiles.length > 0) {
           for (let i = 0; i < essayQuestion.pdfFiles.length; i++) {
-            const file = essayQuestion.pdfFiles[i];
+            const file = essayQuestion.pdfFiles[i].link;
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -124,22 +128,91 @@ export class EssayQuestionRepository {
             }
           }
         }
+
+        const updateLearningMaterialModel =
+          await this.essayQuestionModel.findByIdAndUpdate(
+            id,
+            {
+              $push: {
+                pdfFiles: { $each: updateEssayQuestionDto.pdfFiles },
+              },
+            },
+            {
+              new: true,
+            }
+          );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "سوالات تشریحی با موفقیت بروزرسانی شد.",
+          data: updateLearningMaterialModel,
+        });
       }
 
-      const updateLearningMaterialModel =
-        await this.essayQuestionModel.findByIdAndUpdate(
-          id,
-          updateEssayQuestionDto,
-          {
-            new: true,
-          }
-        );
+      if (pdfFiles && pdfFiles.length == 0) {
+        if (updateEssayQuestionDto?.pdfFiles?.length > 0) {
+          let arrayConversion = updateEssayQuestionDto.pdfFiles.map(
+            (element: any) => {
+              return { name: JSON.parse(element).name };
+            }
+          );
+          if (essayQuestion.pdfFiles.length > 0) {
+            for (let i = 0; i < essayQuestion.pdfFiles.length; i++) {
+              const file = essayQuestion.pdfFiles[i].link;
 
-      return res.status(200).json({
-        statusCode: 200,
-        message: "سوال تشریحی با موفقیت بروزرسانی شد.",
-        data: updateLearningMaterialModel,
-      });
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
+
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.essayQuestionModel.findByIdAndUpdate(
+                      id,
+                      { $pull: { pdfFiles: essayQuestion.pdfFiles[i] } },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < essayQuestion.pdfFiles.length; i++) {
+            const file = essayQuestion.pdfFiles[i].link;
+            await this.essayQuestionModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: essayQuestion.pdfFiles[i] } },
+              { new: true }
+            );
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+                await this.essayQuestionModel.findByIdAndUpdate(
+                  id,
+                  { $pull: { pdfFiles: essayQuestion.pdfFiles[i] } },
+                  { new: true }
+                );
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل قدیمی رخ داده است."
+                );
+              }
+            }
+          }
+        }
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "سوالات تشریحی با موفقیت بروزرسانی شد.",
+        });
+      }
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,
@@ -180,7 +253,7 @@ export class EssayQuestionRepository {
         if (findLearningMaterial && findLearningMaterial.pdfFiles.length > 0) {
           if (findLearningMaterial.pdfFiles.length > 0) {
             for (let i = 0; i < findLearningMaterial.pdfFiles.length; i++) {
-              const file = findLearningMaterial.pdfFiles[i];
+              const file = findLearningMaterial.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);

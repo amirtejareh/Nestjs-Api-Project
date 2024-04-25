@@ -18,7 +18,7 @@ export class UpdateLearningMaterialDto extends PartialType(
   readonly subject?: Subject;
   readonly videos?: IVideo[];
   @ApiProperty({ type: "string", format: "binary" })
-  public pdfFiles?: any;
+  public pdfFiles?: { title: string; link: string }[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

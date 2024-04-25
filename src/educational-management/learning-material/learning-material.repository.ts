@@ -164,12 +164,55 @@ export class LearningMaterialRepository {
       }
 
       if (pdfFiles && pdfFiles.length == 0) {
-        if (learningMaterial.pdfFiles.length > 0) {
+        if (updateLearningMaterialDto?.pdfFiles?.length > 0) {
+          let arrayConversion = updateLearningMaterialDto.pdfFiles.map(
+            (element: any) => {
+              return { name: JSON.parse(element).name };
+            }
+          );
+          if (learningMaterial.pdfFiles.length > 0) {
+            for (let i = 0; i < learningMaterial.pdfFiles.length; i++) {
+              const file = learningMaterial.pdfFiles[i].link;
+
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
+
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.learningMaterialModel.findByIdAndUpdate(
+                      id,
+                      { $pull: { pdfFiles: learningMaterial.pdfFiles[i] } },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
           for (let i = 0; i < learningMaterial.pdfFiles.length; i++) {
             const file = learningMaterial.pdfFiles[i].link;
+            await this.learningMaterialModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: learningMaterial.pdfFiles[i] } },
+              { new: true }
+            );
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
+                await this.learningMaterialModel.findByIdAndUpdate(
+                  id,
+                  { $pull: { pdfFiles: learningMaterial.pdfFiles[i] } },
+                  { new: true }
+                );
               } catch (err) {
                 throw new InternalServerErrorException(
                   "خطایی در حذف فایل قدیمی رخ داده است."
@@ -179,18 +222,9 @@ export class LearningMaterialRepository {
           }
         }
 
-        delete updateLearningMaterialDto.pdfFiles;
-        const updateLearningMaterialModel =
-          await this.learningMaterialModel.findByIdAndUpdate(
-            id,
-            { $set: updateLearningMaterialDto, $unset: { pdfFiles: 1 } },
-            { new: true }
-          );
-
         return res.status(200).json({
           statusCode: 200,
           message: "درس نامه با موفقیت بروزرسانی شد.",
-          data: updateLearningMaterialModel,
         });
       }
     } catch (e) {
