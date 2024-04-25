@@ -44,7 +44,7 @@ export class LearningMaterial {
   @Prop({
     required: true,
   })
-  pdfFiles: string[];
+  pdfFiles: { title: string; link: string }[];
 }
 
 export const LearningMaterialSchema =

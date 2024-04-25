@@ -112,7 +112,7 @@ export class LearningMaterialRepository {
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = [];
+        let pdfFilesPath: { title: string; link: string }[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
@@ -120,13 +120,17 @@ export class LearningMaterialRepository {
             "educational_management/learning_material",
             file
           );
-          pdfFilesPath.push(fileName);
+          pdfFilesPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
         }
+
         updateLearningMaterialDto.pdfFiles = pdfFilesPath;
 
         if (learningMaterial.pdfFiles.length > 0) {
           for (let i = 0; i < learningMaterial.pdfFiles.length; i++) {
-            const file = learningMaterial.pdfFiles[i];
+            const file = learningMaterial.pdfFiles[i].link;
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -138,22 +142,57 @@ export class LearningMaterialRepository {
             }
           }
         }
+
+        const updateLearningMaterialModel =
+          await this.learningMaterialModel.findByIdAndUpdate(
+            id,
+            {
+              $push: {
+                pdfFiles: { $each: updateLearningMaterialDto.pdfFiles },
+              },
+            },
+            {
+              new: true,
+            }
+          );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "درس نامه با موفقیت بروزرسانی شد.",
+          data: updateLearningMaterialModel,
+        });
       }
 
-      const updateLearningMaterialModel =
-        await this.learningMaterialModel.findByIdAndUpdate(
-          id,
-          updateLearningMaterialDto,
-          {
-            new: true,
+      if (pdfFiles && pdfFiles.length == 0) {
+        if (learningMaterial.pdfFiles.length > 0) {
+          for (let i = 0; i < learningMaterial.pdfFiles.length; i++) {
+            const file = learningMaterial.pdfFiles[i].link;
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل قدیمی رخ داده است."
+                );
+              }
+            }
           }
-        );
+        }
 
-      return res.status(200).json({
-        statusCode: 200,
-        message: "درس نامه با موفقیت بروزرسانی شد.",
-        data: updateLearningMaterialModel,
-      });
+        delete updateLearningMaterialDto.pdfFiles;
+        const updateLearningMaterialModel =
+          await this.learningMaterialModel.findByIdAndUpdate(
+            id,
+            { $set: updateLearningMaterialDto, $unset: { pdfFiles: 1 } },
+            { new: true }
+          );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "درس نامه با موفقیت بروزرسانی شد.",
+          data: updateLearningMaterialModel,
+        });
+      }
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,
@@ -182,7 +221,7 @@ export class LearningMaterialRepository {
         if (findLearningMaterial && findLearningMaterial.pdfFiles.length > 0) {
           if (findLearningMaterial.pdfFiles.length > 0) {
             for (let i = 0; i < findLearningMaterial.pdfFiles.length; i++) {
-              const file = findLearningMaterial.pdfFiles[i];
+              const file = findLearningMaterial.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);
