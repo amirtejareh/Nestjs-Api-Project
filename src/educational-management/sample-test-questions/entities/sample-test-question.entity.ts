@@ -43,7 +43,7 @@ export class SampleTestQuestions {
   @Prop({
     required: true,
   })
-  pdfFiles: string[];
+  pdfFiles: { title: string; link: string }[];
 }
 
 export const SampleTestQuestionsSchema =

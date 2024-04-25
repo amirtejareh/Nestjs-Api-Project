@@ -103,16 +103,14 @@ export class AttachRepository {
     updateAttachDto: UpdateAttachDto
   ) {
     try {
-      const attach = await this.attachModel.findOne({
-        _id: id,
-      });
+      const attach = await this.attachModel.findOne({ _id: id });
 
       if (!attach) {
-        throw new NotFoundException("ضمیمه مورد نظر یافت نشد.");
+        throw new NotFoundException("کران بالا مورد نظر یافت نشد.");
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = [];
+        let pdfFilesPath: { title: string; link: string }[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
@@ -120,13 +118,17 @@ export class AttachRepository {
             "educational_management/attach",
             file
           );
-          pdfFilesPath.push(fileName);
+          pdfFilesPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
         }
+
         updateAttachDto.pdfFiles = pdfFilesPath;
 
         if (attach.pdfFiles.length > 0) {
           for (let i = 0; i < attach.pdfFiles.length; i++) {
-            const file = attach.pdfFiles[i];
+            const file = attach.pdfFiles[i].link;
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -138,21 +140,88 @@ export class AttachRepository {
             }
           }
         }
+
+        const updateattachModel = await this.attachModel.findByIdAndUpdate(
+          id,
+          {
+            $push: {
+              pdfFiles: { $each: updateAttachDto.pdfFiles },
+            },
+          },
+          {
+            new: true,
+          }
+        );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "کران بالا با موفقیت بروزرسانی شد.",
+          data: updateattachModel,
+        });
       }
 
-      const updateAttachModel = await this.attachModel.findByIdAndUpdate(
-        id,
-        updateAttachDto,
-        {
-          new: true,
-        }
-      );
+      if (pdfFiles && pdfFiles.length == 0) {
+        if (updateAttachDto?.pdfFiles?.length > 0) {
+          let arrayConversion = updateAttachDto.pdfFiles.map((element: any) => {
+            return { name: JSON.parse(element).name };
+          });
+          if (attach.pdfFiles.length > 0) {
+            for (let i = 0; i < attach.pdfFiles.length; i++) {
+              const file = attach.pdfFiles[i].link;
 
-      return res.status(200).json({
-        statusCode: 200,
-        message: "ضمیمه مورد نظر با موفقیت بروزرسانی شد.",
-        data: updateAttachModel,
-      });
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
+
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.attachModel.findByIdAndUpdate(
+                      id,
+                      { $pull: { pdfFiles: attach.pdfFiles[i] } },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < attach.pdfFiles.length; i++) {
+            const file = attach.pdfFiles[i].link;
+            await this.attachModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: attach.pdfFiles[i] } },
+              { new: true }
+            );
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+                await this.attachModel.findByIdAndUpdate(
+                  id,
+                  { $pull: { pdfFiles: attach.pdfFiles[i] } },
+                  { new: true }
+                );
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل قدیمی رخ داده است."
+                );
+              }
+            }
+          }
+        }
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "کران بالا با موفقیت بروزرسانی شد.",
+        });
+      }
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,
@@ -181,7 +250,7 @@ export class AttachRepository {
         if (findAttach && findAttach.pdfFiles.length > 0) {
           if (findAttach.pdfFiles.length > 0) {
             for (let i = 0; i < findAttach.pdfFiles.length; i++) {
-              const file = findAttach.pdfFiles[i];
+              const file = findAttach.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);

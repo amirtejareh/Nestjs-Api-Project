@@ -109,25 +109,29 @@ export class SampleTestQuestionsRepository {
       });
 
       if (!sampleTestQuestions) {
-        throw new NotFoundException("نمونه سوال امتحانی مورد نظر یافت نشد.");
+        throw new NotFoundException("نمونه سوالات امتحانی مورد نظر یافت نشد.");
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = [];
+        let pdfFilesPath: { title: string; link: string }[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "educational_management/sample-test-questions",
+            "educational_management/sample-test-question",
             file
           );
-          pdfFilesPath.push(fileName);
+          pdfFilesPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
         }
+
         updateSampleTestQuestionsDto.pdfFiles = pdfFilesPath;
 
         if (sampleTestQuestions.pdfFiles.length > 0) {
           for (let i = 0; i < sampleTestQuestions.pdfFiles.length; i++) {
-            const file = sampleTestQuestions.pdfFiles[i];
+            const file = sampleTestQuestions.pdfFiles[i].link;
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -139,22 +143,91 @@ export class SampleTestQuestionsRepository {
             }
           }
         }
+
+        const updatesampleTestQuestionsModel =
+          await this.sampleTestQuestionsModel.findByIdAndUpdate(
+            id,
+            {
+              $push: {
+                pdfFiles: { $each: updateSampleTestQuestionsDto.pdfFiles },
+              },
+            },
+            {
+              new: true,
+            }
+          );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "نمونه سوالات امتحانی با موفقیت بروزرسانی شد.",
+          data: updatesampleTestQuestionsModel,
+        });
       }
 
-      const updateSampleTestQuestionsModel =
-        await this.sampleTestQuestionsModel.findByIdAndUpdate(
-          id,
-          updateSampleTestQuestionsDto,
-          {
-            new: true,
-          }
-        );
+      if (pdfFiles && pdfFiles.length == 0) {
+        if (updateSampleTestQuestionsDto?.pdfFiles?.length > 0) {
+          let arrayConversion = updateSampleTestQuestionsDto.pdfFiles.map(
+            (element: any) => {
+              return { name: JSON.parse(element).name };
+            }
+          );
+          if (sampleTestQuestions.pdfFiles.length > 0) {
+            for (let i = 0; i < sampleTestQuestions.pdfFiles.length; i++) {
+              const file = sampleTestQuestions.pdfFiles[i].link;
 
-      return res.status(200).json({
-        statusCode: 200,
-        message: "نمونه سوال امتحانی با موفقیت بروزرسانی شد.",
-        data: updateSampleTestQuestionsModel,
-      });
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
+
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.sampleTestQuestionsModel.findByIdAndUpdate(
+                      id,
+                      { $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] } },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < sampleTestQuestions.pdfFiles.length; i++) {
+            const file = sampleTestQuestions.pdfFiles[i].link;
+            await this.sampleTestQuestionsModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] } },
+              { new: true }
+            );
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+                await this.sampleTestQuestionsModel.findByIdAndUpdate(
+                  id,
+                  { $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] } },
+                  { new: true }
+                );
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل قدیمی رخ داده است."
+                );
+              }
+            }
+          }
+        }
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "نمونه سوالات امتحانی با موفقیت بروزرسانی شد.",
+        });
+      }
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,
@@ -187,7 +260,7 @@ export class SampleTestQuestionsRepository {
         ) {
           if (findSampleTestQuestions.pdfFiles.length > 0) {
             for (let i = 0; i < findSampleTestQuestions.pdfFiles.length; i++) {
-              const file = findSampleTestQuestions.pdfFiles[i];
+              const file = findSampleTestQuestions.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);

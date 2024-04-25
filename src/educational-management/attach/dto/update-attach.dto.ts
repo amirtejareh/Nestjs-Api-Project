@@ -15,7 +15,7 @@ export class UpdateAttachDto extends PartialType(CreateAttachDto) {
   readonly type: ["summary", "attaches", "tables"];
   readonly videos?: IVideo[];
   @ApiProperty({ type: "string", format: "binary" })
-  public pdfFiles?: string[];
+  public pdfFiles?: { title: string; link: string }[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

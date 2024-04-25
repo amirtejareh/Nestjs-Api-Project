@@ -110,7 +110,7 @@ export class KaranbalaRepository {
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
-        let pdfFilesPath: string[] = [];
+        let pdfFilesPath: { title: string; link: string }[] = [];
 
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
@@ -118,13 +118,17 @@ export class KaranbalaRepository {
             "educational_management/karanbala",
             file
           );
-          pdfFilesPath.push(fileName);
+          pdfFilesPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
         }
+
         updateKaranbalaDto.pdfFiles = pdfFilesPath;
 
         if (karanbala.pdfFiles.length > 0) {
           for (let i = 0; i < karanbala.pdfFiles.length; i++) {
-            const file = karanbala.pdfFiles[i];
+            const file = karanbala.pdfFiles[i].link;
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -136,21 +140,91 @@ export class KaranbalaRepository {
             }
           }
         }
+
+        const updatekaranbalaModel =
+          await this.karanbalaModel.findByIdAndUpdate(
+            id,
+            {
+              $push: {
+                pdfFiles: { $each: updateKaranbalaDto.pdfFiles },
+              },
+            },
+            {
+              new: true,
+            }
+          );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "کران بالا با موفقیت بروزرسانی شد.",
+          data: updatekaranbalaModel,
+        });
       }
 
-      const updateKaranbalaModel = await this.karanbalaModel.findByIdAndUpdate(
-        id,
-        updateKaranbalaDto,
-        {
-          new: true,
-        }
-      );
+      if (pdfFiles && pdfFiles.length == 0) {
+        if (updateKaranbalaDto?.pdfFiles?.length > 0) {
+          let arrayConversion = updateKaranbalaDto.pdfFiles.map(
+            (element: any) => {
+              return { name: JSON.parse(element).name };
+            }
+          );
+          if (karanbala.pdfFiles.length > 0) {
+            for (let i = 0; i < karanbala.pdfFiles.length; i++) {
+              const file = karanbala.pdfFiles[i].link;
 
-      return res.status(200).json({
-        statusCode: 200,
-        message: "کران بالا با موفقیت بروزرسانی شد.",
-        data: updateKaranbalaModel,
-      });
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
+
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.karanbalaModel.findByIdAndUpdate(
+                      id,
+                      { $pull: { pdfFiles: karanbala.pdfFiles[i] } },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < karanbala.pdfFiles.length; i++) {
+            const file = karanbala.pdfFiles[i].link;
+            await this.karanbalaModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: karanbala.pdfFiles[i] } },
+              { new: true }
+            );
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+                await this.karanbalaModel.findByIdAndUpdate(
+                  id,
+                  { $pull: { pdfFiles: karanbala.pdfFiles[i] } },
+                  { new: true }
+                );
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل قدیمی رخ داده است."
+                );
+              }
+            }
+          }
+        }
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "کران بالا با موفقیت بروزرسانی شد.",
+        });
+      }
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,
@@ -177,7 +251,7 @@ export class KaranbalaRepository {
         if (findKaranbala && findKaranbala.pdfFiles.length > 0) {
           if (findKaranbala.pdfFiles.length > 0) {
             for (let i = 0; i < findKaranbala.pdfFiles.length; i++) {
-              const file = findKaranbala.pdfFiles[i];
+              const file = findKaranbala.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);

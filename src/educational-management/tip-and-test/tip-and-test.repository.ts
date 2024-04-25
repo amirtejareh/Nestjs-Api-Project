@@ -122,11 +122,12 @@ export class TipAndTestRepository {
             link: fileName,
           });
         }
+
         updateTipAndTestDto.pdfFiles = pdfFilesPath;
 
         if (tipAndTest.pdfFiles.length > 0) {
           for (let i = 0; i < tipAndTest.pdfFiles.length; i++) {
-            const file = tipAndTest.pdfFiles[i];
+            const file = tipAndTest.pdfFiles[i].link;
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
@@ -138,18 +139,91 @@ export class TipAndTestRepository {
             }
           }
         }
+
+        const updateTipAndTestModel =
+          await this.tipAndTestModel.findByIdAndUpdate(
+            id,
+            {
+              $push: {
+                pdfFiles: { $each: updateTipAndTestDto.pdfFiles },
+              },
+            },
+            {
+              new: true,
+            }
+          );
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "نکته و تست با موفقیت بروزرسانی شد.",
+          data: updateTipAndTestModel,
+        });
       }
 
-      const updateTipAndTestModel =
-        await this.tipAndTestModel.findByIdAndUpdate(id, updateTipAndTestDto, {
-          new: true,
-        });
+      if (pdfFiles && pdfFiles.length == 0) {
+        if (updateTipAndTestDto?.pdfFiles?.length > 0) {
+          let arrayConversion = updateTipAndTestDto.pdfFiles.map(
+            (element: any) => {
+              return { name: JSON.parse(element).name };
+            }
+          );
+          if (tipAndTest.pdfFiles.length > 0) {
+            for (let i = 0; i < tipAndTest.pdfFiles.length; i++) {
+              const file = tipAndTest.pdfFiles[i].link;
 
-      return res.status(200).json({
-        statusCode: 200,
-        message: "نکته و تست با موفقیت بروزرسانی شد.",
-        data: updateTipAndTestModel,
-      });
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
+
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.tipAndTestModel.findByIdAndUpdate(
+                      id,
+                      { $pull: { pdfFiles: tipAndTest.pdfFiles[i] } },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < tipAndTest.pdfFiles.length; i++) {
+            const file = tipAndTest.pdfFiles[i].link;
+            await this.tipAndTestModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: tipAndTest.pdfFiles[i] } },
+              { new: true }
+            );
+            if (existsSync(file)) {
+              try {
+                fs.unlinkSync(`${file}`);
+                await this.tipAndTestModel.findByIdAndUpdate(
+                  id,
+                  { $pull: { pdfFiles: tipAndTest.pdfFiles[i] } },
+                  { new: true }
+                );
+              } catch (err) {
+                throw new InternalServerErrorException(
+                  "خطایی در حذف فایل قدیمی رخ داده است."
+                );
+              }
+            }
+          }
+        }
+
+        return res.status(200).json({
+          statusCode: 200,
+          message: "نکته و تست با موفقیت بروزرسانی شد.",
+        });
+      }
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,
@@ -176,7 +250,7 @@ export class TipAndTestRepository {
         if (findTipAndTest && findTipAndTest.pdfFiles.length > 0) {
           if (findTipAndTest.pdfFiles.length > 0) {
             for (let i = 0; i < findTipAndTest.pdfFiles.length; i++) {
-              const file = findTipAndTest.pdfFiles[i];
+              const file = findTipAndTest.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);

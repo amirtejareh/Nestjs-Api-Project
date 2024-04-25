@@ -44,7 +44,7 @@ export class SampleExampleQuestions {
   @Prop({
     required: true,
   })
-  pdfFiles: string[];
+  pdfFiles: { title: string; link: string }[];
 }
 
 export const SampleExampleQuestionsSchema = SchemaFactory.createForClass(

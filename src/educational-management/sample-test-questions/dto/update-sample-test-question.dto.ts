@@ -16,7 +16,7 @@ export class UpdateSampleTestQuestionsDto extends PartialType(
   readonly type: ["authorship", "general"];
   readonly videos?: IVideo[];
   @ApiProperty({ type: "string", format: "binary" })
-  public pdfFiles?: string[];
+  public pdfFiles?: { title: string; link: string }[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

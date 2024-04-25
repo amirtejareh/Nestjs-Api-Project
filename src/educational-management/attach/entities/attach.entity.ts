@@ -40,7 +40,7 @@ export class Attach {
   @Prop({
     required: true,
   })
-  pdfFiles: string[];
+  pdfFiles: { title: string; link: string }[];
 }
 
 export const AttachSchema = SchemaFactory.createForClass(Attach);

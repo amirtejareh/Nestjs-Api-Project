@@ -50,13 +50,13 @@ export class EssayQuestionRepository {
         }
         createEssayQuestionDto.pdfFiles = pdfFilesPath;
       }
-      const createLearningMaterial = await this.essayQuestionModel.create(
+      const createessayQuestion = await this.essayQuestionModel.create(
         createEssayQuestionDto
       );
       return res.status(200).json({
         statusCode: 200,
         message: "یک سوال تشریحی با موفقیت ایجاد شد.",
-        data: createLearningMaterial,
+        data: createessayQuestion,
       });
     } catch (e) {
       return res.status(500).json({
@@ -129,7 +129,7 @@ export class EssayQuestionRepository {
           }
         }
 
-        const updateLearningMaterialModel =
+        const updateessayQuestionModel =
           await this.essayQuestionModel.findByIdAndUpdate(
             id,
             {
@@ -145,7 +145,7 @@ export class EssayQuestionRepository {
         return res.status(200).json({
           statusCode: 200,
           message: "سوالات تشریحی با موفقیت بروزرسانی شد.",
-          data: updateLearningMaterialModel,
+          data: updateessayQuestionModel,
         });
       }
 
@@ -235,11 +235,11 @@ export class EssayQuestionRepository {
 
   async remove(@Res() res, id: string) {
     try {
-      const findLearningMaterial = await this.essayQuestionModel.findOne({
+      const findessayQuestion = await this.essayQuestionModel.findOne({
         _id: id,
       });
 
-      if (findLearningMaterial) {
+      if (findessayQuestion) {
         const deleteEssayQuestion = await this.essayQuestionModel.deleteOne({
           _id: id,
         });
@@ -250,10 +250,10 @@ export class EssayQuestionRepository {
           });
         }
 
-        if (findLearningMaterial && findLearningMaterial.pdfFiles.length > 0) {
-          if (findLearningMaterial.pdfFiles.length > 0) {
-            for (let i = 0; i < findLearningMaterial.pdfFiles.length; i++) {
-              const file = findLearningMaterial.pdfFiles[i].link;
+        if (findessayQuestion && findessayQuestion.pdfFiles.length > 0) {
+          if (findessayQuestion.pdfFiles.length > 0) {
+            for (let i = 0; i < findessayQuestion.pdfFiles.length; i++) {
+              const file = findessayQuestion.pdfFiles[i].link;
               if (existsSync(file)) {
                 try {
                   fs.unlinkSync(`${file}`);
