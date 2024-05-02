@@ -31,14 +31,8 @@ export class CreateExamService {
     return this.createExamRepository.findAll(page, limit);
   }
 
-  findAllCreateExamsBasedOnStandardExam(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10
-  ) {
-    return this.createExamRepository.findAllCreateExamsBasedOnStandardExam(
-      page,
-      limit
-    );
+  findAllCreateExamsBasedOnStandardExam() {
+    return this.createExamRepository.findAllCreateExamsBasedOnStandardExam();
   }
 
   async findCreateStandardExamsBasedOnChaptersAndExamTypes(
@@ -120,14 +114,8 @@ export class CreateExamService {
     );
   }
 
-  findAllCreateExamsBasedOnSubjectiveExam(
-    @Query("page") page: number = 1,
-    @Query("limit") limit: number = 10
-  ) {
-    return this.createExamRepository.findAllCreateExamsBasedOnSubjectiveExam(
-      page,
-      limit
-    );
+  findAllCreateExamsBasedOnSubjectiveExam() {
+    return this.createExamRepository.findAllCreateExamsBasedOnSubjectiveExam();
   }
 
   async findCreateExamsBasedOnBooks(

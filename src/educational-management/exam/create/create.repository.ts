@@ -84,17 +84,11 @@ export class CreateExamRepository {
       totalItems: totalCreateExams,
     };
   }
-  async findAllCreateExamsBasedOnStandardExam(
-    page: number = 1,
-    limit: number = 10
-  ) {
-    const skip = (page - 1) * limit;
-
+  async findAllCreateExamsBasedOnStandardExam() {
     const createExams = await this.createExamModel
       .find({ type: "standard" })
-      .populate(["books", "gradeLevel", "chapter", "term"])
-      .skip(skip)
-      .limit(limit);
+      .populate(["books", "gradeLevel", "chapter", "term"]);
+
     const totalCreateExams = await this.createExamModel
       .find({ type: "standard" })
       .count();
@@ -104,8 +98,6 @@ export class CreateExamRepository {
     }
     return {
       createExams,
-      currentPage: page,
-      totalPages: Math.ceil(totalCreateExams / limit),
       totalItems: totalCreateExams,
     };
   }
@@ -366,17 +358,11 @@ export class CreateExamRepository {
     };
   }
 
-  async findAllCreateExamsBasedOnSubjectiveExam(
-    page: number = 1,
-    limit: number = 10
-  ) {
-    const skip = (page - 1) * limit;
-
+  async findAllCreateExamsBasedOnSubjectiveExam() {
     const createExams = await this.createExamModel
       .find({ type: "subjective" })
-      .populate(["gradeLevel", "section", "subject", "chapter", "books"])
-      .skip(skip)
-      .limit(limit);
+      .populate(["gradeLevel", "section", "subject", "chapter", "books"]);
+
     const totalCreateExams = await this.createExamModel
       .find({ type: "subjective" })
       .count();
@@ -386,8 +372,6 @@ export class CreateExamRepository {
     }
     return {
       createExams,
-      currentPage: page,
-      totalPages: Math.ceil(totalCreateExams / limit),
       totalItems: totalCreateExams,
     };
   }
