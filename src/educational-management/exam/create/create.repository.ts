@@ -89,17 +89,10 @@ export class CreateExamRepository {
       .find({ type: "standard" })
       .populate(["books", "gradeLevel", "chapter", "term"]);
 
-    const totalCreateExams = await this.createExamModel
-      .find({ type: "standard" })
-      .count();
-
     if (createExams.length == 0) {
       return [];
     }
-    return {
-      createExams,
-      totalItems: totalCreateExams,
-    };
+    return createExams;
   }
 
   async findCreateStandardExamsBasedOnChaptersAndExamTypes(
@@ -363,16 +356,11 @@ export class CreateExamRepository {
       .find({ type: "subjective" })
       .populate(["gradeLevel", "section", "subject", "chapter", "books"]);
 
-    const totalCreateExams = await this.createExamModel
-      .find({ type: "subjective" })
-      .count();
-
     if (createExams.length == 0) {
       return [];
     }
     return {
       createExams,
-      totalItems: totalCreateExams,
     };
   }
 
