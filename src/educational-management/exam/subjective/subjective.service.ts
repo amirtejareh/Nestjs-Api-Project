@@ -27,6 +27,12 @@ export class SubjectiveService {
     );
   }
 
+  findAllQuestionsInSubjectiveExamBasedOnExamId(examId: string) {
+    return this.subjectiveRepository.findAllQuestionsInSubjectiveExamBasedOnExamId(
+      examId
+    );
+  }
+
   async findSubjectiveExamsBasedOnCreateExam(
     page: number = 1,
     limit: number = 10,

@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   Param,
   Req,
   Res,
@@ -34,7 +35,7 @@ export class CreateExamRepository {
   ) {
     try {
       if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length > 0) {
-        let answersheetPdfPath: string[] = [];
+        let answersheetPdfPath: { title: string; link: string }[] = [];
 
         for (let i = 0; i < AnswerSheetSourcePdfFile.length; i++) {
           const file = AnswerSheetSourcePdfFile[i];
@@ -42,7 +43,10 @@ export class CreateExamRepository {
             "educational_management/create_exam",
             file
           );
-          answersheetPdfPath.push(fileName);
+          answersheetPdfPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
         }
 
         createCreateExamDto.AnswerSheetSourcePdfFile = answersheetPdfPath;
@@ -359,9 +363,7 @@ export class CreateExamRepository {
     if (createExams.length == 0) {
       return [];
     }
-    return {
-      createExams,
-    };
+    return createExams;
   }
 
   async findCreateExamsBasedOnBooks(
@@ -417,64 +419,88 @@ export class CreateExamRepository {
     @Body() updateCreateExamDto: UpdateCreateExamDto
   ) {
     try {
-      if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length > 0) {
-        let answersheetPdfPath: string[] = [];
+      const createExam = await this.createExamModel.findOne({ _id: id });
 
-        for (let i = 0; i < AnswerSheetSourcePdfFile.length; i++) {
-          const file = AnswerSheetSourcePdfFile[i];
-          const fileName = await this.imageService.saveImage(
-            "educational_management/create_exam",
-            file
-          );
-          answersheetPdfPath.push(fileName);
-        }
-
-        updateCreateExamDto.AnswerSheetSourcePdfFile = answersheetPdfPath;
+      if (!createExam) {
+        throw new NotFoundException("آزمون مورد نظر یافت نشد.");
       }
+      if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length == 0) {
+        if (updateCreateExamDto?.AnswerSheetSourcePdfFile?.length > 0) {
+          let arrayConversion =
+            updateCreateExamDto.AnswerSheetSourcePdfFile.map((element: any) => {
+              return { name: JSON.parse(element).name };
+            });
+          if (createExam.AnswerSheetSourcePdfFile.length > 0) {
+            for (
+              let i = 0;
+              i < createExam.AnswerSheetSourcePdfFile.length;
+              i++
+            ) {
+              const file = createExam.AnswerSheetSourcePdfFile[i].link;
 
-      const updateCreateExamModel = await this.createExamModel.findOneAndUpdate(
-        { _id: id },
-        { $set: { ...updateCreateExamDto } },
-        { new: true }
-      );
+              let findIndex = arrayConversion.findIndex((element) => {
+                return element.name == file.split("/")[3];
+              });
 
-      if (
-        AnswerSheetSourcePdfFile &&
-        AnswerSheetSourcePdfFile.length == 0 &&
-        updateCreateExamModel &&
-        updateCreateExamModel.AnswerSheetSourcePdfFile.length > 0
-      ) {
-        if (updateCreateExamModel.AnswerSheetSourcePdfFile.length > 0) {
-          for (
-            let i = 0;
-            i < updateCreateExamModel.AnswerSheetSourcePdfFile.length;
-            i++
-          ) {
-            const file = updateCreateExamModel.AnswerSheetSourcePdfFile[i];
-
+              if (findIndex == -1) {
+                if (existsSync(file)) {
+                  try {
+                    fs.unlinkSync(`${file}`);
+                    await this.createExamModel.findByIdAndUpdate(
+                      id,
+                      {
+                        $pull: {
+                          pdfFiles: createExam.AnswerSheetSourcePdfFile[i],
+                        },
+                      },
+                      { new: true }
+                    );
+                  } catch (err) {
+                    throw new InternalServerErrorException(
+                      "خطایی در حذف فایل قدیمی رخ داده است."
+                    );
+                  }
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          for (let i = 0; i < createExam.AnswerSheetSourcePdfFile.length; i++) {
+            const file = createExam.AnswerSheetSourcePdfFile[i].link;
+            await this.createExamModel.findByIdAndUpdate(
+              id,
+              { $pull: { pdfFiles: createExam.AnswerSheetSourcePdfFile[i] } },
+              { new: true }
+            );
             if (existsSync(file)) {
               try {
                 fs.unlinkSync(`${file}`);
-
-                await this.createExamModel.findOneAndUpdate(
-                  { _id: id },
-                  { $set: { AnswerSheetSourcePdfFile: "" } },
+                await this.createExamModel.findByIdAndUpdate(
+                  id,
+                  {
+                    $pull: { pdfFiles: createExam.AnswerSheetSourcePdfFile[i] },
+                  },
                   { new: true }
                 );
               } catch (err) {
                 throw new InternalServerErrorException(
-                  "خطایی در حذف فایل رخ داده است."
+                  "خطایی در حذف فایل قدیمی رخ داده است."
                 );
               }
             }
           }
         }
-      }
 
+        return res.status(200).json({
+          statusCode: 200,
+          message: "ضمیمه  با موفقیت بروزرسانی شد.",
+        });
+      }
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: " آزمون استاندارد یا موضوعی مورد نظر با موفقیت بروزرسانی شد",
-        data: updateCreateExamModel,
+        data: updateCreateExamDto,
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
@@ -490,7 +516,7 @@ export class CreateExamRepository {
     try {
       const findCreateExam = await this.findOne(id);
       if (findCreateExam) {
-        const file = findCreateExam.AnswerSheetSourcePdfFile[0];
+        const file = findCreateExam.AnswerSheetSourcePdfFile[0].link;
 
         if (existsSync(file)) {
           try {

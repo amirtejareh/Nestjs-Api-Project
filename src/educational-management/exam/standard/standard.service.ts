@@ -15,6 +15,12 @@ export class StandardService {
     return this.standardRepository.findAll(page, limit);
   }
 
+  findAllQuestionsInStandardExamBasedOnExamId(examId: string) {
+    return this.standardRepository.findAllQuestionsInStandardExamBasedOnExamId(
+      examId
+    );
+  }
+
   async findStandardsBasedOnBooks(
     page: number = 1,
     limit: number = 10,

@@ -18,7 +18,7 @@ export class CreateCreateExamDto {
   chapter: Chapter;
 
   @ApiProperty({ type: "string", format: "binary" })
-  public AnswerSheetSourcePdfFile: string[];
+  public AnswerSheetSourcePdfFile: any;
 
   @ApiProperty({
     description: "Term",

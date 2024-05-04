@@ -144,6 +144,14 @@ export class StandardRepository {
     return this.standardModel.findOne({ _id: id });
   }
 
+  findAllQuestionsInStandardExamBasedOnExamId(examId: string) {
+    return this.standardModel.find({
+      createExam: {
+        $in: [examId],
+      },
+    });
+  }
+
   async update(
     @Res() res,
     @Param("id") id: string,

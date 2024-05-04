@@ -106,7 +106,7 @@ export class AttachRepository {
       const attach = await this.attachModel.findOne({ _id: id });
 
       if (!attach) {
-        throw new NotFoundException("کران بالا مورد نظر یافت نشد.");
+        throw new NotFoundException("ضمیمه مورد نظر یافت نشد.");
       }
 
       if (pdfFiles && pdfFiles.length > 0) {
@@ -155,7 +155,7 @@ export class AttachRepository {
 
         return res.status(200).json({
           statusCode: 200,
-          message: "کران بالا با موفقیت بروزرسانی شد.",
+          message: "ضمیمه با موفقیت بروزرسانی شد.",
           data: updateattachModel,
         });
       }
@@ -219,7 +219,7 @@ export class AttachRepository {
 
         return res.status(200).json({
           statusCode: 200,
-          message: "کران بالا با موفقیت بروزرسانی شد.",
+          message: "ضمیمه  با موفقیت بروزرسانی شد.",
         });
       }
     } catch (e) {

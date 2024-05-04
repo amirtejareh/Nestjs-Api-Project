@@ -77,7 +77,7 @@ export class CreateExam {
   @Prop({
     required: true,
   })
-  AnswerSheetSourcePdfFile: string[];
+  AnswerSheetSourcePdfFile: { title: string; link: string }[];
 
   @Prop({
     required: true,

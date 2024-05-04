@@ -33,6 +33,14 @@ export class SubjectiveRepository {
     }
   }
 
+  findAllQuestionsInSubjectiveExamBasedOnExamId(examId: string) {
+    return this.subjectiveModel.find({
+      createExam: {
+        $in: [examId],
+      },
+    });
+  }
+
   async findAll(page: number = 1, limit: number = 10) {
     const skip = (page - 1) * limit;
 
