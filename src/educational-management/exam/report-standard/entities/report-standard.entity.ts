@@ -25,6 +25,7 @@ export class ReportStandard {
     type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
   })
   book?: Book;
+  @Prop({ required: true })
   userAnswers: IUserAnswers[];
   @Prop({ required: true })
   examNumber: number;
