@@ -516,7 +516,7 @@ export class CreateExamRepository {
     try {
       const findCreateExam = await this.findOne(id);
       if (findCreateExam) {
-        const file = findCreateExam.AnswerSheetSourcePdfFile[0].link;
+        const file = findCreateExam.AnswerSheetSourcePdfFile[0]?.link;
 
         if (existsSync(file)) {
           try {
