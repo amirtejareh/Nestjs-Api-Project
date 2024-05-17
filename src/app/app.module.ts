@@ -31,6 +31,7 @@ import { CreateExamModule } from "../educational-management/exam/create/create.m
 import { SubjectiveModule } from "../educational-management/exam/subjective/subjective.module";
 import { ReportStandardModule } from "../educational-management/exam/report-standard/report-standard.module";
 import { ReportSubjectiveModule } from "../educational-management/exam/report-subjective/report-subjective.module";
+import { ComprehensiveTestModule } from "../educational-management/comprehensive-test/comprehensive-test.module";
 
 @Global()
 @Module({
@@ -53,6 +54,7 @@ import { ReportSubjectiveModule } from "../educational-management/exam/report-su
     ObjectiveTestModule,
     QuestionModule,
     CreateExamModule,
+    ComprehensiveTestModule,
     OnlineGradeReportModule,
     AnswersheetManagementModule,
     LearningMaterialModule,
