@@ -55,24 +55,12 @@ export class ComprehensiveTestRepository {
     return this.comprehensiveTestModel.findOne({ _id: id });
   }
 
-  async findBasedOnSubjects(subjects: string[]) {
+  async findBasedOnChapters(chapters: string[]) {
     const comprehensiveTests = await this.comprehensiveTestModel.find({
-      subject: {
-        $in: subjects.map((id: string) => new Types.ObjectId(id)),
+      chapter: {
+        $in: chapters.map((id: string) => new Types.ObjectId(id)),
       },
     });
-
-    return comprehensiveTests;
-  }
-
-  async findBasedOnBooks(books: string[]) {
-    const comprehensiveTests = await this.comprehensiveTestModel
-      .find({
-        book: {
-          $in: books.map((id: string) => new Types.ObjectId(id)),
-        },
-      })
-      .populate(["book", "chapter", "section", "subject"]);
 
     return comprehensiveTests;
   }

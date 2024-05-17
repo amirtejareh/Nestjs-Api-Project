@@ -24,16 +24,12 @@ export class ComprehensiveTestService {
     return this.comprehensiveTestRepository.findOne(id);
   }
 
-  async findBasedOnSubjects(subjects: string[]) {
-    return this.comprehensiveTestRepository.findBasedOnSubjects(subjects);
-  }
-
-  async findBasedOnBooks(books: string[]) {
-    if (books[0] == "null") {
+  async findBasedOnChapters(chapters: string[]) {
+    if (chapters[0] == "null") {
       return [];
     }
 
-    return this.comprehensiveTestRepository.findBasedOnBooks(books);
+    return this.comprehensiveTestRepository.findBasedOnChapters(chapters);
   }
 
   update(

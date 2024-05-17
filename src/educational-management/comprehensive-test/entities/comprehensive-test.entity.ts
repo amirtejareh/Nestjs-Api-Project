@@ -3,9 +3,6 @@ import { Document, Schema as mongooseSchema } from "mongoose";
 import { GradeLevel } from "../../../content-management/grade-level/entities/grade-level.entity";
 import { Book } from "../../../content-management/book/entities/book.entity";
 import { Chapter } from "../../../content-management/chapter/entities/chapter.entity";
-import { Section } from "../../../content-management/section/entities/section.entity";
-import { Subject } from "../../../content-management/subject/entities/subject.entity";
-import { IVideo } from "../../../interface/IEntity";
 
 export type ComprehensiveTestDocument = ComprehensiveTest & Document;
 

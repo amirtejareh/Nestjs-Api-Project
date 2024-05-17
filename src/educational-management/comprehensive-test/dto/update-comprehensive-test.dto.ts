@@ -14,11 +14,6 @@ export class UpdateComprehensiveTestDto extends PartialType(
   readonly gradeLevel?: GradeLevel;
   readonly book?: Book;
   readonly chapter?: Chapter;
-  readonly section?: Section;
-  readonly subject?: Subject;
-  readonly videos?: IVideo[];
-  @ApiProperty({ type: "string", format: "binary" })
-  public pdfFiles?: { title: string; link: string }[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

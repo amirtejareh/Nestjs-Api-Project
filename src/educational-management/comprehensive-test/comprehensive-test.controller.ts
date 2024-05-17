@@ -27,9 +27,9 @@ export class ComprehensiveTestController {
 
   @Post()
   @ApiBearerAuth()
-  @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
+  @ApiConsumes("multipart/form-data")
   create(
     @Res() res,
     @Body() createComprehensiveTestDto: CreateComprehensiveTestDto
@@ -50,26 +50,15 @@ export class ComprehensiveTestController {
     return this.comprehensiveTestService.findOne(id);
   }
 
-  @Get("withSubjects/:subjectsId")
-  async findComprehensiveTestBasedOnSubject(
-    @Param("subjectsId", ParseArrayPipe) subjects: string[]
+  @Get("withChapters/:chapterId")
+  async findComprehensiveTestBasedOnChapters(
+    @Param("chapterId", ParseArrayPipe) chapters: string[]
   ) {
-    if (subjects[0] == "null") {
+    if (chapters[0] == "null") {
       return [];
     }
 
-    return this.comprehensiveTestService.findBasedOnSubjects(subjects);
-  }
-
-  @Get("withBooks/:booksId")
-  async findComprehensiveTestBasedOnBooks(
-    @Param("booksId", ParseArrayPipe) books: string[]
-  ) {
-    if (books[0] == "null") {
-      return [];
-    }
-
-    return this.comprehensiveTestService.findBasedOnBooks(books);
+    return this.comprehensiveTestService.findBasedOnChapters(chapters);
   }
 
   @Patch(":id")
