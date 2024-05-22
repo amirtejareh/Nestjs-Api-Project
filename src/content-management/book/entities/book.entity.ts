@@ -89,3 +89,9 @@ BookSchema.virtual("tipandtests", {
   localField: "_id",
   foreignField: "sections",
 });
+
+BookSchema.virtual("comprehensivetests", {
+  ref: "ComprehensiveTest",
+  localField: "_id",
+  foreignField: "book",
+});

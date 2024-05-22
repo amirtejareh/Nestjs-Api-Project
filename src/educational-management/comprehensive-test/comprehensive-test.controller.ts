@@ -29,7 +29,6 @@ export class ComprehensiveTestController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  @ApiConsumes("multipart/form-data")
   create(
     @Res() res,
     @Body() createComprehensiveTestDto: CreateComprehensiveTestDto
@@ -68,6 +67,9 @@ export class ComprehensiveTestController {
     @Param("id") id: string,
     @Body() updateComprehensiveTestDto: UpdateComprehensiveTestDto
   ) {
+    console.log(updateComprehensiveTestDto, "updateComprehensiveTestDto");
+    console.log(id, "id");
+
     return this.comprehensiveTestService.update(
       res,
       id,

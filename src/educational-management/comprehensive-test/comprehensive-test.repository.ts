@@ -56,18 +56,20 @@ export class ComprehensiveTestRepository {
   }
 
   async findBasedOnChapters(chapters: string[]) {
-    const comprehensiveTests = await this.comprehensiveTestModel.find({
-      chapter: {
-        $in: chapters.map((id: string) => new Types.ObjectId(id)),
-      },
-    });
+    const comprehensiveTests = await this.comprehensiveTestModel
+      .find({
+        chapter: {
+          $in: chapters.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book", "gradeLevel", "chapter"]);
 
     return comprehensiveTests;
   }
 
   async update(
     @Res() res,
-    @Param("id") id: string,
+    id: string,
     updateComprehensiveTestDto: UpdateComprehensiveTestDto
   ) {
     try {
@@ -78,6 +80,21 @@ export class ComprehensiveTestRepository {
       if (!comprehensiveTest) {
         throw new NotFoundException("تست جامع مورد نظر یافت نشد.");
       }
+
+      const updateComprehensiveTestModel =
+        await this.comprehensiveTestModel.findByIdAndUpdate(
+          id,
+          updateComprehensiveTestDto,
+          {
+            new: true,
+          }
+        );
+
+      return res.status(200).json({
+        statusCode: 200,
+        message: "یک تست جامع با موفقیت بروزرسانی شد.",
+        data: updateComprehensiveTestModel,
+      });
     } catch (e) {
       return res.status(500).json({
         statusCode: 500,

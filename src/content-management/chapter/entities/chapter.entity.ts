@@ -61,3 +61,9 @@ ChapterSchema.virtual("createexams", {
   localField: "_id",
   foreignField: "chapter",
 });
+
+ChapterSchema.virtual("comprehensivetests", {
+  ref: "ComprehensiveTest",
+  localField: "_id",
+  foreignField: "chapter",
+});

@@ -10,7 +10,7 @@ import { IVideo } from "../../../interface/IEntity";
 export class UpdateComprehensiveTestDto extends PartialType(
   CreateComprehensiveTestDto
 ) {
-  readonly _id?: string;
+  readonly id?: string;
   readonly gradeLevel?: GradeLevel;
   readonly book?: Book;
   readonly chapter?: Chapter;
