@@ -32,3 +32,9 @@ export class ComprehensiveTest {
 
 export const ComprehensiveTestSchema =
   SchemaFactory.createForClass(ComprehensiveTest);
+
+ComprehensiveTestSchema.virtual("primaryquestions", {
+  ref: "PrimaryQuestion",
+  localField: "_id",
+  foreignField: "comprehensiveTestId",
+});

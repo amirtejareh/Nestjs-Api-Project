@@ -48,7 +48,9 @@ export class ComprehensiveTestRepository {
   }
 
   findAll() {
-    return this.comprehensiveTestModel.find({});
+    return this.comprehensiveTestModel
+      .find({})
+      .populate(["book", "gradeLevel", "chapter"]);
   }
 
   findOne(id: string) {
