@@ -33,6 +33,8 @@ import { ReportStandardModule } from "../educational-management/exam/report-stan
 import { ReportSubjectiveModule } from "../educational-management/exam/report-subjective/report-subjective.module";
 import { ComprehensiveTestModule } from "../educational-management/comprehensive-test/comprehensive-test.module";
 import { PrimaryQuestionModule } from "../educational-management/comprehensive-primary-question/primary-question.module";
+import { FirstQuestionModule } from "../educational-management/comprehensive-first-question/first-question.module";
+import { SecondQuestionModule } from "../educational-management/comprehensive-second-question/second-question.module";
 
 @Global()
 @Module({
@@ -51,6 +53,8 @@ import { PrimaryQuestionModule } from "../educational-management/comprehensive-p
     SubjectModule,
     SampleTestQuestionsModule,
     PrimaryQuestionModule,
+    FirstQuestionModule,
+    SecondQuestionModule,
     StandardModule,
     SubjectiveModule,
     ObjectiveTestModule,
