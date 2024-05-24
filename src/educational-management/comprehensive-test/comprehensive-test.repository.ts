@@ -69,6 +69,18 @@ export class ComprehensiveTestRepository {
     return comprehensiveTests;
   }
 
+  async findComprehensiveTestBasedOnBooks(books: string[]) {
+    const comprehensiveTests = await this.comprehensiveTestModel
+      .find({
+        book: {
+          $in: books.map((id: string) => new Types.ObjectId(id)),
+        },
+      })
+      .populate(["book", "gradeLevel", "chapter"]);
+
+    return comprehensiveTests;
+  }
+
   async update(
     @Res() res,
     id: string,

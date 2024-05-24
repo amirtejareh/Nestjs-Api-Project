@@ -4,12 +4,18 @@ import { UpdatePrimaryQuestionDto } from "./dto/update-primary-question.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { PrimaryQuestion } from "./entities/primary-question.entity";
 import { Model, Types } from "mongoose";
+import { FirstQuestion } from "../comprehensive-first-question/entities/first-question.entity";
+import { SecondQuestion } from "../comprehensive-second-question/entities/second-question.entity";
 
 @Injectable()
 export class PrimaryQuestionRepository {
   constructor(
     @InjectModel(PrimaryQuestion.name)
-    private readonly primaryQuestionModel: Model<PrimaryQuestion>
+    private readonly primaryQuestionModel: Model<PrimaryQuestion>,
+    @InjectModel(FirstQuestion.name)
+    private readonly firstQuestionModel: Model<FirstQuestion>,
+    @InjectModel(SecondQuestion.name)
+    private readonly secondQuestionModel: Model<SecondQuestion>
   ) {}
 
   async findOneByTitle(title: string) {
@@ -35,17 +41,56 @@ export class PrimaryQuestionRepository {
   }
 
   async findPrimaryTestsBasedOnComprehensiveTestId(
+    page: number = 1,
+    limit: number = 10,
     comprehensiveTestIds: string[]
   ) {
-    const primaryTests = await this.primaryQuestionModel
+    const skip = (page - 1) * limit;
+
+    const primaryTestIds = await this.primaryQuestionModel
       .find({
         comprehensiveTestId: {
           $in: comprehensiveTestIds.map((id: string) => new Types.ObjectId(id)),
         },
       })
+      .skip(skip)
+      .limit(limit)
+      .select("_id")
       .populate("comprehensiveTestId");
+    const totalPrimaryTests = await this.primaryQuestionModel.countDocuments({
+      comprehensiveTestId: {
+        $in: [comprehensiveTestIds],
+      },
+    });
 
-    return primaryTests;
+    const primaryTests = await this.primaryQuestionModel.find({
+      _id: {
+        $in: primaryTestIds,
+      },
+    });
+    if (primaryTests.length === 0) {
+      return [];
+    }
+
+    const totalFirstQuestions = await this.firstQuestionModel.countDocuments({
+      comprehensiveTestId: {
+        $in: [comprehensiveTestIds],
+      },
+    });
+
+    const totalSecondQuestions = await this.secondQuestionModel.countDocuments({
+      comprehensiveTestId: {
+        $in: [comprehensiveTestIds],
+      },
+    });
+
+    return {
+      primaryTests,
+      currentPage: page,
+      totalPages: Math.ceil(totalPrimaryTests / limit),
+      totalItems: totalPrimaryTests,
+      totalSimilarQuestions: totalFirstQuestions + totalSecondQuestions,
+    };
   }
 
   findAll() {

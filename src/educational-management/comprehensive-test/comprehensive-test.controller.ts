@@ -60,6 +60,19 @@ export class ComprehensiveTestController {
     return this.comprehensiveTestService.findBasedOnChapters(chapters);
   }
 
+  @Get("withBooks/:bookId")
+  async findComprehensiveTestBasedOnBooks(
+    @Param("bookId", ParseArrayPipe) books: string[]
+  ) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.comprehensiveTestService.findComprehensiveTestBasedOnBooks(
+      books
+    );
+  }
+
   @Patch(":id")
   @ApiBearerAuth()
   update(

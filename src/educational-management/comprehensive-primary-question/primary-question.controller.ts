@@ -9,6 +9,7 @@ import {
   UseGuards,
   Res,
   ParseArrayPipe,
+  Query,
 } from "@nestjs/common";
 import { CreatePrimaryQuestionDto } from "./dto/create-primary-question.dto";
 import { UpdatePrimaryQuestionDto } from "./dto/update-primary-question.dto";
@@ -48,6 +49,8 @@ export class PrimaryQuestionController {
 
   @Get("withComprehensiveTest/:comprehensiveTestIds")
   async findPrimaryTestsBasedOnComprehensiveTestId(
+    @Query("page") page: number,
+    @Query("limit") limit: number,
     @Param("comprehensiveTestIds", ParseArrayPipe)
     comprehensiveTestIds: string[]
   ) {
@@ -56,6 +59,8 @@ export class PrimaryQuestionController {
     }
 
     return this.primaryQuestionService.findPrimaryTestsBasedOnComprehensiveTestId(
+      page,
+      limit,
       comprehensiveTestIds
     );
   }

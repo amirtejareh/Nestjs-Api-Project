@@ -32,6 +32,16 @@ export class ComprehensiveTestService {
     return this.comprehensiveTestRepository.findBasedOnChapters(chapters);
   }
 
+  async findComprehensiveTestBasedOnBooks(books: string[]) {
+    if (books[0] == "null") {
+      return [];
+    }
+
+    return this.comprehensiveTestRepository.findComprehensiveTestBasedOnBooks(
+      books
+    );
+  }
+
   update(
     @Res() res,
     id: string,

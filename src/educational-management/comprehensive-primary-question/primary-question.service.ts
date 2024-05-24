@@ -22,9 +22,13 @@ export class PrimaryQuestionService {
   }
 
   async findPrimaryTestsBasedOnComprehensiveTestId(
+    page: number = 1,
+    limit: number = 10,
     comprehensiveTestIds: string[]
   ) {
     return this.primaryQuestionRepository.findPrimaryTestsBasedOnComprehensiveTestId(
+      page,
+      limit,
       comprehensiveTestIds
     );
   }
