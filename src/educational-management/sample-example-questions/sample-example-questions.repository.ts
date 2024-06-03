@@ -149,7 +149,16 @@ export class SampleExampleQuestionsRepository {
         const updateSampleExampleQuestionsModel =
           await this.sampleExampleQuestionsModel.findByIdAndUpdate(
             id,
+
             {
+              $set: {
+                book: updateSampleExampleQuestionsDto.book,
+                gradeLevel: updateSampleExampleQuestionsDto.gradeLevel,
+                section: updateSampleExampleQuestionsDto.section,
+                chapter: updateSampleExampleQuestionsDto.chapter,
+                subject: updateSampleExampleQuestionsDto.subject,
+                videos: updateSampleExampleQuestionsDto.videos,
+              },
               $push: {
                 pdfFiles: { $each: updateSampleExampleQuestionsDto.pdfFiles },
               },
@@ -161,7 +170,7 @@ export class SampleExampleQuestionsRepository {
 
         return res.status(200).json({
           statusCode: 200,
-          message: "تمرین با موفقیت بروزرسانی شد.",
+          message: "سوالات تشریحی با موفقیت بروزرسانی شد.",
           data: updateSampleExampleQuestionsModel,
         });
       }
@@ -187,7 +196,17 @@ export class SampleExampleQuestionsRepository {
                     fs.unlinkSync(`${file}`);
                     await this.sampleExampleQuestionsModel.findByIdAndUpdate(
                       id,
+
                       {
+                        $set: {
+                          book: updateSampleExampleQuestionsDto.book,
+                          gradeLevel:
+                            updateSampleExampleQuestionsDto.gradeLevel,
+                          section: updateSampleExampleQuestionsDto.section,
+                          chapter: updateSampleExampleQuestionsDto.chapter,
+                          subject: updateSampleExampleQuestionsDto.subject,
+                          videos: updateSampleExampleQuestionsDto.videos,
+                        },
                         $pull: { pdfFiles: sampleExampleQuestions.pdfFiles[i] },
                       },
                       { new: true }
@@ -202,12 +221,40 @@ export class SampleExampleQuestionsRepository {
               }
             }
           }
+
+          await this.sampleExampleQuestionsModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateSampleExampleQuestionsDto.book,
+                gradeLevel: updateSampleExampleQuestionsDto.gradeLevel,
+                section: updateSampleExampleQuestionsDto.section,
+                chapter: updateSampleExampleQuestionsDto.chapter,
+                subject: updateSampleExampleQuestionsDto.subject,
+                videos: updateSampleExampleQuestionsDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < sampleExampleQuestions.pdfFiles.length; i++) {
             const file = sampleExampleQuestions.pdfFiles[i].link;
             await this.sampleExampleQuestionsModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: sampleExampleQuestions.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateSampleExampleQuestionsDto.book,
+                  gradeLevel: updateSampleExampleQuestionsDto.gradeLevel,
+                  section: updateSampleExampleQuestionsDto.section,
+                  chapter: updateSampleExampleQuestionsDto.chapter,
+                  subject: updateSampleExampleQuestionsDto.subject,
+                  videos: updateSampleExampleQuestionsDto.videos,
+                },
+                $pull: { pdfFiles: sampleExampleQuestions.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {
@@ -229,7 +276,7 @@ export class SampleExampleQuestionsRepository {
 
         return res.status(200).json({
           statusCode: 200,
-          message: "تمرین با موفقیت بروزرسانی شد.",
+          message: "سوالات تشریحی با موفقیت بروزرسانی شد.",
         });
       }
     } catch (e) {

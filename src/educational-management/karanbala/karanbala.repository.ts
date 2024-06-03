@@ -103,7 +103,9 @@ export class KaranbalaRepository {
     updateKaranbalaDto: UpdateKaranbalaDto
   ) {
     try {
-      const karanbala = await this.karanbalaModel.findOne({ _id: id });
+      const karanbala = await this.karanbalaModel.findOne({
+        _id: id,
+      });
 
       if (!karanbala) {
         throw new NotFoundException("کران بالا مورد نظر یافت نشد.");
@@ -141,10 +143,19 @@ export class KaranbalaRepository {
           }
         }
 
-        const updatekaranbalaModel =
+        const updateKaranbalaModel =
           await this.karanbalaModel.findByIdAndUpdate(
             id,
+
             {
+              $set: {
+                book: updateKaranbalaDto.book,
+                gradeLevel: updateKaranbalaDto.gradeLevel,
+                chapter: updateKaranbalaDto.chapter,
+                section: updateKaranbalaDto.section,
+                subject: updateKaranbalaDto.subject,
+                videos: updateKaranbalaDto.videos,
+              },
               $push: {
                 pdfFiles: { $each: updateKaranbalaDto.pdfFiles },
               },
@@ -157,7 +168,7 @@ export class KaranbalaRepository {
         return res.status(200).json({
           statusCode: 200,
           message: "کران بالا با موفقیت بروزرسانی شد.",
-          data: updatekaranbalaModel,
+          data: updateKaranbalaModel,
         });
       }
 
@@ -182,7 +193,18 @@ export class KaranbalaRepository {
                     fs.unlinkSync(`${file}`);
                     await this.karanbalaModel.findByIdAndUpdate(
                       id,
-                      { $pull: { pdfFiles: karanbala.pdfFiles[i] } },
+
+                      {
+                        $set: {
+                          book: updateKaranbalaDto.book,
+                          gradeLevel: updateKaranbalaDto.gradeLevel,
+                          chapter: updateKaranbalaDto.chapter,
+                          section: updateKaranbalaDto.section,
+                          subject: updateKaranbalaDto.subject,
+                          videos: updateKaranbalaDto.videos,
+                        },
+                        $pull: { pdfFiles: karanbala.pdfFiles[i] },
+                      },
                       { new: true }
                     );
                   } catch (err) {
@@ -195,12 +217,40 @@ export class KaranbalaRepository {
               }
             }
           }
+
+          await this.karanbalaModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateKaranbalaDto.book,
+                gradeLevel: updateKaranbalaDto.gradeLevel,
+                chapter: updateKaranbalaDto.chapter,
+                section: updateKaranbalaDto.section,
+                subject: updateKaranbalaDto.subject,
+                videos: updateKaranbalaDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < karanbala.pdfFiles.length; i++) {
             const file = karanbala.pdfFiles[i].link;
             await this.karanbalaModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: karanbala.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateKaranbalaDto.book,
+                  gradeLevel: updateKaranbalaDto.gradeLevel,
+                  chapter: updateKaranbalaDto.chapter,
+                  section: updateKaranbalaDto.section,
+                  subject: updateKaranbalaDto.subject,
+                  videos: updateKaranbalaDto.videos,
+                },
+                $pull: { pdfFiles: karanbala.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {

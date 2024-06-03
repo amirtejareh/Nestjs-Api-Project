@@ -72,6 +72,12 @@ BookSchema.virtual("reportstandards", {
   foreignField: "book",
 });
 
+BookSchema.virtual("subjects", {
+  ref: "Subject",
+  localField: "_id",
+  foreignField: "books",
+});
+
 BookSchema.virtual("learningmaterials", {
   ref: "LearningMaterial",
   localField: "_id",
@@ -81,7 +87,7 @@ BookSchema.virtual("learningmaterials", {
 BookSchema.virtual("essayquestions", {
   ref: "EssayQuestion",
   localField: "_id",
-  foreignField: "sections",
+  foreignField: "book",
 });
 
 BookSchema.virtual("tipandtests", {

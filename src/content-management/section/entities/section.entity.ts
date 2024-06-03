@@ -43,6 +43,12 @@ SectionSchema.virtual("karanbalas", {
 SectionSchema.virtual("essayquestions", {
   ref: "EssayQuestion",
   localField: "_id",
+  foreignField: "section",
+});
+
+SectionSchema.virtual("subjects", {
+  ref: "Subject",
+  localField: "_id",
   foreignField: "sections",
 });
 

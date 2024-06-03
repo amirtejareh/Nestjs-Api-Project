@@ -103,7 +103,9 @@ export class AttachRepository {
     updateAttachDto: UpdateAttachDto
   ) {
     try {
-      const attach = await this.attachModel.findOne({ _id: id });
+      const attach = await this.attachModel.findOne({
+        _id: id,
+      });
 
       if (!attach) {
         throw new NotFoundException("ضمیمه مورد نظر یافت نشد.");
@@ -143,7 +145,15 @@ export class AttachRepository {
 
         const updateattachModel = await this.attachModel.findByIdAndUpdate(
           id,
+
           {
+            $set: {
+              book: updateAttachDto.book,
+              gradeLevel: updateAttachDto.gradeLevel,
+              type: updateAttachDto.type,
+              chapter: updateAttachDto.chapter,
+              videos: updateAttachDto.videos,
+            },
             $push: {
               pdfFiles: { $each: updateAttachDto.pdfFiles },
             },
@@ -179,7 +189,17 @@ export class AttachRepository {
                     fs.unlinkSync(`${file}`);
                     await this.attachModel.findByIdAndUpdate(
                       id,
-                      { $pull: { pdfFiles: attach.pdfFiles[i] } },
+
+                      {
+                        $set: {
+                          book: updateAttachDto.book,
+                          gradeLevel: updateAttachDto.gradeLevel,
+                          type: updateAttachDto.type,
+                          chapter: updateAttachDto.chapter,
+                          videos: updateAttachDto.videos,
+                        },
+                        $pull: { pdfFiles: attach.pdfFiles[i] },
+                      },
                       { new: true }
                     );
                   } catch (err) {
@@ -192,12 +212,38 @@ export class AttachRepository {
               }
             }
           }
+
+          await this.attachModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateAttachDto.book,
+                gradeLevel: updateAttachDto.gradeLevel,
+                type: updateAttachDto.type,
+                chapter: updateAttachDto.chapter,
+                videos: updateAttachDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < attach.pdfFiles.length; i++) {
             const file = attach.pdfFiles[i].link;
             await this.attachModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: attach.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateAttachDto.book,
+                  gradeLevel: updateAttachDto.gradeLevel,
+                  type: updateAttachDto.type,
+                  chapter: updateAttachDto.chapter,
+                  videos: updateAttachDto.videos,
+                },
+                $pull: { pdfFiles: attach.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {
@@ -229,7 +275,6 @@ export class AttachRepository {
       });
     }
   }
-
   async remove(@Res() res, id: string) {
     try {
       const findAttach = await this.attachModel.findOne({

@@ -46,6 +46,17 @@ GradeLevelSchema.virtual("createexams", {
   foreignField: "gradeLevel",
 });
 
+GradeLevelSchema.virtual("essayquestions", {
+  ref: "EssayQuestion",
+  localField: "_id",
+  foreignField: "gradeLevel",
+});
+GradeLevelSchema.virtual("subjects", {
+  ref: "Subject",
+  localField: "_id",
+  foreignField: "gradeLevels",
+});
+
 GradeLevelSchema.virtual("bookreferences", {
   ref: "BookReference",
   localField: "_id",

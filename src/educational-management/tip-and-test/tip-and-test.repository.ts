@@ -102,7 +102,9 @@ export class TipAndTestRepository {
     updateTipAndTestDto: UpdateTipAndTestDto
   ) {
     try {
-      const tipAndTest = await this.tipAndTestModel.findOne({ _id: id });
+      const tipAndTest = await this.tipAndTestModel.findOne({
+        _id: id,
+      });
 
       if (!tipAndTest) {
         throw new NotFoundException("نکته و تست مورد نظر یافت نشد.");
@@ -143,7 +145,16 @@ export class TipAndTestRepository {
         const updateTipAndTestModel =
           await this.tipAndTestModel.findByIdAndUpdate(
             id,
+
             {
+              $set: {
+                book: updateTipAndTestDto.book,
+                gradeLevel: updateTipAndTestDto.gradeLevel,
+                chapter: updateTipAndTestDto.chapter,
+                section: updateTipAndTestDto.section,
+                subject: updateTipAndTestDto.subject,
+                videos: updateTipAndTestDto.videos,
+              },
               $push: {
                 pdfFiles: { $each: updateTipAndTestDto.pdfFiles },
               },
@@ -181,7 +192,18 @@ export class TipAndTestRepository {
                     fs.unlinkSync(`${file}`);
                     await this.tipAndTestModel.findByIdAndUpdate(
                       id,
-                      { $pull: { pdfFiles: tipAndTest.pdfFiles[i] } },
+
+                      {
+                        $set: {
+                          book: updateTipAndTestDto.book,
+                          gradeLevel: updateTipAndTestDto.gradeLevel,
+                          chapter: updateTipAndTestDto.chapter,
+                          section: updateTipAndTestDto.section,
+                          subject: updateTipAndTestDto.subject,
+                          videos: updateTipAndTestDto.videos,
+                        },
+                        $pull: { pdfFiles: tipAndTest.pdfFiles[i] },
+                      },
                       { new: true }
                     );
                   } catch (err) {
@@ -194,12 +216,40 @@ export class TipAndTestRepository {
               }
             }
           }
+
+          await this.tipAndTestModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateTipAndTestDto.book,
+                gradeLevel: updateTipAndTestDto.gradeLevel,
+                chapter: updateTipAndTestDto.chapter,
+                section: updateTipAndTestDto.section,
+                subject: updateTipAndTestDto.subject,
+                videos: updateTipAndTestDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < tipAndTest.pdfFiles.length; i++) {
             const file = tipAndTest.pdfFiles[i].link;
             await this.tipAndTestModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: tipAndTest.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateTipAndTestDto.book,
+                  gradeLevel: updateTipAndTestDto.gradeLevel,
+                  chapter: updateTipAndTestDto.chapter,
+                  section: updateTipAndTestDto.section,
+                  subject: updateTipAndTestDto.subject,
+                  videos: updateTipAndTestDto.videos,
+                },
+                $pull: { pdfFiles: tipAndTest.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {

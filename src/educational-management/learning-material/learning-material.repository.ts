@@ -146,7 +146,16 @@ export class LearningMaterialRepository {
         const updateLearningMaterialModel =
           await this.learningMaterialModel.findByIdAndUpdate(
             id,
+
             {
+              $set: {
+                book: updateLearningMaterialDto.book,
+                gradeLevel: updateLearningMaterialDto.gradeLevel,
+                chapter: updateLearningMaterialDto.chapter,
+                section: updateLearningMaterialDto.section,
+                subject: updateLearningMaterialDto.subject,
+                videos: updateLearningMaterialDto.videos,
+              },
               $push: {
                 pdfFiles: { $each: updateLearningMaterialDto.pdfFiles },
               },
@@ -184,7 +193,18 @@ export class LearningMaterialRepository {
                     fs.unlinkSync(`${file}`);
                     await this.learningMaterialModel.findByIdAndUpdate(
                       id,
-                      { $pull: { pdfFiles: learningMaterial.pdfFiles[i] } },
+
+                      {
+                        $set: {
+                          book: updateLearningMaterialDto.book,
+                          gradeLevel: updateLearningMaterialDto.gradeLevel,
+                          chapter: updateLearningMaterialDto.chapter,
+                          section: updateLearningMaterialDto.section,
+                          subject: updateLearningMaterialDto.subject,
+                          videos: updateLearningMaterialDto.videos,
+                        },
+                        $pull: { pdfFiles: learningMaterial.pdfFiles[i] },
+                      },
                       { new: true }
                     );
                   } catch (err) {
@@ -197,12 +217,40 @@ export class LearningMaterialRepository {
               }
             }
           }
+
+          await this.learningMaterialModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateLearningMaterialDto.book,
+                gradeLevel: updateLearningMaterialDto.gradeLevel,
+                chapter: updateLearningMaterialDto.chapter,
+                section: updateLearningMaterialDto.section,
+                subject: updateLearningMaterialDto.subject,
+                videos: updateLearningMaterialDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < learningMaterial.pdfFiles.length; i++) {
             const file = learningMaterial.pdfFiles[i].link;
             await this.learningMaterialModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: learningMaterial.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateLearningMaterialDto.book,
+                  gradeLevel: updateLearningMaterialDto.gradeLevel,
+                  chapter: updateLearningMaterialDto.chapter,
+                  section: updateLearningMaterialDto.section,
+                  subject: updateLearningMaterialDto.subject,
+                  videos: updateLearningMaterialDto.videos,
+                },
+                $pull: { pdfFiles: learningMaterial.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {

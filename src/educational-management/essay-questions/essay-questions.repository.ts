@@ -129,10 +129,19 @@ export class EssayQuestionRepository {
           }
         }
 
-        const updateessayQuestionModel =
+        const updateEssayQuestionModel =
           await this.essayQuestionModel.findByIdAndUpdate(
             id,
+
             {
+              $set: {
+                book: updateEssayQuestionDto.book,
+                gradeLevel: updateEssayQuestionDto.gradeLevel,
+                chapter: updateEssayQuestionDto.chapter,
+                section: updateEssayQuestionDto.section,
+                subject: updateEssayQuestionDto.subject,
+                videos: updateEssayQuestionDto.videos,
+              },
               $push: {
                 pdfFiles: { $each: updateEssayQuestionDto.pdfFiles },
               },
@@ -145,7 +154,7 @@ export class EssayQuestionRepository {
         return res.status(200).json({
           statusCode: 200,
           message: "سوالات تشریحی با موفقیت بروزرسانی شد.",
-          data: updateessayQuestionModel,
+          data: updateEssayQuestionModel,
         });
       }
 
@@ -170,7 +179,18 @@ export class EssayQuestionRepository {
                     fs.unlinkSync(`${file}`);
                     await this.essayQuestionModel.findByIdAndUpdate(
                       id,
-                      { $pull: { pdfFiles: essayQuestion.pdfFiles[i] } },
+
+                      {
+                        $set: {
+                          book: updateEssayQuestionDto.book,
+                          gradeLevel: updateEssayQuestionDto.gradeLevel,
+                          chapter: updateEssayQuestionDto.chapter,
+                          section: updateEssayQuestionDto.section,
+                          subject: updateEssayQuestionDto.subject,
+                          videos: updateEssayQuestionDto.videos,
+                        },
+                        $pull: { pdfFiles: essayQuestion.pdfFiles[i] },
+                      },
                       { new: true }
                     );
                   } catch (err) {
@@ -183,12 +203,40 @@ export class EssayQuestionRepository {
               }
             }
           }
+
+          await this.essayQuestionModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateEssayQuestionDto.book,
+                gradeLevel: updateEssayQuestionDto.gradeLevel,
+                chapter: updateEssayQuestionDto.chapter,
+                section: updateEssayQuestionDto.section,
+                subject: updateEssayQuestionDto.subject,
+                videos: updateEssayQuestionDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < essayQuestion.pdfFiles.length; i++) {
             const file = essayQuestion.pdfFiles[i].link;
             await this.essayQuestionModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: essayQuestion.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateEssayQuestionDto.book,
+                  gradeLevel: updateEssayQuestionDto.gradeLevel,
+                  chapter: updateEssayQuestionDto.chapter,
+                  section: updateEssayQuestionDto.section,
+                  subject: updateEssayQuestionDto.subject,
+                  videos: updateEssayQuestionDto.videos,
+                },
+                $pull: { pdfFiles: essayQuestion.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {
@@ -228,8 +276,32 @@ export class EssayQuestionRepository {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
       })
-      .populate(["book", "chapter", "section", "subject"]);
-
+      .populate([
+        "book",
+        "chapter",
+        "section",
+        {
+          path: "subject",
+          populate: [
+            {
+              path: "gradeLevels",
+              model: "GradeLevel",
+            },
+            {
+              path: "books",
+              model: "Book",
+            },
+            {
+              path: "chapters",
+              model: "Chapter",
+            },
+            {
+              path: "sections",
+              model: "Section",
+            },
+          ],
+        },
+      ]);
     return essayQuestions;
   }
 

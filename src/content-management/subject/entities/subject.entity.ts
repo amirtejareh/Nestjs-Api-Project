@@ -61,5 +61,5 @@ SubjectSchema.virtual("learningmaterials", {
 SubjectSchema.virtual("essayquestions", {
   ref: "EssayQuestion",
   localField: "_id",
-  foreignField: "sections",
+  foreignField: "subject",
 });

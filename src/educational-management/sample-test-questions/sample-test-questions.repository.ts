@@ -118,7 +118,7 @@ export class SampleTestQuestionsRepository {
         for (let i = 0; i < pdfFiles.length; i++) {
           const file = pdfFiles[i];
           const fileName = await this.imageService.saveImage(
-            "educational_management/sample-test-question",
+            "educational_management/sample-test-questions",
             file
           );
           pdfFilesPath.push({
@@ -144,10 +144,18 @@ export class SampleTestQuestionsRepository {
           }
         }
 
-        const updatesampleTestQuestionsModel =
+        const updateSampleTestQuestionsModel =
           await this.sampleTestQuestionsModel.findByIdAndUpdate(
             id,
+
             {
+              $set: {
+                book: updateSampleTestQuestionsDto.book,
+                gradeLevel: updateSampleTestQuestionsDto.gradeLevel,
+                type: updateSampleTestQuestionsDto.type,
+                chapterTerm: updateSampleTestQuestionsDto.chapterTerm,
+                videos: updateSampleTestQuestionsDto.videos,
+              },
               $push: {
                 pdfFiles: { $each: updateSampleTestQuestionsDto.pdfFiles },
               },
@@ -160,7 +168,7 @@ export class SampleTestQuestionsRepository {
         return res.status(200).json({
           statusCode: 200,
           message: "نمونه سوالات امتحانی با موفقیت بروزرسانی شد.",
-          data: updatesampleTestQuestionsModel,
+          data: updateSampleTestQuestionsModel,
         });
       }
 
@@ -185,7 +193,17 @@ export class SampleTestQuestionsRepository {
                     fs.unlinkSync(`${file}`);
                     await this.sampleTestQuestionsModel.findByIdAndUpdate(
                       id,
-                      { $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] } },
+
+                      {
+                        $set: {
+                          book: updateSampleTestQuestionsDto.book,
+                          gradeLevel: updateSampleTestQuestionsDto.gradeLevel,
+                          type: updateSampleTestQuestionsDto.type,
+                          chapterTerm: updateSampleTestQuestionsDto.chapterTerm,
+                          videos: updateSampleTestQuestionsDto.videos,
+                        },
+                        $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] },
+                      },
                       { new: true }
                     );
                   } catch (err) {
@@ -198,12 +216,38 @@ export class SampleTestQuestionsRepository {
               }
             }
           }
+
+          await this.sampleTestQuestionsModel.findByIdAndUpdate(
+            id,
+
+            {
+              $set: {
+                book: updateSampleTestQuestionsDto.book,
+                gradeLevel: updateSampleTestQuestionsDto.gradeLevel,
+                type: updateSampleTestQuestionsDto.type,
+                chapterTerm: updateSampleTestQuestionsDto.chapterTerm,
+                videos: updateSampleTestQuestionsDto.videos,
+              },
+            },
+            {
+              new: true,
+            }
+          );
         } else {
           for (let i = 0; i < sampleTestQuestions.pdfFiles.length; i++) {
             const file = sampleTestQuestions.pdfFiles[i].link;
             await this.sampleTestQuestionsModel.findByIdAndUpdate(
               id,
-              { $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] } },
+              {
+                $set: {
+                  book: updateSampleTestQuestionsDto.book,
+                  gradeLevel: updateSampleTestQuestionsDto.gradeLevel,
+                  type: updateSampleTestQuestionsDto.type,
+                  chapterTerm: updateSampleTestQuestionsDto.chapterTerm,
+                  videos: updateSampleTestQuestionsDto.videos,
+                },
+                $pull: { pdfFiles: sampleTestQuestions.pdfFiles[i] },
+              },
               { new: true }
             );
             if (existsSync(file)) {
