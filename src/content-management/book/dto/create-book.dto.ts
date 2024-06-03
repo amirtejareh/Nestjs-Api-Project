@@ -8,7 +8,7 @@ export class CreateBookDto {
     example: "Math",
   })
   @IsNotEmpty({ message: "فیلد عنوان کتاب اجباری است" })
-  @Length(3, 20, { message: "عنوان کتاب باید بین ۳ تا ۲۰ حرف باشد" })
+  @Length(3, 250, { message: "عنوان کتاب باید بین ۳ تا ۲۵۵ حرف باشد" })
   readonly title: string;
 
   @ApiProperty({ type: "string", format: "binary" })

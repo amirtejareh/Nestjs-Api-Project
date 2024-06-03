@@ -10,7 +10,7 @@ export class UpdateFieldOfStudyDto {
     example: "Math",
   })
   @IsNotEmpty({ message: "فیلد عنوان رشته تحصیلی اجباری است" })
-  @Length(3, 20, { message: "عنوان رشته تحصیلی باید بین ۳ تا ۲۰ حرف باشد" })
+  @Length(3, 250, { message: "عنوان کتاب باید بین ۳ تا ۲۵۵ حرف باشد" })
   readonly title: string;
   @ApiProperty({
     description: "Grade levels",
