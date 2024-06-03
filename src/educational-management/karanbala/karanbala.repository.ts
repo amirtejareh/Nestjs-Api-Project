@@ -81,7 +81,32 @@ export class KaranbalaRepository {
           $in: books.map((id: string) => new Types.ObjectId(id)),
         },
       })
-      .populate(["book", "chapter", "section", "subject"]);
+      .populate([
+        "book",
+        "chapter",
+        "section",
+        {
+          path: "subject",
+          populate: [
+            {
+              path: "gradeLevels",
+              model: "GradeLevel",
+            },
+            {
+              path: "books",
+              model: "Book",
+            },
+            {
+              path: "chapters",
+              model: "Chapter",
+            },
+            {
+              path: "sections",
+              model: "Section",
+            },
+          ],
+        },
+      ]);
 
     return essayQuestions;
   }
