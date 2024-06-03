@@ -13,7 +13,7 @@ export class UpdateGradeLevelDto extends PartialType(CreateGradeLevelDto) {
     description: "Title of th grade level",
     example: "second",
   })
-  @Length(3, 250, { message: "عنوان کتاب باید بین ۳ تا ۲۵۵ حرف باشد" })
+  @Length(3, 255, { message: "عنوان کتاب باید بین ۳ تا ۲۵۵ حرف باشد" })
   readonly title: string;
 
   @Length(3, 5000, {

@@ -12,7 +12,7 @@ export class UpdateSubjectDto extends PartialType(CreateSubjectDto) {
     example: "Subject 1",
   })
   @IsNotEmpty({ message: "فیلد عنوان موضوع اجباری است" })
-  @Length(3, 250, { message: "عنوان کتاب باید بین ۳ تا ۲۵۵ حرف باشد" })
+  @Length(3, 255, { message: "عنوان کتاب باید بین ۳ تا ۲۵۵ حرف باشد" })
   readonly title: string;
   readonly gradeLevels: GradeLevel[];
   readonly books: Book[];
