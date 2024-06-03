@@ -35,6 +35,8 @@ import { ComprehensiveTestModule } from "../educational-management/comprehensive
 import { PrimaryQuestionModule } from "../educational-management/comprehensive-primary-question/primary-question.module";
 import { FirstQuestionModule } from "../educational-management/comprehensive-first-question/first-question.module";
 import { SecondQuestionModule } from "../educational-management/comprehensive-second-question/second-question.module";
+import { CityModule } from "../city/city.module";
+import { ProvinceModule } from "../province/province.module";
 
 @Global()
 @Module({
@@ -57,6 +59,8 @@ import { SecondQuestionModule } from "../educational-management/comprehensive-se
     SecondQuestionModule,
     StandardModule,
     SubjectiveModule,
+    CityModule,
+    ProvinceModule,
     ObjectiveTestModule,
     QuestionModule,
     CreateExamModule,

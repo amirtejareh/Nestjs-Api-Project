@@ -10,6 +10,8 @@ import {
   TermOfStudy,
   TermOfStudySchema,
 } from "../content-management/term-of-study/entities/term-of-study.entity";
+import { City, CitySchema } from "../city/entities/city.entity";
+import { Province, ProvinceSchema } from "../province/entities/province.entity";
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import {
       { name: Role.name, schema: RoleSchema },
       { name: Permission.name, schema: PermissionSchema },
       { name: TermOfStudy.name, schema: TermOfStudySchema },
+      { name: City.name, schema: CitySchema },
+      { name: Province.name, schema: ProvinceSchema },
     ]),
   ],
   providers: [SeederService],

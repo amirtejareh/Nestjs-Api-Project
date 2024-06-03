@@ -7,6 +7,10 @@ import {
 } from "../permission/entities/permission.entity";
 import { Model } from "mongoose";
 import { TermOfStudy } from "../content-management/term-of-study/entities/term-of-study.entity";
+import { City } from "../city/entities/city.entity";
+import { Province } from "../province/entities/province.entity";
+import cities from "../common/utils/cities";
+import provinces from "../common/utils/privinces";
 
 @Injectable()
 export class SeederService {
@@ -15,10 +19,26 @@ export class SeederService {
     @InjectModel(Permission.name)
     private permissionModel: Model<PermissionDocument>,
     @InjectModel(TermOfStudy.name)
-    private termOfStudyModel: Model<TermOfStudy>
+    private termOfStudyModel: Model<TermOfStudy>,
+    @InjectModel(City.name)
+    private cityModel: Model<City>,
+    @InjectModel(Province.name)
+    private provinceModel: Model<Province>
   ) {}
 
   async seed() {
+    const existingProvince = await this.provinceModel.find({});
+
+    if (existingProvince.length === 0) {
+      await this.provinceModel.create(provinces);
+    }
+
+    const existingCity = await this.cityModel.find({});
+
+    if (existingCity.length === 0) {
+      await this.cityModel.create(cities);
+    }
+
     const permissions = [
       { resource: "post", action: "create" },
       { resource: "post", action: "read" },
