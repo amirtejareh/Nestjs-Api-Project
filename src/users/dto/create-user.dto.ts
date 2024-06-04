@@ -7,6 +7,10 @@ import {
   MaxLength,
   Length,
 } from "class-validator";
+import { GradeLevel } from "../../content-management/grade-level/entities/grade-level.entity";
+import { FieldOfStudy } from "../../content-management/field-of-study/entities/field-of-study.entity";
+import { Province } from "../../province/entities/province.entity";
+import { City } from "../../city/entities/city.entity";
 
 export class CreateUserDto {
   @ApiProperty({
@@ -61,6 +65,38 @@ export class CreateUserDto {
   })
   @IsNotEmpty({ message: "فیلد کدملی اجباری است" })
   readonly national_id_number: string;
+
+  @ApiProperty({
+    description: "Gender of the individual",
+    enum: ["male", "female"],
+  })
+  gender?: string;
+
+  @ApiProperty({ required: false })
+  familyName?: string;
+
+  @ApiProperty({ required: false })
+  firstName?: string;
+
+  @ApiProperty({ required: false })
+  birthday?: string;
+
+  @ApiProperty({ required: false })
+  fathersName?: string;
+
+  @ApiProperty({ required: false })
+  phone?: string;
+
+  @ApiProperty({ required: false })
+  parentsPhone?: string;
+
+  @ApiProperty({ type: "string", format: "binary" })
+  public profilePhoto?: any;
+
+  readonly gradeLevel?: GradeLevel[];
+  readonly fieldOfStudy?: FieldOfStudy[];
+  readonly province?: Province[];
+  readonly city?: City[];
 
   readonly roles?: string[];
   readonly createdAt?: Date;
