@@ -11,6 +11,7 @@ import { RoleService } from "../role/role.service";
 import { RoleRepository } from "../role/role.repository";
 import { RoleSchema } from "../role/entities/role.entity";
 import { AuthGuard } from "./guards/auth.guard";
+import { ImageService } from "../common/services/imageService";
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AuthGuard } from "./guards/auth.guard";
     RoleService,
     RoleRepository,
     AuthGuard,
+    ImageService,
   ],
   controllers: [AuthController],
 })

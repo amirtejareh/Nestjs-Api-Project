@@ -9,6 +9,7 @@ import { RoleRepository } from "../role/role.repository";
 import { RoleSchema } from "../role/entities/role.entity";
 import { JwtService } from "@nestjs/jwt";
 import { AuthService } from "../auth/auth.service";
+import { ImageService } from "../common/services/imageService";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthService } from "../auth/auth.service";
   providers: [
     RoleService,
     RoleRepository,
+    ImageService,
     UsersService,
     UserRepository,
     JwtService,

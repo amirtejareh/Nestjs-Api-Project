@@ -16,6 +16,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   readonly fieldOfStudy?: FieldOfStudy[];
   readonly province?: Province[];
   readonly city?: City[];
-  @ApiProperty({ type: "string", format: "binary" })
-  public profilePhoto: any;
+  public profilePhoto?: string;
 }

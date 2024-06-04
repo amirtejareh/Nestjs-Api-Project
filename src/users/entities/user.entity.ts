@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { Document, Schema as mongooseSchema } from "mongoose";
 import { Role } from "../../role/entities/role.entity";
 import { Permission } from "../../permission/entities/permission.entity";
-import { Province } from "../../province/entities/province.entity";
 import { City } from "../../city/entities/city.entity";
 import { FieldOfStudy } from "../../content-management/field-of-study/entities/field-of-study.entity";
 import { GradeLevel } from "../../content-management/grade-level/entities/grade-level.entity";
@@ -43,16 +42,8 @@ export class User {
   @Prop({ required: false })
   parentsPhone: string;
 
-  @Prop({
-    type: [
-      {
-        required: false,
-        type: mongooseSchema.Types.ObjectId,
-        ref: Province.name,
-      },
-    ],
-  })
-  province: Province[];
+  @Prop({ required: false })
+  province: number;
 
   @Prop({
     type: [
@@ -83,8 +74,8 @@ export class User {
   })
   gradeLevel: GradeLevel[];
 
-  @ApiProperty({ required: false, type: "string", format: "binary" })
-  public profilePhoto?: any;
+  @Prop({ required: false })
+  public profilePhoto?: string;
 
   @Prop({ unique: true, error: "ایمیل قبلاً ثبت شده است" })
   email: string;

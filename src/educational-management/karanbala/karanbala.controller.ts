@@ -9,7 +9,6 @@ import {
   UseGuards,
   UseInterceptors,
   Res,
-  UploadedFile,
   UploadedFiles,
   ParseArrayPipe,
 } from "@nestjs/common";

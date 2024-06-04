@@ -3,13 +3,11 @@ import {
   Post,
   Body,
   UnauthorizedException,
-  ValidationPipe,
   ConflictException,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { MissingFieldsException } from "../common/exception/missing-fields-exception";
 import { CreateUserDto } from "../users/dto/create-user.dto";
-import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 import * as bcrypt from "bcrypt";
 import { NationalCodeHelper } from "../common/utils/national-code.helper";

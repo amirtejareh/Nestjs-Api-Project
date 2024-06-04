@@ -48,7 +48,7 @@ export class CreateUserDto {
         "رمز عبور شامل حداقل ۸ کاراکتر یک حرف کوچک، یک حرف بزرگ و یک عدداست",
     }
   )
-  readonly password: string;
+  password: string;
 
   @ApiProperty({
     description: "Mobile of the user",
@@ -89,15 +89,11 @@ export class CreateUserDto {
 
   @ApiProperty({ required: false })
   parentsPhone?: string;
-
-  @ApiProperty({ type: "string", format: "binary" })
-  public profilePhoto?: any;
-
+  readonly profilePhoto?: string;
   readonly gradeLevel?: GradeLevel[];
   readonly fieldOfStudy?: FieldOfStudy[];
   readonly province?: Province[];
   readonly city?: City[];
-
   readonly roles?: string[];
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
