@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   Res,
+  ParseArrayPipe,
 } from "@nestjs/common";
 import { CityService } from "./city.service";
 import { CreateCityDto } from "./dto/create-city.dto";
 import { UpdateCityDto } from "./dto/update-city.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("City")
 @Controller("city")
 export class CityController {
   constructor(private readonly cityService: CityService) {}
@@ -19,6 +22,17 @@ export class CityController {
   @Post()
   create(@Res() res, @Body() createCityDto: CreateCityDto) {
     return this.cityService.create(res, createCityDto);
+  }
+
+  @Get("withProvinces/:provinceId")
+  async findCitiesBasedOnProvince(
+    @Param("provinceId", ParseArrayPipe) provinces: string[]
+  ) {
+    if (provinces[0] == "null") {
+      return [];
+    }
+
+    return this.cityService.findBasedOnProvince(provinces);
   }
 
   @Get()

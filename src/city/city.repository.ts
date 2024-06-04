@@ -7,7 +7,7 @@ import {
   UploadedFile,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { CreateCityDto } from "./dto/create-city.dto";
 import { UpdateCityDto } from "./dto/update-city.dto";
 import { City } from "./entities/city.entity";
@@ -41,6 +41,16 @@ export class CityRepository {
 
   findAll() {
     return this.CityModel.find({});
+  }
+
+  async findBasedOnProvince(province: string[]) {
+    console.log(province, "province");
+
+    const cities = await this.CityModel.find({
+      province_id: province[0],
+    });
+
+    return cities;
   }
 
   findOne(id: string) {

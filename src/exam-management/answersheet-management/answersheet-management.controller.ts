@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   Res,
   UploadedFiles,
-  UploadedFile,
 } from "@nestjs/common";
 
 import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";

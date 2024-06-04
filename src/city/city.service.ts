@@ -15,6 +15,14 @@ export class CityService {
     return this.cityRepository.findAll();
   }
 
+  async findBasedOnProvince(province: string[]) {
+    if (province[0] == "null") {
+      return [];
+    }
+
+    return this.cityRepository.findBasedOnProvince(province);
+  }
+
   findOne(id: string) {
     return this.cityRepository.findOne(id);
   }
