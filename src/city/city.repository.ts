@@ -44,8 +44,6 @@ export class CityRepository {
   }
 
   async findBasedOnProvince(province: string[]) {
-    console.log(province, "province");
-
     const cities = await this.CityModel.find({
       province_id: province[0],
     });
