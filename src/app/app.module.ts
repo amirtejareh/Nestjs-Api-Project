@@ -37,6 +37,7 @@ import { FirstQuestionModule } from "../educational-management/comprehensive-fir
 import { SecondQuestionModule } from "../educational-management/comprehensive-second-question/second-question.module";
 import { CityModule } from "../city/city.module";
 import { ProvinceModule } from "../province/province.module";
+import { NewsModule } from "../content-management/news/news.module";
 
 @Global()
 @Module({
@@ -51,6 +52,7 @@ import { ProvinceModule } from "../province/province.module";
     BookModule,
     BookReferenceModule,
     ChapterModule,
+    NewsModule,
     SectionModule,
     SubjectModule,
     SampleTestQuestionsModule,
