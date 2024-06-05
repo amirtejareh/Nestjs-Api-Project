@@ -1,4 +1,4 @@
-import { Injectable, Res, UploadedFile } from "@nestjs/common";
+import { Injectable, Query, Res, UploadedFile } from "@nestjs/common";
 import { CreateNewsDto } from "./dto/create-news.dto";
 import { UpdateNewsDto } from "./dto/update-news.dto";
 import { NewsRepository } from "./news.repository";
@@ -15,8 +15,8 @@ export class NewsService {
     return this.newsRepository.create(res, file, createNewsDto);
   }
 
-  findAll() {
-    return this.newsRepository.findAll();
+  findAll(page: number, limit: number) {
+    return this.newsRepository.findAll(page, limit);
   }
 
   findSome(limit: number = 10) {

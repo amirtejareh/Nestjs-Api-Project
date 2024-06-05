@@ -41,8 +41,8 @@ export class NewsController {
   }
 
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  findAll(@Query("page") page: number, @Query("limit") limit: number) {
+    return this.newsService.findAll(page, limit);
   }
 
   @Get("withLimit")

@@ -57,8 +57,21 @@ export class NewsRepository {
     }
   }
 
-  findAll() {
-    return this.newsModel.find({});
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const allNews = await this.newsModel.find({}).skip(skip).limit(limit);
+    const totalNews = await this.newsModel.find({}).count();
+
+    if (allNews.length == 0) {
+      return [];
+    }
+    return {
+      allNews,
+      currentPage: page,
+      totalPages: Math.ceil(totalNews / limit),
+      totalItems: totalNews,
+    };
   }
 
   async findSome(limit: number = 10) {
