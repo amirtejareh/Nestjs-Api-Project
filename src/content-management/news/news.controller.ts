@@ -10,7 +10,7 @@ import {
   Res,
   UploadedFile,
   UseInterceptors,
-  ParseArrayPipe,
+  Query,
 } from "@nestjs/common";
 import { NewsService } from "./news.service";
 import { CreateNewsDto } from "./dto/create-news.dto";
@@ -43,6 +43,11 @@ export class NewsController {
   @Get()
   findAll() {
     return this.newsService.findAll();
+  }
+
+  @Get("withLimit")
+  findSome(@Query("limit") limit: number) {
+    return this.newsService.findSome(limit);
   }
 
   @Get(":id")

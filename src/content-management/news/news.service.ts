@@ -19,6 +19,10 @@ export class NewsService {
     return this.newsRepository.findAll();
   }
 
+  findSome(limit: number = 10) {
+    return this.newsRepository.findSome(limit);
+  }
+
   findOne(id: string) {
     return this.newsRepository.findOne(id);
   }

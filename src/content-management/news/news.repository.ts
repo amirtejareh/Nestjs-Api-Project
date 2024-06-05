@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
@@ -10,7 +9,7 @@ import {
 } from "@nestjs/common";
 
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 import { News } from "./entities/news.entity";
 import * as fs from "fs";
 import { ImageService } from "../../common/services/imageService";
@@ -62,37 +61,26 @@ export class NewsRepository {
     return this.newsModel.find({});
   }
 
-  async findNewssBasedOnGradeLevels(gradeLevels: string[]) {
-    const newss = await this.newsModel.find({
-      gradeLevels: {
-        $in: gradeLevels.map((id: string) => new Types.ObjectId(id)),
+  async findSome(limit: number = 10) {
+    const newsIds = await this.newsModel.find({}).limit(limit).select("_id");
+
+    const totalnews = await this.newsModel.countDocuments({});
+
+    const news = await this.newsModel.find({
+      _id: {
+        $in: newsIds,
       },
     });
 
-    return newss;
-  }
+    if (news.length === 0) {
+      return [];
+    }
 
-  async findNewssBasedOnNewsReferences(
-    gradeLevels: string[],
-    newsReferences: string[]
-  ) {
-    const validNewsReferences = newsReferences.filter((id: string) =>
-      Types.ObjectId.isValid(id)
-    );
-    const validGradeLevels = gradeLevels.filter((id: string) =>
-      Types.ObjectId.isValid(id)
-    );
-
-    const newss = await this.newsModel.find({
-      newsReferences: {
-        $in: validNewsReferences.map((id: string) => new Types.ObjectId(id)),
-      },
-      gradeLevels: {
-        $in: validGradeLevels.map((id: string) => new Types.ObjectId(id)),
-      },
-    });
-
-    return newss;
+    return {
+      news,
+      totalPages: Math.ceil(totalnews / limit),
+      totalItems: totalnews,
+    };
   }
 
   findOne(id: string) {
