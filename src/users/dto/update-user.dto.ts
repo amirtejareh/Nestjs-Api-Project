@@ -16,5 +16,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   readonly fieldOfStudy?: FieldOfStudy[];
   readonly province?: Province[];
   readonly city?: City[];
+  readonly slogan?: string;
   public profilePhoto?: string;
 }

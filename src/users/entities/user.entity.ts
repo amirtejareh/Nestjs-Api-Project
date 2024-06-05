@@ -77,6 +77,9 @@ export class User {
   @Prop({ required: false })
   public profilePhoto?: string;
 
+  @Prop({ required: false })
+  public slogan?: string;
+
   @Prop({ unique: true, error: "ایمیل قبلاً ثبت شده است" })
   email: string;
 

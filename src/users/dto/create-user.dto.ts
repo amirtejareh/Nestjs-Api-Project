@@ -76,6 +76,9 @@ export class CreateUserDto {
   familyName?: string;
 
   @ApiProperty({ required: false })
+  slogan?: string;
+
+  @ApiProperty({ required: false })
   firstName?: string;
 
   @ApiProperty({ required: false })
