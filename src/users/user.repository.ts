@@ -40,6 +40,26 @@ export class UserRepository {
     return this.userModel.find({});
   }
 
+  async getUserBasedOnUsername(
+    @Res() res,
+    @Param("username") username: string
+  ) {
+    try {
+      const User = await this.userModel.find({ username });
+
+      if (!User) {
+        throw new NotFoundException("کاربر مورد نظر یافت نشد.");
+      }
+
+      return res.status(200).json(User);
+    } catch (e) {
+      return res.status(500).json({
+        statusCode: 500,
+        message: e.message,
+      });
+    }
+  }
+
   async update(
     @Res() res,
     @UploadedFile() file: Express.Multer.File,

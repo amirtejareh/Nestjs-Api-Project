@@ -38,6 +38,7 @@ import { SecondQuestionModule } from "../educational-management/comprehensive-se
 import { CityModule } from "../city/city.module";
 import { ProvinceModule } from "../province/province.module";
 import { NewsModule } from "../content-management/news/news.module";
+import { OrderModule } from "../order/order.module";
 
 @Global()
 @Module({
@@ -50,6 +51,7 @@ import { NewsModule } from "../content-management/news/news.module";
     GradeLevelModule,
     TermOfStudyModule,
     BookModule,
+    OrderModule,
     BookReferenceModule,
     ChapterModule,
     NewsModule,

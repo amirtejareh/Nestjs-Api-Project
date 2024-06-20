@@ -33,7 +33,14 @@ async function bootstrap() {
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   });
+
+  app.enableCors({
+    allowedHeaders: "*",
+    origin: "*",
+  });
+
   app.listen(3000);
 }
 

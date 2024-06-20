@@ -31,6 +31,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get("withUsername/:username")
+  getUserBasedOnUsername(@Res() res, @Param("username") username: string) {
+    return this.usersService.getUserBasedOnUsername(res, username);
+  }
+
   @Patch(":username")
   @UseInterceptors(FileInterceptor("profilePhoto"))
   @ApiConsumes("multipart/form-data")

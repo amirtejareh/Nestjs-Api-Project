@@ -18,6 +18,10 @@ export class UsersService {
     return this.userRepository.findAll();
   }
 
+  getUserBasedOnUsername(@Res() res, username: string) {
+    return this.userRepository.getUserBasedOnUsername(res, username);
+  }
+
   update(
     @Res() res,
     @UploadedFile() file: Express.Multer.File,
