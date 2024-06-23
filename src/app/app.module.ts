@@ -39,6 +39,7 @@ import { CityModule } from "../city/city.module";
 import { ProvinceModule } from "../province/province.module";
 import { NewsModule } from "../content-management/news/news.module";
 import { OrderModule } from "../order/order.module";
+import { ContentEducationalPricingModule } from "../settings/content_educational_pricing/content_educational_pricing.module";
 
 @Global()
 @Module({
@@ -81,6 +82,7 @@ import { OrderModule } from "../order/order.module";
     TipAndTestModule,
     KaranbalaModule,
     BookIntroModule,
+    ContentEducationalPricingModule,
   ],
   providers: [ImageService],
 
