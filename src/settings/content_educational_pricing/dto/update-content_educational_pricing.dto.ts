@@ -11,6 +11,7 @@ export class UpdateContentEducationalPricingDto extends PartialType(
   readonly gradeLevel?: GradeLevel;
   readonly book: Book;
   readonly price: number;
+  readonly type?: string;
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

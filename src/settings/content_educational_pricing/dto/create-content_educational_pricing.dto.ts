@@ -22,6 +22,9 @@ export class CreateContentEducationalPricingDto {
   })
   readonly price: number;
 
+  @ApiProperty({ enum: ["comprehensive_test", "quiz"] })
+  readonly type?: string;
+
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

@@ -23,6 +23,12 @@ export class ContentEducationalPricing {
     required: true,
   })
   price: number;
+
+  @Prop({
+    required: true,
+    enum: ["comprehensive_test", "quiz"],
+  })
+  type: string;
 }
 
 export const ContentEducationalPricingSchema = SchemaFactory.createForClass(
