@@ -51,7 +51,9 @@ export class ContentEducationalPricingRepository {
   }
 
   findAll() {
-    return this.contentEducationalPricingModel.find({});
+    return this.contentEducationalPricingModel
+      .find({})
+      .populate(["gradeLevel", "book"]);
   }
 
   findOne(id: string) {

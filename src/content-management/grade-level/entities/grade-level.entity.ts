@@ -57,6 +57,12 @@ GradeLevelSchema.virtual("subjects", {
   foreignField: "gradeLevels",
 });
 
+GradeLevelSchema.virtual("contenteducationalpricings", {
+  ref: "ContentEducationalPricing",
+  localField: "_id",
+  foreignField: "gradeLevel",
+});
+
 GradeLevelSchema.virtual("bookreferences", {
   ref: "BookReference",
   localField: "_id",
