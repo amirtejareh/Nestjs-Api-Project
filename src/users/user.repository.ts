@@ -45,7 +45,7 @@ export class UserRepository {
     @Param("username") username: string
   ) {
     try {
-      const User = await this.userModel.find({ username });
+      const User = await this.userModel.find({ username }).populate(["city"]);
 
       if (!User) {
         throw new NotFoundException("کاربر مورد نظر یافت نشد.");

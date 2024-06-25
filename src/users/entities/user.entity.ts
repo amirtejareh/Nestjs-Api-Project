@@ -8,6 +8,16 @@ import { GradeLevel } from "../../content-management/grade-level/entities/grade-
 import { ApiProperty } from "@nestjs/swagger";
 
 export type UserDocument = User & Document;
+
+enum GenderValue {
+  Male = "male",
+  Female = "female",
+}
+
+enum GenderLabel {
+  Male = "مرد",
+  Female = "زن",
+}
 @Schema()
 export class User {
   @Prop({
@@ -21,8 +31,8 @@ export class User {
   @Prop({ unique: true, error: "شماره تلفن همراه قبلاً ثبت شده است" })
   mobile: string;
 
-  @Prop({ required: false, enum: ["male", "female"] })
-  gender: string;
+  @Prop({ required: false, type: Object })
+  gender: { value: GenderValue; label: GenderLabel };
 
   @Prop({ required: false })
   familyName: string;
@@ -42,37 +52,17 @@ export class User {
   @Prop({ required: false })
   parentsPhone: string;
 
-  @Prop({ required: false })
-  province: number;
+  @Prop({ required: false, type: Object })
+  province: { value: number; label: string };
 
-  @Prop({
-    type: [
-      { required: false, type: mongooseSchema.Types.ObjectId, ref: City.name },
-    ],
-  })
-  city: City[];
+  @Prop({ required: false, type: Object })
+  city: { value: number; label: string };
 
-  @Prop({
-    type: [
-      {
-        required: false,
-        type: mongooseSchema.Types.ObjectId,
-        ref: FieldOfStudy.name,
-      },
-    ],
-  })
-  fieldOfStudy: FieldOfStudy[];
+  @Prop({ required: false, type: Object })
+  fieldOfStudy: { value: number; label: string };
 
-  @Prop({
-    type: [
-      {
-        required: false,
-        type: mongooseSchema.Types.ObjectId,
-        ref: GradeLevel.name,
-      },
-    ],
-  })
-  gradeLevel: GradeLevel[];
+  @Prop({ required: false, type: Object })
+  gradeLevel: { value: number; label: string };
 
   @Prop({ required: false })
   public profilePhoto?: string;
