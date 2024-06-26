@@ -37,7 +37,7 @@ export class PaymentRepository {
         false
       );
       const response = await zarinpal.PaymentRequest({
-        Amount: 1000,
+        Amount: createPaymentDto.amount,
         CallbackURL: `http://localhost:2000/dashboard/user/purchase/callbackUrl`,
         Description:
           createPaymentDto.type == "comprehensive_test"
@@ -51,7 +51,7 @@ export class PaymentRepository {
         await this.PaymentModel.create({
           invoiceNumber: await this.invoiceGenerator(),
           verify: false,
-          amount: 1000,
+          amount: createPaymentDto.amount,
           email: createPaymentDto.email,
           userId: createPaymentDto.userId,
           authority: response.authority,
