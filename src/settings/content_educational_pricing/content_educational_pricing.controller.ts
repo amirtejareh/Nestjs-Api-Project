@@ -55,6 +55,23 @@ export class ContentEducationalPricingController {
     return this.contentEducationalPricingService.findOne(id);
   }
 
+  @Get("withBooks/:BookId")
+  async findPriceBasedOnBookAndGradeLevelAndType(
+    @Query("bookId") bookId: string,
+    @Query("gradeLevelId") gradeLevelId: string,
+    @Query("type") type: string
+  ) {
+    if (bookId == "") {
+      return [];
+    }
+
+    return this.contentEducationalPricingService.findPriceBasedOnBookAndGradeLevelAndType(
+      bookId,
+      gradeLevelId,
+      type
+    );
+  }
+
   @Patch(":id")
   @ApiBearerAuth()
   update(

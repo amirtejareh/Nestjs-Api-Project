@@ -38,7 +38,7 @@ import { SecondQuestionModule } from "../educational-management/comprehensive-se
 import { CityModule } from "../city/city.module";
 import { ProvinceModule } from "../province/province.module";
 import { NewsModule } from "../content-management/news/news.module";
-import { OrderModule } from "../order/order.module";
+import { PaymentModule } from "../payment/payment.module";
 import { ContentEducationalPricingModule } from "../settings/content_educational_pricing/content_educational_pricing.module";
 
 @Global()
@@ -52,7 +52,7 @@ import { ContentEducationalPricingModule } from "../settings/content_educational
     GradeLevelModule,
     TermOfStudyModule,
     BookModule,
-    OrderModule,
+    PaymentModule,
     BookReferenceModule,
     ChapterModule,
     NewsModule,

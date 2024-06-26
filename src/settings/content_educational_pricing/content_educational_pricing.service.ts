@@ -23,6 +23,18 @@ export class ContentEducationalPricingService {
     return this.contentEducationalPricingRepository.findAll();
   }
 
+  async findPriceBasedOnBookAndGradeLevelAndType(
+    bookId: string,
+    gradeLevelId: string,
+    type: string
+  ) {
+    return this.contentEducationalPricingRepository.findPriceBasedOnBookAndGradeLevelAndType(
+      bookId,
+      gradeLevelId,
+      type
+    );
+  }
+
   findOne(id: string) {
     return this.contentEducationalPricingRepository.findOne(id);
   }

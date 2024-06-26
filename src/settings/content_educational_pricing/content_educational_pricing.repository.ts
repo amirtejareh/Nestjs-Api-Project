@@ -56,6 +56,25 @@ export class ContentEducationalPricingRepository {
       .populate(["gradeLevel", "book"]);
   }
 
+  async findPriceBasedOnBookAndGradeLevelAndType(
+    bookId: string,
+    gradeLevelId: string,
+    type: string
+  ) {
+    const contentEducationalPricing =
+      await this.contentEducationalPricingModel.find({
+        gradeLevel: {
+          $in: new Types.ObjectId(gradeLevelId),
+        },
+        book: {
+          $in: new Types.ObjectId(bookId),
+        },
+        type,
+      });
+
+    return contentEducationalPricing;
+  }
+
   findOne(id: string) {
     return this.contentEducationalPricingModel.findOne({ _id: id });
   }
