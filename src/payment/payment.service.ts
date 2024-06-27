@@ -12,8 +12,8 @@ export class PaymentService {
     return this.paymentRepository.create(res, createPaymentDto);
   }
 
-  findAll() {
-    return this.paymentRepository.findAll();
+  findAll(page: number, limit: number) {
+    return this.paymentRepository.findAll(page, limit);
   }
 
   findOne(id: string) {

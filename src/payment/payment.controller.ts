@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Res,
+  Query,
 } from "@nestjs/common";
 import { PaymentService } from "./payment.service";
 import { CreatePaymentDto } from "./dto/create-payment.dto";
@@ -24,8 +25,8 @@ export class PaymentController {
   }
 
   @Get()
-  findAll() {
-    return this.paymentService.findAll();
+  findAll(@Query("page") page: number, @Query("limit") limit: number) {
+    return this.paymentService.findAll(page, limit);
   }
 
   @Get("withAuthority/:authorityId")

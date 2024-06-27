@@ -40,10 +40,17 @@ import { ProvinceModule } from "../province/province.module";
 import { NewsModule } from "../content-management/news/news.module";
 import { PaymentModule } from "../payment/payment.module";
 import { ContentEducationalPricingModule } from "../settings/content_educational_pricing/content_educational_pricing.module";
+import { ConfigModule } from "@nestjs/config";
+
+const ENV = process.env.NODE_ENV;
+console.log(ENV, "ENV");
 
 @Global()
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: !ENV ? ".env" : `.env.${ENV}`,
+    }),
     MongooseModule.forRoot("mongodb://127.0.0.1/karanbala"),
     UsersModule,
     SeedModule,

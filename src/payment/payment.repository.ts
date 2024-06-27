@@ -38,7 +38,7 @@ export class PaymentRepository {
       );
       const response = await zarinpal.PaymentRequest({
         Amount: createPaymentDto.amount,
-        CallbackURL: `http://localhost:2000/dashboard/user/purchase/callbackUrl`,
+        CallbackURL: `${process.env.BASE_URL}/dashboard/user/purchase/callbackUrl`,
         Description:
           createPaymentDto.type == "comprehensive_test"
             ? "بابت خرید تست جامع"
@@ -131,8 +131,23 @@ export class PaymentRepository {
     }
   }
 
-  findAll() {
-    return this.PaymentModel.find({});
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const allTransactions = await this.PaymentModel.find({})
+      .skip(skip)
+      .limit(limit);
+    const totalTransactions = await this.PaymentModel.find({}).count();
+
+    if (allTransactions.length == 0) {
+      return [];
+    }
+    return {
+      allTransactions,
+      currentPage: page,
+      totalPages: Math.ceil(totalTransactions / limit),
+      totalItems: totalTransactions,
+    };
   }
 
   findOne(id: string) {
