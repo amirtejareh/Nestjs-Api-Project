@@ -43,7 +43,6 @@ import { ContentEducationalPricingModule } from "../settings/content_educational
 import { ConfigModule } from "@nestjs/config";
 
 const ENV = process.env.NODE_ENV;
-console.log(ENV, "ENV");
 
 @Global()
 @Module({
