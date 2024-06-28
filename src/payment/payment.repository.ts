@@ -6,17 +6,30 @@ import {
   Res,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { UpdatePaymentDto } from "./dto/update-payment.dto";
 import ZarinpalCheckout from "../../lib/zarinpal";
 import { Payment } from "./entities/payment.entity";
 import moment from "moment-jalali";
 import { CreatePaymentDto } from "./dto/create-payment.dto";
+import { Permission } from "../permission/entities/permission.entity";
+import { Role } from "../role/entities/role.entity";
+import { User } from "../users/entities/user.entity";
+import { Book } from "../content-management/book/entities/book.entity";
 @Injectable()
 export class PaymentRepository {
   constructor(
     @InjectModel(Payment.name)
-    private readonly PaymentModel: Model<Payment>
+    private readonly PaymentModel: Model<Payment>,
+
+    @InjectModel(Permission.name)
+    private readonly PermissionModel: Model<Permission>,
+
+    @InjectModel(User.name)
+    private readonly UserModel: Model<User>,
+
+    @InjectModel(Role.name)
+    private readonly RoleModel: Model<Role>
   ) {}
 
   async findOneByTitle(title: string) {
@@ -30,8 +43,94 @@ export class PaymentRepository {
     );
   }
 
+  async updateUserRoles(book: Book, type: string, id: string) {
+    let permissions;
+    if (type === "comprehensive_test") {
+      permissions = [{ resource: "ComprehensiveTest" + book, action: "read" }];
+    }
+
+    if (type === "quiz") {
+      permissions = [{ resource: "Quiz" + book, action: "read" }];
+    }
+
+    let roles;
+
+    if (type === "comprehensive_test") {
+      roles = [
+        {
+          title: "ComprehensiveTest" + book,
+          permissions,
+        },
+      ];
+    }
+
+    if (type === "quiz") {
+      roles = [
+        {
+          title: "Quiz" + book,
+          permissions,
+        },
+      ];
+    }
+
+    for (const permission of permissions) {
+      const existingPermission = await this.PermissionModel.findOne({
+        resource: permission.resource,
+        action: permission.action,
+      });
+
+      if (!existingPermission) {
+        await this.PermissionModel.create(permission);
+      }
+    }
+
+    for (const role of roles) {
+      const permissionObjects = await this.PermissionModel.find({
+        resource: { $in: role.permissions.map((p) => p.resource) },
+        action: { $in: role.permissions.map((p) => p.action) },
+      }).exec();
+      const permissionIds = permissionObjects.map(
+        (permission) => permission._id
+      );
+
+      const existingRole: any = await this.RoleModel.findOne({
+        title: role.title,
+      });
+
+      if (!existingRole) {
+        await this.RoleModel.create({
+          title: role.title,
+          permissions: permissionIds,
+        });
+      }
+    }
+    const existingRole: any = await this.RoleModel.findOne({
+      title: roles[0].title,
+    });
+    await this.UserModel.findOneAndUpdate(
+      { _id: id },
+      { $push: { roles: existingRole } },
+      { new: true }
+    );
+  }
+
   async create(@Res() res, createPaymentDto: CreatePaymentDto) {
     try {
+      const isProductPaid = await this.PaymentModel.findOne({
+        book: {
+          $in: createPaymentDto.book,
+        },
+        userId: createPaymentDto.userId,
+        verify: true,
+      });
+
+      if (isProductPaid) {
+        return res.status(400).json({
+          statusCode: 400,
+          message: "این محصول پیش از این خریداری شده است",
+        });
+      }
+
       var zarinpal = ZarinpalCheckout.create(
         "2cd95860-22ad-42c3-9656-1143ba4b7de3",
         false
@@ -56,7 +155,7 @@ export class PaymentRepository {
           userId: createPaymentDto.userId,
           authority: response.authority,
           mobile: createPaymentDto.mobile,
-          gradeLevel: createPaymentDto.gradeLevel,
+          book: createPaymentDto.book,
           type: createPaymentDto.type,
         });
         return res.status(200).json({
@@ -96,6 +195,7 @@ export class PaymentRepository {
           message: "سفارش قبلا تکمیل شده است",
         });
       }
+
       var zarinpal = ZarinpalCheckout.create(
         "2cd95860-22ad-42c3-9656-1143ba4b7de3",
         false
@@ -117,9 +217,23 @@ export class PaymentRepository {
           { new: true }
         );
 
+        await this.updateUserRoles(
+          payment.book[0],
+          payment.type,
+          payment.userId
+        );
+
         return res.status(200).json({
           statusCode: 200,
           message: "پرداخت شما با موفقیت انجام شد",
+        });
+      }
+
+      if (response.status == -51) {
+        return res.status(500).json({
+          statusCode: 500,
+          message:
+            "پرداخت انجام نشد در صورت کسر وجه طی ۷۲ ساعت به حساب شما باز می گردد",
         });
       }
     } catch (error) {

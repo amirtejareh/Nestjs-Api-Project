@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document, Schema as mongooseSchema } from "mongoose";
 import { User } from "../../users/entities/user.entity";
 import { GradeLevel } from "../../content-management/grade-level/entities/grade-level.entity";
+import { Book } from "../../content-management/book/entities/book.entity";
 
 export type PaymentDocument = Payment & Document;
 
@@ -57,9 +58,9 @@ export class Payment {
   mobile: string;
 
   @Prop({
-    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: Book.name }],
   })
-  gradeLevel: GradeLevel[];
+  book: Book[];
 
   @Prop({ enum: ["comprehensive_test", "quiz"] })
   type: string;

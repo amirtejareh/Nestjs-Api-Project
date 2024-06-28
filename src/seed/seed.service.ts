@@ -97,6 +97,7 @@ export class SeederService {
       );
 
       const existingRole = await this.roleModel.findOne({ title: role.title });
+      console.log(existingRole, "existingRole");
 
       if (existingRole) {
         existingRole.permissions = permissionIds;

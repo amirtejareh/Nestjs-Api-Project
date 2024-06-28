@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { GradeLevel } from "../../content-management/grade-level/entities/grade-level.entity";
+import { Book } from "../../content-management/book/entities/book.entity";
 
 export class CreatePaymentDto {
   @ApiProperty({
@@ -27,18 +27,18 @@ export class CreatePaymentDto {
 
   @ApiProperty({
     description: "id of the user",
-    example: "11111",
+    example: "24242ewSDAD23",
   })
-  userId: number;
+  userId: string;
 
   @ApiProperty({ enum: ["comprehensive_test", "quiz"] })
   type: string;
 
   @ApiProperty({
-    description: "Grade level id",
+    description: "Book id",
     example: "64d5513027862ad356480ff0",
   })
-  gradeLevel: GradeLevel;
+  book: Book;
 
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
