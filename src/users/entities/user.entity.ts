@@ -61,8 +61,13 @@ export class User {
   @Prop({ required: false, type: Object })
   fieldOfStudy: { value: number; label: string };
 
-  @Prop({ required: false, type: Object })
-  gradeLevel: { value: number; label: string };
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
+  })
+  gradeLevel: GradeLevel[];
+
+  @Prop({ required: false })
+  gradeLevelMaxUpdated: number;
 
   @Prop({ required: false })
   public profilePhoto?: string;

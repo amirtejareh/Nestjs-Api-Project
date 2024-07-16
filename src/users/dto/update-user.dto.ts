@@ -12,7 +12,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   readonly fathersName?: string;
   readonly phone?: string;
   readonly parentsPhone?: string;
-  readonly gradeLevel?: GradeLevel[];
+  gradeLevel?: GradeLevel[];
   readonly fieldOfStudy?: FieldOfStudy[];
   readonly province?: Province[];
   readonly city?: City[];

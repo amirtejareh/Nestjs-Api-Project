@@ -33,7 +33,7 @@ export class UserRepository {
     });
   }
   async getUser(query: object): Promise<User> {
-    return this.userModel.findOne(query);
+    return this.userModel.findOne(query).populate(["gradeLevel"]);
   }
 
   async findAll(): Promise<User[]> {
@@ -111,9 +111,25 @@ export class UserRepository {
         }
       }
 
+      let count = 0;
+
+      if (User[0].gradeLevelMaxUpdated >= 0) {
+        if (User[0].gradeLevelMaxUpdated < 3) {
+          count = User[0].gradeLevelMaxUpdated + 1;
+        } else {
+          count = 3;
+        }
+      } else {
+        count = 1;
+      }
+
+      if (count == 3) {
+        delete updateUserDto.gradeLevel;
+      }
+
       const updateUserModel = await this.userModel.findOneAndUpdate(
         { email: User[0].email },
-        updateUserDto,
+        { ...updateUserDto, gradeLevelMaxUpdated: count },
         {
           new: true,
         }

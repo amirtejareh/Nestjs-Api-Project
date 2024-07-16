@@ -30,7 +30,12 @@ export class AuthService {
       _id: { $in: roleIds },
     });
 
-    const payload = { username: user.username, sub: user._id, roles };
+    const payload = {
+      username: user.username,
+      sub: user._id,
+      roles,
+      gradeLevel: user.gradeLevel,
+    };
 
     return {
       statusCode: 200,
