@@ -23,12 +23,6 @@ export class ReportStandardRepository {
       })
       .exec();
 
-    if (reportFound) {
-      throw new ConflictException(
-        "امکان ثبت مجدد نتیجه آزمون وجود ندارد میتوانید در میز کار خود نتیجه آزمون فعلی را مشاهده کنید."
-      );
-    }
-
     const questions = await this.findAllQuestionsInStandardExamBasedOnExamId(
       createReportStandardDto.examId
     );

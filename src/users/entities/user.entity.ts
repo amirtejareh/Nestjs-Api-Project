@@ -25,10 +25,10 @@ export class User {
   })
   roles: Permission[];
 
-  @Prop({ unique: true, error: "نام کاربری قبلاً ثبت شده است" })
+  @Prop()
   username: string;
 
-  @Prop({ unique: true, error: "شماره تلفن همراه قبلاً ثبت شده است" })
+  @Prop()
   mobile: string;
 
   @Prop({ required: false, type: Object })
@@ -75,13 +75,13 @@ export class User {
   @Prop({ required: false })
   public slogan?: string;
 
-  @Prop({ unique: true, error: "ایمیل قبلاً ثبت شده است" })
+  @Prop()
   email: string;
 
   @Prop()
   password: string;
 
-  @Prop({ unique: true, error: "شماره ملی قبلاً ثبت شده است" })
+  @Prop()
   national_id_number: string;
 }
 

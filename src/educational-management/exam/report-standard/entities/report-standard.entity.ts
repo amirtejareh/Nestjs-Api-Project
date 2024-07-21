@@ -15,8 +15,11 @@ interface IUserAnswers {
 
 @Schema({ timestamps: true })
 export class ReportStandard {
-  @Prop()
-  user: User;
+  @Prop({
+    type: [{ type: mongooseSchema.Types.ObjectId, ref: User.name }],
+  })
+  user?: User;
+
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: GradeLevel.name }],
   })
