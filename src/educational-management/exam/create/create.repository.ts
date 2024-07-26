@@ -424,79 +424,54 @@ export class CreateExamRepository {
       if (!createExam) {
         throw new NotFoundException("آزمون مورد نظر یافت نشد.");
       }
-      if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length == 0) {
-        if (updateCreateExamDto?.AnswerSheetSourcePdfFile?.length > 0) {
-          let arrayConversion =
-            updateCreateExamDto.AnswerSheetSourcePdfFile.map((element: any) => {
-              return { name: JSON.parse(element).name };
-            });
-          if (createExam.AnswerSheetSourcePdfFile.length > 0) {
-            for (
-              let i = 0;
-              i < createExam.AnswerSheetSourcePdfFile.length;
-              i++
-            ) {
-              const file = createExam.AnswerSheetSourcePdfFile[i].link;
 
-              let findIndex = arrayConversion.findIndex((element) => {
-                return element.name == file.split("/")[3];
-              });
-
-              if (findIndex == -1) {
-                if (existsSync(file)) {
-                  try {
-                    fs.unlinkSync(`${file}`);
-                    await this.createExamModel.findByIdAndUpdate(
-                      id,
-                      {
-                        $pull: {
-                          pdfFiles: createExam.AnswerSheetSourcePdfFile[i],
-                        },
-                      },
-                      { new: true }
-                    );
-                  } catch (err) {
-                    throw new InternalServerErrorException(
-                      "خطایی در حذف فایل قدیمی رخ داده است."
-                    );
-                  }
-                }
-              } else {
-              }
-            }
-          }
-        } else {
-          for (let i = 0; i < createExam.AnswerSheetSourcePdfFile.length; i++) {
-            const file = createExam.AnswerSheetSourcePdfFile[i].link;
-            await this.createExamModel.findByIdAndUpdate(
-              id,
-              { $pull: { pdfFiles: createExam.AnswerSheetSourcePdfFile[i] } },
-              { new: true }
-            );
-            if (existsSync(file)) {
-              try {
-                fs.unlinkSync(`${file}`);
-                await this.createExamModel.findByIdAndUpdate(
-                  id,
-                  {
-                    $pull: { pdfFiles: createExam.AnswerSheetSourcePdfFile[i] },
-                  },
-                  { new: true }
-                );
-              } catch (err) {
-                throw new InternalServerErrorException(
-                  "خطایی در حذف فایل قدیمی رخ داده است."
-                );
-              }
+      if (AnswerSheetSourcePdfFile && AnswerSheetSourcePdfFile.length > 0) {
+        for (let i = 0; i < createExam.AnswerSheetSourcePdfFile.length; i++) {
+          const file = createExam.AnswerSheetSourcePdfFile[i].link;
+          await this.createExamModel.findByIdAndUpdate(
+            id,
+            { $pull: { pdfFiles: createExam.AnswerSheetSourcePdfFile[i] } },
+            { new: true }
+          );
+          if (existsSync(file)) {
+            try {
+              fs.unlinkSync(`${file}`);
+              await this.createExamModel.findByIdAndUpdate(
+                id,
+                {
+                  $pull: { pdfFiles: createExam.AnswerSheetSourcePdfFile[i] },
+                },
+                { new: true }
+              );
+            } catch (err) {
+              throw new InternalServerErrorException(
+                "خطایی در حذف فایل قدیمی رخ داده است."
+              );
             }
           }
         }
 
-        return res.status(200).json({
-          statusCode: 200,
-          message: "ضمیمه  با موفقیت بروزرسانی شد.",
+        let answersheetPdfPath: { title: string; link: string }[] = [];
+
+        for (let i = 0; i < AnswerSheetSourcePdfFile.length; i++) {
+          const file = AnswerSheetSourcePdfFile[i];
+          const fileName = await this.imageService.saveImage(
+            "educational_management/create_exam",
+            file
+          );
+          answersheetPdfPath.push({
+            title: Buffer.from(file.originalname, "ascii").toString("utf8"),
+            link: fileName,
+          });
+        }
+
+        updateCreateExamDto.AnswerSheetSourcePdfFile = answersheetPdfPath;
+
+        await this.createExamModel.findByIdAndUpdate(id, updateCreateExamDto, {
+          new: true,
         });
       }
+
       return res.status(HttpStatus.OK).json({
         statusCode: HttpStatus.OK,
         message: " آزمون استاندارد یا موضوعی مورد نظر با موفقیت بروزرسانی شد",
