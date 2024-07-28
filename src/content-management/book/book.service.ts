@@ -9,10 +9,11 @@ export class BookService {
 
   create(
     @Res() res,
-    @UploadedFile() file: Express.Multer.File,
+    image: Express.Multer.File,
+    galleries: Express.Multer.File[],
     createBookDto: CreateBookDto
   ) {
-    return this.bookRepository.create(res, file, createBookDto);
+    return this.bookRepository.create(res, image, galleries, createBookDto);
   }
 
   findAll() {

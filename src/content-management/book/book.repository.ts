@@ -31,16 +31,30 @@ export class BookRepository {
 
   async create(
     @Res() res,
-    @UploadedFile() file: Express.Multer.File,
+    image: Express.Multer.File,
+    galleries: Express.Multer.File[],
     createBookDto: CreateBookDto
   ) {
     try {
-      if (file) {
+      if (image) {
         const fileName = await this.imageService.saveImage(
           "content_management/image_book",
-          file
+          image[0]
         );
+
         createBookDto.image = fileName;
+      }
+
+      if (galleries.length > 0) {
+        galleries.map(async (gallery) => {
+          console.log(gallery);
+
+          let fileName = await this.imageService.saveImage(
+            "content_management/image_book",
+            gallery
+          );
+          console.log(fileName, "fileName");
+        });
       }
 
       const createBookModel = await this.bookModel.create(createBookDto);

@@ -14,6 +14,9 @@ export class UpdateBookDto {
   @ApiProperty({ type: "string", format: "binary" })
   public image: any;
 
+  @ApiProperty({ type: "string", format: "binary", required: false })
+  public galleries?: any;
+
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }

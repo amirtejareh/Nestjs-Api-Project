@@ -11,15 +11,20 @@ import {
   UploadedFile,
   UseInterceptors,
   ParseArrayPipe,
+  UploadedFiles,
 } from "@nestjs/common";
 import { BookService } from "./book.service";
 import { CreateBookDto } from "./dto/create-book.dto";
 import { UpdateBookDto } from "./dto/update-book.dto";
-import { ApiBearerAuth, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "../../auth/guards/auth.guard";
 import { RoleGuard } from "../../auth/guards/role.guard";
 import { Roles } from "../../common/decorators/roles.decorator";
-import { FileInterceptor } from "@nestjs/platform-express";
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from "@nestjs/platform-express";
 
 @ApiTags("Book")
 @Controller("book")
@@ -31,13 +36,24 @@ export class BookController {
   @ApiConsumes("multipart/form-data")
   @UseGuards(AuthGuard, RoleGuard)
   @Roles("SuperAdmin")
-  @UseInterceptors(FileInterceptor("image"))
+  @ApiBody({ type: CreateBookDto })
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: "image", maxCount: 1 },
+      { name: "galleries", maxCount: 10 },
+    ])
+  )
   create(
     @Res() res,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles()
+    files: { image: Express.Multer.File; galleries: Express.Multer.File[] },
     @Body() createBookDto: CreateBookDto
   ) {
-    return this.bookService.create(res, file, createBookDto);
+    const { image, galleries } = files;
+
+    return this.bookService.create(res, image, galleries, createBookDto);
+
+    // اینجا می‌توانید کد ذخیره سازی و پردازش تصاویر را قرار دهید
   }
 
   @Get()

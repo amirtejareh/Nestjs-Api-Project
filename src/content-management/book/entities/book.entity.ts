@@ -17,6 +17,9 @@ export class Book {
   @Prop({ required: false })
   image: string;
 
+  @Prop({ required: false })
+  galleries?: string;
+
   @Prop({
     type: [{ type: mongooseSchema.Types.ObjectId, ref: BookReference.name }],
   })

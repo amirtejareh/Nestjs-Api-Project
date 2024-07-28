@@ -14,6 +14,9 @@ export class CreateBookDto {
   @ApiProperty({ type: "string", format: "binary" })
   public image: any;
 
+  @ApiProperty({ type: "string", format: "binary", required: false })
+  public galleries?: string[];
+
   readonly createdAt?: Date;
   readonly updatedAt?: Date;
 }
